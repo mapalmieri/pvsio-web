@@ -14,23 +14,36 @@ define(function (require, exports, module) {
     "use strict";
     var printer_version = "2.0";
 
-    var GenericPrinter = require("plugins/emulink/models/EmuchartsGenericPrinter");
+    var GenericPrinter =
+        require("plugins/emulink/models/EmuchartsGenericPrinter");
     var projectManager = require("project/ProjectManager").getInstance();
 
-    var leave_enter_function_template = require("text!plugins/emulink/models/misraC/templates/misraC_leave_enter_functions.handlebars");
-    var init_function_template = require("text!plugins/emulink/models/misraC/templates/misraC_init_function.handlebars");
-    var enumerated_type_template = require("text!plugins/emulink/models/misraC/templates/misraC_enumerated_type.handlebars");
-    var constants_template = require("text!plugins/emulink/models/misraC/templates/misraC_constants.handlebars");
-    var basic_types_template = require("text!plugins/emulink/models/misraC/templates/misraC_basic_types.handlebars");
+    var leave_enter_function_template =
+        require("text!plugins/emulink/models/misraC/templates/misraC_leave_enter_functions.handlebars");
+    var init_function_template =
+        require("text!plugins/emulink/models/misraC/templates/misraC_init_function.handlebars");
+    var enumerated_type_template =
+        require("text!plugins/emulink/models/misraC/templates/misraC_enumerated_type.handlebars");
+    var constants_template =
+        require("text!plugins/emulink/models/misraC/templates/misraC_constants.handlebars");
+    var basic_types_template =
+        require("text!plugins/emulink/models/misraC/templates/misraC_basic_types.handlebars");
 
-    var struct_type_template = require("text!plugins/emulink/models/misraC/templates/misraC_struct_type.handlebars");
-    var triggers_template = require("text!plugins/emulink/models/misraC/templates/misraC_transition_functions.handlebars");
+    var struct_type_template =
+        require("text!plugins/emulink/models/misraC/templates/misraC_struct_type.handlebars");
+    var triggers_template =
+        require("text!plugins/emulink/models/misraC/templates/misraC_transition_functions.handlebars");
 
-    var header_template = require("text!plugins/emulink/models/misraC/templates/misraC_header.handlebars");
-    var body_template = require("text!plugins/emulink/models/misraC/templates/misraC_body.handlebars");
-    var pvsioweb_utils_template = require("text!plugins/emulink/models/misraC/templates/misraC_pvsioweb_utils.handlebars");
-    var makefile_template = require("text!plugins/emulink/models/misraC/templates/misraC_makefile.handlebars");
-    var main_template = require("text!plugins/emulink/models/misraC/templates/misraC_main.handlebars");
+    var header_template =
+        require("text!plugins/emulink/models/misraC/templates/misraC_header.handlebars");
+    var body_template =
+        require("text!plugins/emulink/models/misraC/templates/misraC_body.handlebars");
+    var pvsioweb_utils_template =
+        require("text!plugins/emulink/models/misraC/templates/misraC_pvsioweb_utils.handlebars");
+    var makefile_template =
+        require("text!plugins/emulink/models/misraC/templates/misraC_makefile.handlebars");
+    var main_template =
+        require("text!plugins/emulink/models/misraC/templates/misraC_main.handlebars");
     // var dbg_utils_template = require("text!plugins/emulink/models/misraC/templates/misraC_dbg_utils.handlebars");
 
     var predefined_functions = { leave: "leave", enter: "enter" };
@@ -49,7 +62,7 @@ define(function (require, exports, module) {
     };
 
     /**
-     * Set a number with the properly value's suffix, useful for parsing declaration's variable, with respect to MISRA 1998 rule (Rule 18, advisory)
+     * Set a number with the proper value's suffix, useful for parsing declaration's variable, with respect to MISRA 1998 rule (Rule 18, advisory)
      * Parameter is current value
      */
     function getSuffix(value, type) {
@@ -134,7 +147,8 @@ define(function (require, exports, module) {
         return tmp.join(" ");
     }
 
-    // This function converts emucharts variables into MisraC-compliant types and values
+    // This function converts emucharts variables into MisraC-compliant
+    // types and values
     function convert_variable(v) {
         if (v) {
             if (v.type && typesTable[v.type]) {
@@ -146,7 +160,8 @@ define(function (require, exports, module) {
         return v;
     }
 
-    // This function converts emucharts constants into MisraC-compliant types and values
+    // This function converts emucharts constants into MisraC-compliant
+    // types and values
     function convert_constant(c) {
         if (c) {
             if (c.type && typesTable[c.type]) {
@@ -167,7 +182,8 @@ define(function (require, exports, module) {
         return ans;
     };
 
-    // this function prints a dummy main file suitable for testing the generated code
+    // this function prints a dummy main file suitable for testing the
+    // generated code
     Printer.prototype.print_main = function (emuchart) {
         var data = {};
         data.triggers = this.genericPrinter.get_triggers(emuchart);
@@ -186,7 +202,8 @@ define(function (require, exports, module) {
     };
 
     // This is the main API.
-    // TODO: When opt.interactive is true, a dialog is shown to the user to select compilation parameters.
+    // TODO: When opt.interactive is true, a dialog is shown to the user to
+    // select compilation parameters.
     Printer.prototype.print = function (emuchart, opt) {
         opt = opt || {};
         var _this = this;
@@ -199,7 +216,7 @@ define(function (require, exports, module) {
 
             //-- these functions generate the content of the header file
             var init_function_declaration = (model && model.init) ?
-                        Handlebars.compile(init_function_template, { noEscape: true })({
+               Handlebars.compile(init_function_template, { noEscape: true })({
                             comment: "init function",
                             name: model.init.name,
                             override: model.init.override,
@@ -207,14 +224,15 @@ define(function (require, exports, module) {
                             is_header_file: true
                         }) : "";
             var triggers_declaration = (model && model.triggers) ?
-                        Handlebars.compile(triggers_template, { noEscape: true })({
+               Handlebars.compile(triggers_template, { noEscape: true })({
                             comment: "triggers",
                             functions: model.triggers.functions,
                             enter: predefined_functions.enter,
                             leave: predefined_functions.leave,
                             is_header_file: true
                         }) : "";
-            var enter_leave_functions_declaration = Handlebars.compile(leave_enter_function_template, { noEscape: true })({
+            var enter_leave_functions_declaration =
+       Handlebars.compile(leave_enter_function_template, { noEscape: true })({
                             comment: "enter/leave functions",
                             current_mode: model.enter_leave.current_mode,
                             previous_mode: model.enter_leave.previous_mode,
@@ -224,17 +242,17 @@ define(function (require, exports, module) {
                             is_header_file: true
                         });
             var modes_declaration = (model && model.modes) ?
-                        Handlebars.compile(enumerated_type_template, { noEscape: true })({
+               Handlebars.compile(enumerated_type_template, { noEscape: true })({
                             comment: "operating modes",
                             enumtype: [ model.modes ]
                         }) : "";
             var variables_declaration = (model && model.state_variables) ?
-                        Handlebars.compile(struct_type_template, { noEscape: true })({
+               Handlebars.compile(struct_type_template, { noEscape: true })({
                             comment: "state attributes",
                             recordtype: [ model.state_variables ]
                         }) : "";
             var datatypes_declaration = (model && model.datatypes) ?
-                        Handlebars.compile(enumerated_type_template, { noEscape: true })({
+               Handlebars.compile(enumerated_type_template, { noEscape: true })({
                             comment: "user-defined datatypes",
                             enumtype: [ model.datatypes ]
                         }) : "";
@@ -251,19 +269,19 @@ define(function (require, exports, module) {
 
             //-- these functions generate the body
             var constants = (model && model.constants) ?
-                        Handlebars.compile(constants_template, { noEscape: true })({
+               Handlebars.compile(constants_template, { noEscape: true })({
                             comment: "user-defined constants",
                             constants: model.constants
                         }) : "";
             var init_function = (model && model.init) ?
-                        Handlebars.compile(init_function_template, { noEscape: true })({
+               Handlebars.compile(init_function_template, { noEscape: true })({
                             comment: "init function",
                             name: model.init.name,
                             override: model.init.override,
                             variables: model.init.variables
                         }) : "";
             var triggers = (model && model.triggers) ?
-                        Handlebars.compile(triggers_template, { noEscape: true })({
+                Handlebars.compile(triggers_template, { noEscape: true })({
                             comment: "triggers",
                             functions: model.triggers.functions,
                             enter: predefined_functions.enter,
@@ -290,14 +308,17 @@ define(function (require, exports, module) {
             var pvsioweb_utils_header = Handlebars.compile(pvsioweb_utils_template, { noEscape: true })({ is_header_file: true });
             var pvsioweb_utils_body = Handlebars.compile(pvsioweb_utils_template, { noEscape: true })({});
 
-            //-- these are basic types definitions (bool, int, real -- renamed using misraC conventions)
-            var basic_types = Handlebars.compile(basic_types_template, { noEscape: true })({});
+            //-- these are basic types definitions (bool, int, real
+            //-- renamed using misraC conventions)
+            var basic_types =
+               Handlebars.compile(basic_types_template, { noEscape: true })({});
 
             //-- this is the makefile & dummy main
             var makefile = _this.print_makefile(emuchart);
             var main = _this.print_main(emuchart);
 
-            //-- finally, write everything to disk, in subfolder /misraC of the current project
+            //-- finally, write everything to disk, in subfolder /misraC
+            //   of the current project
             var overWrite = {overWrite: true};
             var folder = "/misraC";
             projectManager.project().addFile(folder + "/" + emuchart.name + ".h", header, overWrite);
@@ -313,7 +334,7 @@ define(function (require, exports, module) {
         }
         return new Promise (function (resolve, reject) {
             if (opt.interactive) {
-                return _this.genericPrinter.get_params().then(function (par) {
+                return _this.genericPrinter.get_params().then(function (opt) {
                     opt.wordsize = "64";
                     finalize(resolve, reject, opt);
                 }).catch(function (err) {

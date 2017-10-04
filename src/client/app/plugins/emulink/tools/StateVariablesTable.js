@@ -16,6 +16,7 @@ define(function (require, exports, module) {
     var attributes = [
         { name: "Variable Name" },
         { name: "Variable Type" },
+        { name: "Variable Representation" }, //PM!
         { name: "Initial Value" }
     ];
     function add(e) {
@@ -24,6 +25,7 @@ define(function (require, exports, module) {
             attributes: [
                 { name: e.name },
                 { name: e.type },
+                { name: e.repr }, //PM!
                 { name: e.value }
             ]
         });

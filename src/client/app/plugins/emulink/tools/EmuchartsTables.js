@@ -262,25 +262,41 @@ define(function (require, exports, module) {
                 scopeOptions.push({ value: option, selected: false});
             }
         });
+        var variableRepresentations = emuchartsManager.getVariableRepresentations();
+        var representationOptions = [];
+        variableRepresentations.forEach(function (option) {
+            if (option === theVariable.repr) {
+                representationOptions.push({ value: option, selected: true});
+            } else {
+                representationOptions.push({ value: option, selected: false});
+            }
+        });
+
         displayEditVariable.create({
             header: "Editing variable " + theVariable.name,
             textLabel: {
                 newVariableName: "Variable name",
                 newVariableType: "Variable type",
+                newVariableRepresentation: "Variable Representation", // AD!
                 newVariableValue: "Initial value",
                 newVariableScope: "Variable scope"
             },
             placeholder: {
                 newVariableName: theVariable.name,
                 newVariableType: theVariable.type,
+                newVariableRepresentation: theVariable.repr,          // AD!
                 newVariableValue: theVariable.value,
                 newVariableScope: theVariable.scope
             },
             scopeOptions: scopeOptions,
+            representationOptions: representationOptions,
             buttons: ["Cancel", "Ok"]
         }).on("ok", function (e, view) {
             var newVariableName = e.data.labels.get("newVariableName");
             var newVariableType = e.data.labels.get("newVariableType");
+//            var newVariableRepresentation = e.data.labels.get("newVariableRepresentation"); // AD!
+            var newVariableRepresentation =                          // AD!
+      variableRepresentations[e.data.options.get("newVariableRepresentation")];
             var newVariableValue = e.data.labels.get("newVariableValue");
             var newVariableScope = variableScopes[e.data.options.get("newVariableScope")];
             if (newVariableName && newVariableName.value !== "" &&
@@ -290,6 +306,7 @@ define(function (require, exports, module) {
                     theVariable.id,
                     {   name: newVariableName,
                         type: newVariableType,
+                        repr: newVariableRepresentation,    // AD!
                         value: newVariableValue,
                         scope: newVariableScope   }
                 );
@@ -301,6 +318,7 @@ define(function (require, exports, module) {
             view.remove();
         });
     }
+
     function edit_machinestate_aux(_this) {
         document.getElementById("menuStates").children[1].style.display = "none";
         var states = emuchartsManager.getStates();
@@ -326,6 +344,7 @@ define(function (require, exports, module) {
             return;
         });
     }
+
     function edit_transition_aux(_this) {
         document.getElementById("menuTransitions").children[1].style.display = "none";
         var transitions = emuchartsManager.getTransitions();
@@ -368,6 +387,7 @@ define(function (require, exports, module) {
             return;
         });
     }
+
     function edit_transition(_this, theTransition) {
         if (emuchartsManager.getIsPIM()) {
             pimEmulink.editTransition(theTransition);
@@ -390,6 +410,7 @@ define(function (require, exports, module) {
             view.remove();
         });
     }
+
     function edit_constant (_this, theConstant) {
         displayEditConstant.create({
             header: "Editing constant " + theConstant.name,
@@ -424,6 +445,7 @@ define(function (require, exports, module) {
             view.remove();
         });
     }
+
     function edit_datatype (_this, theDatatype) {
         displayEditDatatype.create({
             header: "Editing datatype " + theDatatype.name,
@@ -458,6 +480,7 @@ define(function (require, exports, module) {
             view.remove();
         });
     }
+
     function edit_machinestate(_this, theState) {
         if (emuchartsManager.getIsPIM()) {
             return pimEmulink.editState(theState);
@@ -498,6 +521,7 @@ define(function (require, exports, module) {
             view.remove();
         });
     }
+
     function edit_initialtransition(_this, theTransition) {
         displayRename.create({
             header: "Renaming initial trigger " + theTransition.name.substring(0, maxLen) + "...",
@@ -514,6 +538,7 @@ define(function (require, exports, module) {
             view.remove();
         });
     }
+
     function edit_machinestate_color(_this, theState) {
         if (emuchartsManager.getIsPIM()) {
             return pimEmulink.editState(theState);
@@ -571,6 +596,7 @@ define(function (require, exports, module) {
             view.remove();
         });
     }
+
     function add_transition() {
         document.getElementById("menuTransitions").children[1].style.display = "none";
         var states = emuchartsManager.getStates();

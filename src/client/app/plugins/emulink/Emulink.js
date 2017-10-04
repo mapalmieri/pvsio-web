@@ -663,9 +663,11 @@ define(function (require, exports, module) {
             };
             emuchartsCodeGenerators.emuchartsPVSPrinter.print(emucharts, { interactive: true });
         });
+
         d3.select("#btn_menuAlloyPrinter").on("click", function () {
             printer_template(emuchartsCodeGenerators.emuchartsAlloyPrinter, ".alloy");
         });
+
         d3.select("#btn_menuNuXMVPrinter").on("click", function () {
             printer_template(emuchartsCodeGenerators.emuchartsNuXMVPrinter, ".smv");
             // var emucharts = {
@@ -695,6 +697,7 @@ define(function (require, exports, module) {
             //     console.log("Warning, NuXMV model is undefined.");
             // }
         });
+
         d3.select("#btn_menuPIMPrinter").on("click", function () {
             var emucharts = {
                 name: ("emucharts_" + projectManager.project().name() + "_PIM"),
@@ -724,6 +727,7 @@ define(function (require, exports, module) {
                 console.log("Warning, PIM model is undefined.");
             }
         });
+
         d3.select("#btn_menuCppPrinter").on("click", function () {
             var emucharts = {
                 name: ("emucharts_" + projectManager.project().name()),
@@ -753,6 +757,7 @@ define(function (require, exports, module) {
                 console.log("Warning, C++ code is undefined.");
             }
         });
+
         d3.select("#btn_menuMALPrinter").on("click", function () {
             var emucharts = {
                 name: ("emucharts_" + projectManager.project().name() + "_MAL"),
@@ -782,6 +787,7 @@ define(function (require, exports, module) {
                 console.log("Warning, MAL model is undefined.");
             }
         });
+
         d3.select("#btn_menuVDMPrinter").on("click", function () {
             var emucharts = {
                 name: ("emucharts_" + projectManager.project().name() + "_VDM"),
@@ -871,6 +877,7 @@ define(function (require, exports, module) {
                 console.log("Warning, Ada code is undefined.");
             }
         });
+
         d3.select("#btn_menuBlessPrinter").on("click", function () {
             var emucharts = {
                 name: ("emucharts_" + projectManager.project().name() + "_Bless"),
@@ -903,6 +910,7 @@ define(function (require, exports, module) {
                 console.log("Warning, Bless model is undefined.");
             }
         });
+
         d3.select("#btn_menuMisraCPrinter").on("click", function () {
             var desc = emuchartsManager.getSelectedEmuchartsDescriptor();
             var filename = (desc && desc.emuchart_name) ? desc.emuchart_name
@@ -921,10 +929,15 @@ define(function (require, exports, module) {
                 variables: emuchartsManager.getVariables(),
                 states: emuchartsManager.getStates(),
                 transitions: emuchartsManager.getTransitions(),
-                initial_transitions: emuchartsManager.getInitialTransitions()
+//                initial_transitions: emuchartsManager.getInitialTransitions()
+//AA
+initial_transitions: emuchartsManager.getInitialTransitions(),
+//AA
+type_mappings: emuchartsManager.getTypeMappings()  // AD!
             };
             emuchartsCodeGenerators.emuchartsMisraCPrinter.print(emucharts, { interactive: true });
         });
+
         d3.select("#btn_menuAndroidPrinter").on("click", function () {
             var emucharts = {
                 name: projectManager.project().name(),
@@ -946,6 +959,7 @@ define(function (require, exports, module) {
             };
             emuchartsCodeGenerators.emuchartsAndroidPrinter.print(emucharts);
         });
+
         d3.select("#btn_menuICOPrinter").on("click", function () {
             var emucharts = {
                 name: projectManager.project().name(),
@@ -968,7 +982,7 @@ define(function (require, exports, module) {
             emuchartsCodeGenerators.emuchartsICOPrinter.print(emucharts);
         });
 
-        //-- Verification menu ---------------------------------------------------
+        //-- Verification menu ----------------------------------------------
         d3.select("#btn_menuConsistencyOfActions").on("click", function () {
             // document.getElementById("menuVerification").children[1].style.display = "none";
             var stateVariables = emuchartsManager.getVariables().map(function (variable) {
@@ -1133,7 +1147,8 @@ define(function (require, exports, module) {
                 view.remove();
             });
         });
-        //-- Zoom menu -----------------------------------------------------------
+
+        //-- Zoom menu --------------------------------------------------------
         d3.select("#menuZoom").on("mouseover", function () {
             document.getElementById("menuZoom").children[1].style.display = "block";
         });

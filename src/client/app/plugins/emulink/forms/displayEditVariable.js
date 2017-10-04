@@ -8,7 +8,7 @@ define(function (require, exports, module) {
     "use strict";
     var d3 = require("d3/d3"),
         formTemplate = require("text!./templates/displayEditVariable.handlebars"),
-        BaseDialog = require("pvsioweb/forms/BaseDialog"),        
+        BaseDialog = require("pvsioweb/forms/BaseDialog"),
         FormUtils = require("./FormUtils");
 
     var AddVariableView = BaseDialog.extend({
@@ -32,7 +32,8 @@ define(function (require, exports, module) {
             var form = this.el;
             if (FormUtils.validateForm(form)) {
                 var selectors = [ "newVariableName", "newVariableType",
-                                  "newVariableValue", "newVariableScope" ];
+                                  "newVariableValue", "newVariableScope",
+                                  "newVariableRepresentation" ]; //PM!
                 var formdata = FormUtils.serializeForm(form, selectors);
                 this.trigger(this._data.buttons[1].toLowerCase().replace(new RegExp(" ", "g"), "_"),
                              {data: formdata, el: this.el}, this);

@@ -359,11 +359,12 @@ define(function (require, exports, module) {
                     l1.push({
                         name: tmp[1],
                         type: variable.type,
+                        repr: variable.repr, //PM!
                         value: variable.value
                     });
                     records.set(tmp[0], l1);
                 } else {
-                    basic.push({ name: variable.name, type: variable.type, value: variable.value });
+                    basic.push({ name: variable.name, type: variable.type, repr: variable.repr, value: variable.value }); //PM
                 }
             });
         }
@@ -385,7 +386,7 @@ define(function (require, exports, module) {
         }
         var x = split_variables(emuchart);
         x.basic.forEach(function (basic) {
-            variables.push({ name: basic.name, type: basic.type });
+            variables.push({ name: basic.name, type: basic.type, repr: basic.repr, value: basic.value }); //PM!
         });
         x.records.keys().forEach(function (key) {
             variables.push({
@@ -764,12 +765,68 @@ define(function (require, exports, module) {
             state_variables: this.get_variables(emuchart, opt),
             init: this.get_initial_transition(emuchart, opt),
             triggers: this.get_transitions(emuchart, opt),
+// AD! TBD        mappings: this.get_mappings(emuchart, opt),
             model_name: emuchart.name
             // disclaimer: this.print_disclaimer()
         };
         console.log(JSON.stringify(model, null, " "));
         return model;
     };
+
+//    // utility function for getting basic types mapping
+//    EmuchartsGenericPrinter.prototype.get_mapping = function() {
+//        return new Promise (function (resolve, reject) {
+//            displayAskParameters.create({
+//                header: "Basic types representation",
+////                params: [{
+//
+//                mappings: [{
+//                    id: "char_t",
+//                    name: "char_t",
+//                    value: "char",
+//                    inputbox: true
+//                },{
+//                    id: "int8_t",
+//                    name: "int8_t",
+//                    value: "signed char",
+//                    inputbox: true
+//                },{
+//                    id: "int16_t",
+//                    name: "int16_t",
+//                    value: "signed short",
+//                    inputbox: true
+//                }],
+//
+//                buttons: ["Cancel", "Ok"]
+//            }).on("ok", function (e, view) {
+//                view.remove();
+//                var par = ({
+//                    current_mode: e.data.labels.get("current_mode"),
+//                    previous_mode: e.data.labels.get("previous_mode"),
+//                    state_type: e.data.labels.get("state_type")
+//                });
+//                if (par.current_mode) {
+//                    predefined_variables.current_mode.name = par.current_mode;
+//                }
+//                if (par.previous_mode) {
+//                    predefined_variables.previous_mode = {
+//                        name: par.previous_mode,
+//                        type: mode_type,
+//                        value: undef
+//                    };
+//                } else {
+//                    predefined_variables.previous_mode = null; // this will disable the creation of this state attribute
+//                }
+//                if (par.state_type) {
+//                    state_type = par.state_type;
+//                }
+//                resolve(par);
+//            }).on("cancel", function (e, view) {
+//                // just remove window
+//                view.remove();
+//            });
+//        });
+//    };
 
     // utility function for getting basic printer options
     EmuchartsGenericPrinter.prototype.get_params = function() {
@@ -791,26 +848,90 @@ define(function (require, exports, module) {
                     name: "System mode type",
                     value: predefined_variables.current_mode.type,
                     inputbox: true
+                },{                             // AD!
+                    id: "char_t",
+                    name: "char_t",
+                    value: "char",
+                    inputbox: true
+                },{
+                    id: "int8_t",
+                    name: "int8_t",
+                    value: "signed char",
+                    inputbox: true
+                },{
+                    id: "int16_t",
+                    name: "int16_t",
+                    value: "signed short",
+                    inputbox: true
+                },{
+                    id: "int32_t",
+                    name: "int32_t",
+                    value: "signed int",
+                    inputbox: true
+                },{
+                    id: "int64_t",
+                    name: "int64_t",
+                    value: "signed long",
+                    inputbox: true
+                },{
+                    id: "uint8_t",
+                    name: "uint8_t",
+                    value: "unsigned char",
+                    inputbox: true
+                },{
+                    id: "uint16_t",
+                    name: "uint16_t",
+                    value: "unsigned short",
+                    inputbox: true
+                },{
+                    id: "uint32_t",
+                    name: "uint32_t",
+                    value: "unsigned int",
+                    inputbox: true
+                },{
+                    id: "uint64_t",
+                    name: "uint64_t",
+                    value: "unsigned long",
+                    inputbox: true
+                },{
+                    id: "float32_t",
+                    name: "float32_t",
+                    value: "float",
+                    inputbox: true
+                },{
+                    id: "float64_t",
+                    name: "float64_t",
+                    value: "double",
+                    inputbox: true
+                },{
+                    id: "float128_t",
+                    name: "float128_t",
+                    value: "long double",
+                    inputbox: true
                 }],
+
                 buttons: ["Cancel", "Ok"]
             }).on("ok", function (e, view) {
                 view.remove();
-                var par = ({
-                    current_mode: e.data.labels.get("current_mode"),
-                    previous_mode: e.data.labels.get("previous_mode"),
-                    state_type: e.data.labels.get("state_type")
+                var par = {};
+                //-- PM!
+                // e.data contains all information from the dialog
+                var keys = (e && e.data && e.data.labels)? e.data.labels.keys() : [];
+                keys.forEach(function (key) {
+                    par[key] = e.data.labels.get(key);
                 });
+                // var par = ({
+                //     current_mode: e.data.labels.get("current_mode"),
+                //     previous_mode: e.data.labels.get("previous_mode"),
+                //     state_type: e.data.labels.get("state_type"),
+                //     char_t: e.data.labels.get("char_t")
+                // });
+                //--
+                predefined_variables.previous_mode = (par.previous_mode) ?
+                    { name: par.previous_mode, type: mode_type, value: undef }
+                    : null; // null will disable the creation of this state attribute
                 if (par.current_mode) {
                     predefined_variables.current_mode.name = par.current_mode;
-                }
-                if (par.previous_mode) {
-                    predefined_variables.previous_mode = {
-                        name: par.previous_mode,
-                        type: mode_type,
-                        value: undef
-                    };
-                } else {
-                    predefined_variables.previous_mode = null; // this will disable the creation of this state attribute
                 }
                 if (par.state_type) {
                     state_type = par.state_type;

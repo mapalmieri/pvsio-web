@@ -164,6 +164,7 @@ define(function (require, exports, module) {
                         id: variable.id,
                         name: variable.name,
                         type: variable.type,
+                        repr: variable.repr,          // AD!
                         value: variable.value,
                         scope: variable.scope
                     });
@@ -922,6 +923,7 @@ define(function (require, exports, module) {
             id: id,
             name: variable.name,
             type: variable.type,
+            repr: variable.repr,              // AD!
             value: variable.value,
             scope: variable.scope
         };
@@ -933,6 +935,7 @@ define(function (require, exports, module) {
                 id: id,
                 name: variable.name,
                 type: variable.type,
+                repr: variable.repr,              // AD!
                 value: variable.value,
                 scope: variable.scope
             }
@@ -1107,6 +1110,7 @@ define(function (require, exports, module) {
         this.variables.remove(variableID);
         var newVariable = {
             type: newData.type || theVariable.type,
+            repr: newData.repr,                            // AD!
             name: newData.name || theVariable.name,
             value: newData.value || theVariable.value,
             scope: newData.scope || theVariable.scope
@@ -1120,6 +1124,7 @@ define(function (require, exports, module) {
             pre: {
                 id: theVariable.id,
                 type: theVariable.type,
+                repr: theVariable.repr,                 // AD!
                 name: theVariable.name,
                 value: theVariable.value,
                 scope: theVariable.scope
@@ -1127,6 +1132,7 @@ define(function (require, exports, module) {
             post: {
                 id: newVariable.id,
                 type: newVariable.type,
+                repr: newVariable.repr,                 // AD!
                 name: newVariable.name,
                 value: newVariable.value,
                 scope: newVariable.scope
@@ -1222,6 +1228,7 @@ define(function (require, exports, module) {
                     id: v.id,
                     name: v.name,
                     type: v.type,
+                    repr: v.repr,                      // AD!
                     value: v.value,
                     scope: v.scope
                 });
@@ -1230,6 +1237,30 @@ define(function (require, exports, module) {
         return ans.sort(function (a, b) {
             return a.name.localeCompare(b.name);
         });
+    };
+
+    // AD! OK
+    /**
+     * @function getMappings
+     * @descriptionb Returns the mappings defined in the diagram.
+     * @returns {Array(Object)} An array of mapping descriptors.
+     * @memberof module:Emucharts
+     * @instance
+     */
+//    Emucharts.prototype.getTypeMappings = function (scope) {
+    Emucharts.prototype.getTypeMappings = function () {
+        var ans = [], _this = this;
+        if (this.type_mappings) {
+            _this.type_mappings.forEach(function (key) {
+                var v = _this.type_mappings.get(key);
+                ans.push({
+                    id: v.id,
+                    name: v.name,
+                    value: v.value,
+                });
+            });
+        }
+        return ans;
     };
 
     /**
@@ -1287,6 +1318,20 @@ define(function (require, exports, module) {
     Emucharts.prototype.getVariableScopes = function () {
         return ["Local", "Input", "Output"];
     };
+
+    /** AD!
+     * @function getVariableRepresentations
+     * @description Returns the supported variable representations.
+     * @returns {Array(String)} An array of Strings specifying the variable representations supported by the diagram.
+     * @memberof module:Emucharts
+     * @instance
+     */
+    Emucharts.prototype.getVariableRepresentations = function () {
+        return [ "char_t", "int8_t", "int16_t", "int32_t", "int64_t",
+                 "uint8_t", "uint16_t", "uint32_t", "uint64_t",
+                 "float32_t", "float64_t", "float128_t" ];
+    };
+
 
     /**
      * @function empty

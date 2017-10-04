@@ -4,60 +4,60 @@
  *
  * MISRA C code printer for emucharts models.
  * Emuchart objects have the following structure:
-      emuchart = {
-                name: (string),
-                author: {
-                    name: (string),
-                    affiliation: (string),
-                    contact: (string)
-                },
-                importings: (array of including and defining pre-processing directives, according to types of variable used),
-                constants: (array of {
-                                name: (string), // the constant identifier
-                                type: (string), // the constant type
-                                value: (string) // the constant value (can be undefined)
-                            }),
-                variables: (array of {
-                                name: (string), // the variable identifier
-                                type: (string), // the variable type
-                                scope: (string),// the variable scope, either local or input or output
-                                value: (string) // the initial value of the variable
-                            }),
-                states: (array of {
-                                name: (string), // the state label
-                                id: (string),   // a unique identifier
-                            }),
-                transitions: (array of {
-                                name: (string), // the transition label (it includes trigger name, condition and actions)
-                                id: (string),   // a unique identifier
-                                source: {
-                                    name: (string), // the source state label
-                                    id: (string)    // a unique identifier
-                                },
-                                target: {
-                                    name: (string), // the target state label
-                                    id: (string)    // a unique identifier
-                                },
-                                listSources: (array of
-                                    :(string)       // sources state label list in case of homonymous transitions with different source
-                                                    // (this array is present only into the first object of the array with the same trigger name)
-                                ),
-                                listTargets: (array of
-                                    :(string)       // target state label list in case of homonymous transitions with different target
-                                                    // (this array is present only into the first object of the array with the same trigger name)
-                                ),
-                            }),
-                initial_transitions: (array of {
-                                name: (string),         // the initial transition label
-                                id: (string),           // a unique identifier
-                                condition: (string),    // It is an optional, in case of multiple initial transitions
-                                actions: (string)       // It is an optional, in case of different expression, instead of initializations
-                                target: {
-                                    name: (string), // the target state label
-                                    id: (string)    // a unique identifier
-                                },
-                            })
-      }
+ *    emuchart = {
+ *              name: (string),
+ *              author: {
+ *                  name: (string),
+ *                  affiliation: (string),
+ *                  contact: (string)
+ *              },
+ *              importings: (array of including and defining pre-processing directives, according to types of variable used),
+ *              constants: (array of {
+ *                              name: (string), // the constant identifier
+ *                              type: (string), // the constant type
+ *                              value: (string) // the constant value (can be undefined)
+ *                          }),
+ *              variables: (array of {
+ *                              name: (string), // the variable identifier
+ *                              type: (string), // the variable type
+ *                              scope: (string),// the variable scope, either local or input or output
+ *                              value: (string) // the initial value of the variable
+ *                          }),
+ *              states: (array of {
+ *                              name: (string), // the state label
+ *                              id: (string),   // a unique identifier
+ *                          }),
+ *              transitions: (array of {
+ *                              name: (string), // the transition label (it includes trigger name, condition and actions)
+ *                              id: (string),   // a unique identifier
+ *                              source: {
+ *                                  name: (string), // the source state label
+ *                                  id: (string)    // a unique identifier
+ *                              },
+ *                              target: {
+ *                                  name: (string), // the target state label
+ *                                  id: (string)    // a unique identifier
+ *                              },
+ *                              listSources: (array of
+ *                                  :(string)       // sources state label list in case of homonymous transitions with different source
+ *                                                  // (this array is present only into the first object of the array with the same trigger name)
+ *                              ),
+ *                              listTargets: (array of
+ *                                  :(string)       // target state label list in case of homonymous transitions with different target
+ *                                                  // (this array is present only into the first object of the array with the same trigger name)
+ *                              ),
+ *                          }),
+ *              initial_transitions: (array of {
+ *                              name: (string),         // the initial transition label
+ *                              id: (string),           // a unique identifier
+ *                              condition: (string),    // It is an optional, in case of multiple initial transitions
+ *                              actions: (string)       // It is an optional, in case of different expression, instead of initializations
+ *                              target: {
+ *                                  name: (string), // the target state label
+ *                                  id: (string)    // a unique identifier
+ *                              },
+ *                          })
+ *    }
  */
 define(function (require, exports, module) {
     var makefileTemplate = require("text!plugins/emulink/models/misraC/templates/makefile.handlebars");

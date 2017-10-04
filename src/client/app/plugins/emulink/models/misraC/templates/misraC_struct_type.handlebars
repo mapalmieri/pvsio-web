@@ -8,6 +8,6 @@
  */{{/if}}{{#each recordtype}}
 typedef {{#if variables}}struct { {{#each variables}}
     {{#if children}}struct { {{#each children}}
-        {{type}} {{name}};{{#if originalType}} //-- {{originalType}}{{/if}}{{/each}} } {{name}}{{
-       else}}{{type}} {{name}};{{#if originalType}} //-- {{originalType}}{{/if}}{{/if}}{{/each}}
+        {{#if repr}}{{repr}}{{else}}{{type}}{{/if}} {{name}};{{#if originalType}} //-- {{originalType}}{{/if}}{{/each}} } {{name}}{{
+       else}}{{#if repr}}{{repr}}{{else}}{{type}}{{/if}} {{name}};{{#if originalType}} //-- {{originalType}}{{/if}}{{/if}}{{/each}}
 } {{/if}}{{state_type}};{{/each}}

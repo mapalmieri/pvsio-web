@@ -806,6 +806,16 @@ define(function (require, exports, module) {
         return _selectedEditor.getDatatype(datatypeID);
     };
 
+    // AD! OK
+    /**
+     * Returns an array containing the current set of TypeMappings defined in
+     * the model
+     * @memberof EmuchartsManager
+     */
+    EmuchartsManager.prototype.getTypeMappings = function () {
+        return _selectedEditor.getTypeMappings();
+    };
+
     /**
      * Returns an array containing the current set of variables defined in the model
      * @memberof EmuchartsManager
@@ -852,6 +862,14 @@ define(function (require, exports, module) {
      */
     EmuchartsManager.prototype.getVariableScopes = function () {
         return _selectedEditor.getVariableScopes();
+    };
+
+    /** AD!
+     * Returns an array specifying the supported variable representations
+     * @memberof EmuchartsManager
+     */
+    EmuchartsManager.prototype.getVariableRepresentations = function () {
+        return _selectedEditor.getVariableRepresentations();
     };
 
     /**

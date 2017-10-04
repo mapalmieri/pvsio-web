@@ -56,6 +56,7 @@ define(function (require, exports, module) {
             view.remove();
         });
     };
+
     ContextMenus.prototype.edit_constant = function () {
         var _this = this;
         document.getElementById("menuContext").children[1].style.display = "none";
@@ -91,6 +92,7 @@ define(function (require, exports, module) {
             return;
         });
     };
+
     ContextMenus.prototype.delete_constant = function () {
         document.getElementById("menuContext").children[1].style.display = "none";
         // step 1: ask to select the variable that needs to be edited
@@ -126,25 +128,35 @@ define(function (require, exports, module) {
     ContextMenus.prototype.add_statevariable = function () {
         document.getElementById("menuContext").children[1].style.display = "none";
         var scopeOptions = emuchartsManager.getVariableScopes();
+        var representationOptions =
+                      emuchartsManager.getVariableRepresentations();   // AD!
         displayAddVariable.create({
             header: "Please enter new state variable...",
             textLabel: {
                 newVariableName: "Variable name",
                 newVariableType: "Variable type",
+                newVariableRepresentation: "Variable Representation", // AD!
                 newVariableValue: "Initial value",
                 newVariableScope: "Variable scope"
             },
             placeholder: {
                 newVariableName: "Name, e.g., display",
                 newVariableType: "Type, e.g., real",
+//                newVariableRepresentation: "Representation, e.g., real_64",
+//		                                                      // AD!
                 newVariableValue: "Value, e.g., 0"
             },
             scopeOptions: scopeOptions,
+            representationOptions: representationOptions,
             buttons: ["Cancel", "Create variable"]
         }).on("create_variable", function (e, view) {
             console.log("add variable");
             var newVariableName = e.data.labels.get("newVariableName");
             var newVariableType = e.data.labels.get("newVariableType");
+//            var newVariableRepresentation =                          // AD!
+//                e.data.labels.get("newVariableRepresentation");
+            var newVariableRepresentation =                          // AD!
+              representationOptions[e.data.options.get("newVariableRepresentation")];
             var newVariableValue = e.data.labels.get("newVariableValue");
             var newVariableScope = scopeOptions[e.data.options.get("newVariableScope")];
             if (newVariableName && newVariableName.value !== "" &&
@@ -153,6 +165,7 @@ define(function (require, exports, module) {
                 emuchartsManager.add_variable({
                     name: newVariableName,
                     type: newVariableType,
+                    repr: newVariableRepresentation,                 // AD!
                     value: newVariableValue,
                     scope: newVariableScope
                 });
@@ -163,6 +176,7 @@ define(function (require, exports, module) {
             view.remove();
         });
     };
+
     ContextMenus.prototype.edit_statevariable = function () {
         var _this = this;
         document.getElementById("menuContext").children[1].style.display = "none";
@@ -195,6 +209,7 @@ define(function (require, exports, module) {
             return;
         });
     };
+
     ContextMenus.prototype.delete_statevariable = function () {
         document.getElementById("menuContext").children[1].style.display = "none";
         // step 1: ask to select the variable that needs to be edited

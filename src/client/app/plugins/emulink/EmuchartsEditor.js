@@ -2082,6 +2082,17 @@ define(function (require, exports, module) {
     EmuchartsEditor.prototype.getDatatype = function (datatypeID) {
         return this.emucharts.getDatatype(datatypeID);
     };
+
+    // AD!  OK
+    /**
+     * Returns an array containing the current set of TypeMappings defined in
+     * the diagram
+     * @memberof EmuchartsEditor
+     */
+    EmuchartsEditor.prototype.getTypeMappings = function () {
+        return this.emucharts.getTypeMappings();
+    };
+
     /**
      * Returns an array containing the current set of variables defined in the diagram
      * @memberof EmuchartsEditor
@@ -2128,6 +2139,14 @@ define(function (require, exports, module) {
      */
     EmuchartsEditor.prototype.getVariableScopes = function () {
         return this.emucharts.getVariableScopes();
+    };
+
+    /** AD!
+     * Returns an array specifying the supported variable representations
+     * @memberof EmuchartsEditor
+     */
+    EmuchartsEditor.prototype.getVariableRepresentations = function () {
+        return this.emucharts.getVariableRepresentations();
     };
 
     /**
