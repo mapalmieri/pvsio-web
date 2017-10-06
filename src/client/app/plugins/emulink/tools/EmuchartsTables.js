@@ -294,7 +294,6 @@ define(function (require, exports, module) {
         }).on("ok", function (e, view) {
             var newVariableName = e.data.labels.get("newVariableName");
             var newVariableType = e.data.labels.get("newVariableType");
-//            var newVariableRepresentation = e.data.labels.get("newVariableRepresentation"); // AD!
             var newVariableRepresentation =                          // AD!
       variableRepresentations[e.data.options.get("newVariableRepresentation")];
             var newVariableValue = e.data.labels.get("newVariableValue");

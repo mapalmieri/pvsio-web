@@ -1239,30 +1239,6 @@ define(function (require, exports, module) {
         });
     };
 
-    // AD! OK
-    /**
-     * @function getMappings
-     * @descriptionb Returns the mappings defined in the diagram.
-     * @returns {Array(Object)} An array of mapping descriptors.
-     * @memberof module:Emucharts
-     * @instance
-     */
-//    Emucharts.prototype.getTypeMappings = function (scope) {
-    Emucharts.prototype.getTypeMappings = function () {
-        var ans = [], _this = this;
-        if (this.type_mappings) {
-            _this.type_mappings.forEach(function (key) {
-                var v = _this.type_mappings.get(key);
-                ans.push({
-                    id: v.id,
-                    name: v.name,
-                    value: v.value,
-                });
-            });
-        }
-        return ans;
-    };
-
     /**
      * @function getVariable
      * @descriptionb Returns the variable with ID given by the function argument

@@ -806,16 +806,6 @@ define(function (require, exports, module) {
         return _selectedEditor.getDatatype(datatypeID);
     };
 
-    // AD! OK
-    /**
-     * Returns an array containing the current set of TypeMappings defined in
-     * the model
-     * @memberof EmuchartsManager
-     */
-    EmuchartsManager.prototype.getTypeMappings = function () {
-        return _selectedEditor.getTypeMappings();
-    };
-
     /**
      * Returns an array containing the current set of variables defined in the model
      * @memberof EmuchartsManager

@@ -2083,16 +2083,6 @@ define(function (require, exports, module) {
         return this.emucharts.getDatatype(datatypeID);
     };
 
-    // AD!  OK
-    /**
-     * Returns an array containing the current set of TypeMappings defined in
-     * the diagram
-     * @memberof EmuchartsEditor
-     */
-    EmuchartsEditor.prototype.getTypeMappings = function () {
-        return this.emucharts.getTypeMappings();
-    };
-
     /**
      * Returns an array containing the current set of variables defined in the diagram
      * @memberof EmuchartsEditor

@@ -114,18 +114,7 @@ are post-processed using specific functions provided by language-specific printe
     model_name: emuchart.name
     // disclaimer: this.print_disclaimer()
 };
-
-***
-An example generic model printed by the Generic Printer is as follows:
-
-{
- "enter_leave": {
-  "comment": "entry/leave actions",
-  "entry_actions": [],
-  "leave_actions": [],
-  "current_mode": {
-   "name": "mode",
-   "type": "Mode",
+*** An example generic model printed by the Generic Printer is as follows: { "enter_leave": { "comment": "entry/leave actions", "entry_actions": [], "leave_actions": [], "current_mode": { "name": "mode", "type": "Mode",
    "value": "off"
   },
   "previous_mode": {
@@ -277,6 +266,11 @@ define(function (require, exports, module) {
     var EmuchartsParser2 = require("plugins/emulink/EmuchartsParser2");
     // var projectManager = require("project/ProjectManager").getInstance();
     var displayAskParameters = require("plugins/emulink/forms/displayAskParameters");
+
+    // AD! The following two stmts are needed to print misraC_basic_types.h
+    var basic_types_template =                     // AD!
+        require("text!plugins/emulink/models/misraC/templates/misraC_basic_types.handlebars");
+   var projectManager = require("project/ProjectManager").getInstance(); // AD!
 
     var parser;
     var parser2;
@@ -765,68 +759,12 @@ define(function (require, exports, module) {
             state_variables: this.get_variables(emuchart, opt),
             init: this.get_initial_transition(emuchart, opt),
             triggers: this.get_transitions(emuchart, opt),
-// AD! TBD        mappings: this.get_mappings(emuchart, opt),
             model_name: emuchart.name
             // disclaimer: this.print_disclaimer()
         };
         console.log(JSON.stringify(model, null, " "));
         return model;
     };
-
-//    // utility function for getting basic types mapping
-//    EmuchartsGenericPrinter.prototype.get_mapping = function() {
-//        return new Promise (function (resolve, reject) {
-//            displayAskParameters.create({
-//                header: "Basic types representation",
-////                params: [{
-//
-//                mappings: [{
-//                    id: "char_t",
-//                    name: "char_t",
-//                    value: "char",
-//                    inputbox: true
-//                },{
-//                    id: "int8_t",
-//                    name: "int8_t",
-//                    value: "signed char",
-//                    inputbox: true
-//                },{
-//                    id: "int16_t",
-//                    name: "int16_t",
-//                    value: "signed short",
-//                    inputbox: true
-//                }],
-//
-//                buttons: ["Cancel", "Ok"]
-//            }).on("ok", function (e, view) {
-//                view.remove();
-//                var par = ({
-//                    current_mode: e.data.labels.get("current_mode"),
-//                    previous_mode: e.data.labels.get("previous_mode"),
-//                    state_type: e.data.labels.get("state_type")
-//                });
-//                if (par.current_mode) {
-//                    predefined_variables.current_mode.name = par.current_mode;
-//                }
-//                if (par.previous_mode) {
-//                    predefined_variables.previous_mode = {
-//                        name: par.previous_mode,
-//                        type: mode_type,
-//                        value: undef
-//                    };
-//                } else {
-//                    predefined_variables.previous_mode = null; // this will disable the creation of this state attribute
-//                }
-//                if (par.state_type) {
-//                    state_type = par.state_type;
-//                }
-//                resolve(par);
-//            }).on("cancel", function (e, view) {
-//                // just remove window
-//                view.remove();
-//            });
-//        });
-//    };
 
     // utility function for getting basic printer options
     EmuchartsGenericPrinter.prototype.get_params = function() {
@@ -848,6 +786,7 @@ define(function (require, exports, module) {
                     name: "System mode type",
                     value: predefined_variables.current_mode.type,
                     inputbox: true
+    // AD! The following items are needed to print misraC_basic_types.h
                 },{                             // AD!
                     id: "char_t",
                     name: "char_t",
@@ -917,16 +856,40 @@ define(function (require, exports, module) {
                 //-- PM!
                 // e.data contains all information from the dialog
                 var keys = (e && e.data && e.data.labels)? e.data.labels.keys() : [];
+                // AD! itt is needed to print misraC_basic_types.h
+                // AD! (or maybe we can use par directly?)
+                var itt = [];   // AD! inverse type table
                 keys.forEach(function (key) {
                     par[key] = e.data.labels.get(key);
+                    var XXX = par[key];     // AD!
+                    itt.push([XXX, key]);   // AD!
                 });
-                // var par = ({
-                //     current_mode: e.data.labels.get("current_mode"),
-                //     previous_mode: e.data.labels.get("previous_mode"),
-                //     state_type: e.data.labels.get("state_type"),
-                //     char_t: e.data.labels.get("char_t")
-                // });
-                //--
+
+            // AD! The following stmts produce misraC_basic_types.h
+            // AD! This code should not be here, but I couldn't
+            // AD! find the right place -- PLEASE FIX ME
+            // AD! -- BEGIN --
+            var basic_types = Handlebars.compile(basic_types_template,
+                                  { noEscape: true })(
+                                          { char_t: itt[3][0],
+                                            int8_t: itt[4][0],
+                                            int16_t: itt[5][0],
+                                            int32_t: itt[6][0],
+                                            int64_t: itt[7][0],
+                                            uint8_t: itt[9][0],
+                                            uint16_t: itt[9][0],
+                                            uint32_t: itt[10][0],
+                                            uint64_t: itt[11][0],
+                                            float32_t: itt[12][0],
+                                            float64_t: itt[13][0],
+                                            float128_t: itt[14][0]
+                                          });
+            var overWrite = {overWrite: true};
+            var folder = "/misraC";
+            projectManager.project().addFile(folder + "/misraC_basic_types.h",
+                                        basic_types, overWrite);
+            // AD! -- END --
+
                 predefined_variables.previous_mode = (par.previous_mode) ?
                     { name: par.previous_mode, type: mode_type, value: undef }
                     : null; // null will disable the creation of this state attribute

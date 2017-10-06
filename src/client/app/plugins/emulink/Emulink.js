@@ -929,11 +929,7 @@ define(function (require, exports, module) {
                 variables: emuchartsManager.getVariables(),
                 states: emuchartsManager.getStates(),
                 transitions: emuchartsManager.getTransitions(),
-//                initial_transitions: emuchartsManager.getInitialTransitions()
-//AA
-initial_transitions: emuchartsManager.getInitialTransitions(),
-//AA
-type_mappings: emuchartsManager.getTypeMappings()  // AD!
+                initial_transitions: emuchartsManager.getInitialTransitions()
             };
             emuchartsCodeGenerators.emuchartsMisraCPrinter.print(emucharts, { interactive: true });
         });

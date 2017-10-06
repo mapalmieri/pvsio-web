@@ -142,8 +142,6 @@ define(function (require, exports, module) {
             placeholder: {
                 newVariableName: "Name, e.g., display",
                 newVariableType: "Type, e.g., real",
-//                newVariableRepresentation: "Representation, e.g., real_64",
-//		                                                      // AD!
                 newVariableValue: "Value, e.g., 0"
             },
             scopeOptions: scopeOptions,
@@ -153,8 +151,6 @@ define(function (require, exports, module) {
             console.log("add variable");
             var newVariableName = e.data.labels.get("newVariableName");
             var newVariableType = e.data.labels.get("newVariableType");
-//            var newVariableRepresentation =                          // AD!
-//                e.data.labels.get("newVariableRepresentation");
             var newVariableRepresentation =                          // AD!
               representationOptions[e.data.options.get("newVariableRepresentation")];
             var newVariableValue = e.data.labels.get("newVariableValue");

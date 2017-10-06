@@ -26,8 +26,9 @@ define(function (require, exports, module) {
         require("text!plugins/emulink/models/misraC/templates/misraC_enumerated_type.handlebars");
     var constants_template =
         require("text!plugins/emulink/models/misraC/templates/misraC_constants.handlebars");
-    var basic_types_template =
-        require("text!plugins/emulink/models/misraC/templates/misraC_basic_types.handlebars");
+// AD! I moved the following stmt to EmuchartsGenericPrinter.js
+// AD!    var basic_types_template =
+// AD!        require("text!plugins/emulink/models/misraC/templates/misraC_basic_types.handlebars");
 
     var struct_type_template =
         require("text!plugins/emulink/models/misraC/templates/misraC_struct_type.handlebars");
@@ -49,16 +50,28 @@ define(function (require, exports, module) {
     var predefined_functions = { leave: "leave", enter: "enter" };
     var pvsioweb_utils_filename = "pvsioweb_utils";
 
+//    var typesTable = {
+//        "bool"  : "UI_8",
+//        "short" : "I_16",
+//        "int"   : "I_32",
+//        "long"  : "I_64",
+//        "float" : "F_32",
+//        "double": "D_64",
+//        //--
+//        "real"  : "D_64",
+//        "nat"   : "UI_32"
+//    };
+
     var typesTable = {
-        "bool"  : "UI_8",
-        "short" : "I_16",
-        "int"   : "I_32",
-        "long"  : "I_64",
-        "float" : "F_32",
-        "double": "D_64",
+        "bool"  : "int8_t",
+        "short" : "int16_t",
+        "int"   : "int32_t",
+        "long"  : "int64_t",
+        "float" : "float32_t",
+        "double": "float64_t",
         //--
-        "real"  : "D_64",
-        "nat"   : "UI_32"
+        "real"  : "float64_t",
+        "nat"   : "uint32_t"
     };
 
     /**
@@ -207,12 +220,15 @@ define(function (require, exports, module) {
     Printer.prototype.print = function (emuchart, opt) {
         opt = opt || {};
         var _this = this;
+
         function finalize(resolve, reject, opt) {
             var model = _this.genericPrinter.print(emuchart, {
                 convert_expression: convert_expression,
                 convert_variable: convert_variable,
                 convert_constant: convert_constant
             });
+
+// console.log("********* MODEL.ENTER_LEAVE.CHAR_T ABSENT!");
 
             //-- these functions generate the content of the header file
             var init_function_declaration = (model && model.init) ?
@@ -308,10 +324,11 @@ define(function (require, exports, module) {
             var pvsioweb_utils_header = Handlebars.compile(pvsioweb_utils_template, { noEscape: true })({ is_header_file: true });
             var pvsioweb_utils_body = Handlebars.compile(pvsioweb_utils_template, { noEscape: true })({});
 
-            //-- these are basic types definitions (bool, int, real
-            //-- renamed using misraC conventions)
-            var basic_types =
-               Handlebars.compile(basic_types_template, { noEscape: true })({});
+// AD! I moved the following stmt to EmuchartsGenericPrinter.js
+// AD!            //-- these are basic types definitions (bool, int, real
+// AD!            //-- renamed using misraC conventions)
+// AD!            var basic_types =
+// AD!               Handlebars.compile(basic_types_template, { noEscape: true })({});
 
             //-- this is the makefile & dummy main
             var makefile = _this.print_makefile(emuchart);
@@ -323,7 +340,8 @@ define(function (require, exports, module) {
             var folder = "/misraC";
             projectManager.project().addFile(folder + "/" + emuchart.name + ".h", header, overWrite);
             projectManager.project().addFile(folder + "/" + emuchart.name + ".c", body, overWrite);
-            projectManager.project().addFile(folder + "/misraC_basic_types.h", basic_types, overWrite);
+// AD! I moved the following stmt to EmuchartsGenericPrinter.js
+// AD!            projectManager.project().addFile(folder + "/misraC_basic_types.h", basic_types, overWrite);
 
             projectManager.project().addFile(folder + "/" + pvsioweb_utils_filename + ".h", pvsioweb_utils_header, overWrite);
             projectManager.project().addFile(folder + "/" + pvsioweb_utils_filename + ".c", pvsioweb_utils_body, overWrite);
