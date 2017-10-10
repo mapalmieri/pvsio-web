@@ -267,8 +267,6 @@ define(function (require, exports, module) {
     // var projectManager = require("project/ProjectManager").getInstance();
     var displayAskParameters = require("plugins/emulink/forms/displayAskParameters");
 
-   var projectManager = require("project/ProjectManager").getInstance(); // AD!
-
     var parser;
     var parser2;
 
@@ -800,9 +798,6 @@ define(function (require, exports, module) {
                 //-- PM!
                 // e.data contains all information from the dialog
                 var keys = (e && e.data && e.data.labels)? e.data.labels.keys() : [];
-                // AD! itt is needed to print misraC_basic_types.h
-                // AD! (or maybe we can use par directly?)
-                var itt = [];   // AD! inverse type table
                 keys.forEach(function (key) {
                     par[key] = e.data.labels.get(key);
                 });
