@@ -26,9 +26,9 @@ define(function (require, exports, module) {
         require("text!plugins/emulink/models/misraC/templates/misraC_enumerated_type.handlebars");
     var constants_template =
         require("text!plugins/emulink/models/misraC/templates/misraC_constants.handlebars");
-// AD! I moved the following stmt to EmuchartsGenericPrinter.js
-// AD!    var basic_types_template =
-// AD!        require("text!plugins/emulink/models/misraC/templates/misraC_basic_types.handlebars");
+
+    var basic_types_template =
+        require("text!plugins/emulink/models/misraC/templates/misraC_basic_types.handlebars");
 
     var struct_type_template =
         require("text!plugins/emulink/models/misraC/templates/misraC_struct_type.handlebars");
@@ -73,6 +73,68 @@ define(function (require, exports, module) {
         "real"  : "float64_t",
         "nat"   : "uint32_t"
     };
+
+    var misraC_params = [{
+        id: "char_t",
+        name: "char_t",
+        value: "char",
+        inputbox: true
+    },{
+        id: "int8_t",
+        name: "int8_t",
+        value: "signed char",
+        inputbox: true
+    },{
+        id: "int16_t",
+        name: "int16_t",
+        value: "signed short",
+        inputbox: true
+    },{
+        id: "int32_t",
+        name: "int32_t",
+        value: "signed int",
+        inputbox: true
+    },{
+        id: "int64_t",
+        name: "int64_t",
+        value: "signed long",
+        inputbox: true
+    },{
+        id: "uint8_t",
+        name: "uint8_t",
+        value: "unsigned char",
+        inputbox: true
+    },{
+        id: "uint16_t",
+        name: "uint16_t",
+        value: "unsigned short",
+        inputbox: true
+    },{
+        id: "uint32_t",
+        name: "uint32_t",
+        value: "unsigned int",
+        inputbox: true
+    },{
+        id: "uint64_t",
+        name: "uint64_t",
+        value: "unsigned long",
+        inputbox: true
+    },{
+        id: "float32_t",
+        name: "float32_t",
+        value: "float",
+        inputbox: true
+    },{
+        id: "float64_t",
+        name: "float64_t",
+        value: "double",
+        inputbox: true
+    },{
+        id: "float128_t",
+        name: "float128_t",
+        value: "long double",
+        inputbox: true
+    }];
 
     /**
      * Set a number with the proper value's suffix, useful for parsing declaration's variable, with respect to MISRA 1998 rule (Rule 18, advisory)
@@ -228,7 +290,7 @@ define(function (require, exports, module) {
                 convert_constant: convert_constant
             });
 
-// console.log("********* MODEL.ENTER_LEAVE.CHAR_T ABSENT!");
+            // console.log("********* MODEL.ENTER_LEAVE.CHAR_T ABSENT!");
 
             //-- these functions generate the content of the header file
             var init_function_declaration = (model && model.init) ?
@@ -248,7 +310,7 @@ define(function (require, exports, module) {
                             is_header_file: true
                         }) : "";
             var enter_leave_functions_declaration =
-       Handlebars.compile(leave_enter_function_template, { noEscape: true })({
+                Handlebars.compile(leave_enter_function_template, { noEscape: true })({
                             comment: "enter/leave functions",
                             current_mode: model.enter_leave.current_mode,
                             previous_mode: model.enter_leave.previous_mode,
@@ -324,11 +386,9 @@ define(function (require, exports, module) {
             var pvsioweb_utils_header = Handlebars.compile(pvsioweb_utils_template, { noEscape: true })({ is_header_file: true });
             var pvsioweb_utils_body = Handlebars.compile(pvsioweb_utils_template, { noEscape: true })({});
 
-// AD! I moved the following stmt to EmuchartsGenericPrinter.js
-// AD!            //-- these are basic types definitions (bool, int, real
-// AD!            //-- renamed using misraC conventions)
-// AD!            var basic_types =
-// AD!               Handlebars.compile(basic_types_template, { noEscape: true })({});
+            //-- these are basic types definitions (bool, int, real
+            //-- renamed using misraC conventions)
+            var basic_types = Handlebars.compile(basic_types_template, { noEscape: true })(opt);
 
             //-- this is the makefile & dummy main
             var makefile = _this.print_makefile(emuchart);
@@ -340,8 +400,8 @@ define(function (require, exports, module) {
             var folder = "/misraC";
             projectManager.project().addFile(folder + "/" + emuchart.name + ".h", header, overWrite);
             projectManager.project().addFile(folder + "/" + emuchart.name + ".c", body, overWrite);
-// AD! I moved the following stmt to EmuchartsGenericPrinter.js
-// AD!            projectManager.project().addFile(folder + "/misraC_basic_types.h", basic_types, overWrite);
+
+            projectManager.project().addFile(folder + "/misraC_basic_types.h", basic_types, overWrite);
 
             projectManager.project().addFile(folder + "/" + pvsioweb_utils_filename + ".h", pvsioweb_utils_header, overWrite);
             projectManager.project().addFile(folder + "/" + pvsioweb_utils_filename + ".c", pvsioweb_utils_body, overWrite);
@@ -352,7 +412,7 @@ define(function (require, exports, module) {
         }
         return new Promise (function (resolve, reject) {
             if (opt.interactive) {
-                return _this.genericPrinter.get_params().then(function (opt) {
+                return _this.genericPrinter.get_params(misraC_params).then(function (opt) {
                     opt.wordsize = "64";
                     finalize(resolve, reject, opt);
                 }).catch(function (err) {

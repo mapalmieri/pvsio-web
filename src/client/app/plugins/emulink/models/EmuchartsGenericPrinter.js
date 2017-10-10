@@ -267,9 +267,6 @@ define(function (require, exports, module) {
     // var projectManager = require("project/ProjectManager").getInstance();
     var displayAskParameters = require("plugins/emulink/forms/displayAskParameters");
 
-    // AD! The following two stmts are needed to print misraC_basic_types.h
-    var basic_types_template =                     // AD!
-        require("text!plugins/emulink/models/misraC/templates/misraC_basic_types.handlebars");
    var projectManager = require("project/ProjectManager").getInstance(); // AD!
 
     var parser;
@@ -283,6 +280,25 @@ define(function (require, exports, module) {
         current_mode: { name: "mode", type: mode_type, value: undef }
     };
     var predefined_functions = { leave: "leave", enter: "enter" };
+
+    var predefined_params = [
+        {
+            id: "current_mode",
+            name: "Current Mode variable name",
+            value: predefined_variables.current_mode.name,
+            inputbox: true
+        },{
+            id: "previous_mode",
+            name: "Previous Mode variable name",
+            value: (predefined_variables.previous_mode) ? predefined_variables.previous_mode.name : "",
+            inputbox: true
+        },{
+            id: "mode_type",
+            name: "Mode variables type",
+            value: predefined_variables.current_mode.type,
+            inputbox: true
+        }
+    ];
 
     /**
      * Constructor
@@ -767,88 +783,13 @@ define(function (require, exports, module) {
     };
 
     // utility function for getting basic printer options
-    EmuchartsGenericPrinter.prototype.get_params = function() {
+    // @params opt Object in the form { id: (string), name: (string), value: (string), inputbox: true|false }
+    EmuchartsGenericPrinter.prototype.get_params = function(par) {
+        par = par || [];
         return new Promise (function (resolve, reject) {
             displayAskParameters.create({
                 header: "PVS Printer Options",
-                params: [{
-                    id: "current_mode",
-                    name: "Current system mode",
-                    value: predefined_variables.current_mode.name,
-                    inputbox: true
-                },{
-                    id: "previous_mode",
-                    name: "Previous system mode",
-                    value: (predefined_variables.previous_mode) ? predefined_variables.previous_mode.name : "",
-                    inputbox: true
-                },{
-                    id: "mode_type",
-                    name: "System mode type",
-                    value: predefined_variables.current_mode.type,
-                    inputbox: true
-    // AD! The following items are needed to print misraC_basic_types.h
-                },{                             // AD!
-                    id: "char_t",
-                    name: "char_t",
-                    value: "char",
-                    inputbox: true
-                },{
-                    id: "int8_t",
-                    name: "int8_t",
-                    value: "signed char",
-                    inputbox: true
-                },{
-                    id: "int16_t",
-                    name: "int16_t",
-                    value: "signed short",
-                    inputbox: true
-                },{
-                    id: "int32_t",
-                    name: "int32_t",
-                    value: "signed int",
-                    inputbox: true
-                },{
-                    id: "int64_t",
-                    name: "int64_t",
-                    value: "signed long",
-                    inputbox: true
-                },{
-                    id: "uint8_t",
-                    name: "uint8_t",
-                    value: "unsigned char",
-                    inputbox: true
-                },{
-                    id: "uint16_t",
-                    name: "uint16_t",
-                    value: "unsigned short",
-                    inputbox: true
-                },{
-                    id: "uint32_t",
-                    name: "uint32_t",
-                    value: "unsigned int",
-                    inputbox: true
-                },{
-                    id: "uint64_t",
-                    name: "uint64_t",
-                    value: "unsigned long",
-                    inputbox: true
-                },{
-                    id: "float32_t",
-                    name: "float32_t",
-                    value: "float",
-                    inputbox: true
-                },{
-                    id: "float64_t",
-                    name: "float64_t",
-                    value: "double",
-                    inputbox: true
-                },{
-                    id: "float128_t",
-                    name: "float128_t",
-                    value: "long double",
-                    inputbox: true
-                }],
-
+                params: predefined_params.concat(par),
                 buttons: ["Cancel", "Ok"]
             }).on("ok", function (e, view) {
                 view.remove();
@@ -861,35 +802,7 @@ define(function (require, exports, module) {
                 var itt = [];   // AD! inverse type table
                 keys.forEach(function (key) {
                     par[key] = e.data.labels.get(key);
-                    var XXX = par[key];     // AD!
-                    itt.push([XXX, key]);   // AD!
                 });
-
-            // AD! The following stmts produce misraC_basic_types.h
-            // AD! This code should not be here, but I couldn't
-            // AD! find the right place -- PLEASE FIX ME
-            // AD! -- BEGIN --
-            var basic_types = Handlebars.compile(basic_types_template,
-                                  { noEscape: true })(
-                                          { char_t: itt[3][0],
-                                            int8_t: itt[4][0],
-                                            int16_t: itt[5][0],
-                                            int32_t: itt[6][0],
-                                            int64_t: itt[7][0],
-                                            uint8_t: itt[9][0],
-                                            uint16_t: itt[9][0],
-                                            uint32_t: itt[10][0],
-                                            uint64_t: itt[11][0],
-                                            float32_t: itt[12][0],
-                                            float64_t: itt[13][0],
-                                            float128_t: itt[14][0]
-                                          });
-            var overWrite = {overWrite: true};
-            var folder = "/misraC";
-            projectManager.project().addFile(folder + "/misraC_basic_types.h",
-                                        basic_types, overWrite);
-            // AD! -- END --
-
                 predefined_variables.previous_mode = (par.previous_mode) ?
                     { name: par.previous_mode, type: mode_type, value: undef }
                     : null; // null will disable the creation of this state attribute
