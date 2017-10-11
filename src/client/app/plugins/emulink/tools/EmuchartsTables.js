@@ -277,7 +277,7 @@ define(function (require, exports, module) {
             textLabel: {
                 newVariableName: "Variable name",
                 newVariableType: "Variable type",
-                newVariableRepresentation: "Variable Representation", // AD!
+                newVariableRepresentation: "Typedef name", // AD!
                 newVariableValue: "Initial value",
                 newVariableScope: "Variable scope"
             },
