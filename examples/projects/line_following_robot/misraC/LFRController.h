@@ -23,10 +23,10 @@ typedef enum { AUTO, MANUAL } Mode;
 typedef struct { 
     Mode mode;
     Gear gear;
-    float64_t lightsensor_left; //-- real
-    float64_t lightsensor_right; //-- real
-    float32_t motorspeed_left;
-    float32_t motorspeed_right;
+    D_64 lightsensor_left; //-- real
+    D_64 lightsensor_right; //-- real
+    D_64 motorspeed_left; //-- real
+    D_64 motorspeed_right; //-- real
 } State;
 
 /**

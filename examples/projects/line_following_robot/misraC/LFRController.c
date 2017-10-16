@@ -2,12 +2,12 @@
 /**
  * user-defined constants
  */
-const float64_t ACC_STEP = 0.1f;
-const float64_t BRAKE_STEP = 0.1f;
-const float64_t LSR_THRESHOLD = 150.0f;
-const float64_t SPEED1 = 0.1f;
-const float64_t SPEED4 = 0.4f;
-const float64_t SPEED5 = 0.5f;
+const D_64 ACC_STEP = 0.1f;
+const D_64 BRAKE_STEP = 0.1f;
+const D_64 LSR_THRESHOLD = 150.0f;
+const D_64 SPEED1 = 0.1f;
+const D_64 SPEED4 = 0.4f;
+const D_64 SPEED5 = 0.5f;
 
 /**
  * init function
@@ -17,8 +17,8 @@ void init(State* st) {
     st->gear = DRIVE;
     st->lightsensor_left = 0.0f;
     st->lightsensor_right = 0.0f;
-    st->motorspeed_left = 0;
-    st->motorspeed_right = 0;
+    st->motorspeed_left = 0.0f;
+    st->motorspeed_right = 0.0f;
 }
 
 /**
@@ -35,31 +35,13 @@ void leave(Mode m, State* st) {
  * triggers
  */
 bool per_accelerate(State* st) {
-    return (st->mode == MANUAL && ( st->gear == DRIVE ))
-            || (st->mode == AUTO && ( st->gear == DRIVE ))
-            || (st->mode == AUTO && ( st->gear == NEUTRAL ))
+    return (st->mode == AUTO && ( st->gear == NEUTRAL ))
             || (st->mode == AUTO && ( st->gear == REVERSE ))
             || (st->mode == MANUAL && ( st->gear == REVERSE ));
 }
 State* accelerate(State* st) {
     assert( per_accelerate(st) );
-    if (st->mode == MANUAL && ( st->gear == DRIVE )) {
-        #ifdef DBG
-        _dbg_print_condition("st->mode == MANUAL && ( st->gear == DRIVE )");
-        #endif
-        leave(MANUAL, st);
-        st->motorspeed_left = inc_CW_speed(motorspeed_left(st),ACC_STEP);
-        st->motorspeed_right = inc_CCW_speed(motorspeed_right(st),ACC_STEP);
-        enter(MANUAL, st);
-    } else if (st->mode == AUTO && ( st->gear == DRIVE )) {
-        #ifdef DBG
-        _dbg_print_condition("st->mode == AUTO && ( st->gear == DRIVE )");
-        #endif
-        leave(AUTO, st);
-        st->motorspeed_left = inc_CW_speed(motorspeed_left(st),ACC_STEP);
-        st->motorspeed_right = inc_CCW_speed(motorspeed_right(st),ACC_STEP);
-        enter(MANUAL, st);
-    } else if (st->mode == AUTO && ( st->gear == NEUTRAL )) {
+    if (st->mode == AUTO && ( st->gear == NEUTRAL )) {
         #ifdef DBG
         _dbg_print_condition("st->mode == AUTO && ( st->gear == NEUTRAL )");
         #endif
@@ -70,16 +52,16 @@ State* accelerate(State* st) {
         _dbg_print_condition("st->mode == AUTO && ( st->gear == REVERSE )");
         #endif
         leave(AUTO, st);
-        st->motorspeed_left = inc_CCW_speed(motorspeed_left(st),ACC_STEP);
-        st->motorspeed_right = inc_CW_speed(motorspeed_right(st),ACC_STEP);
+        st->motorspeed_left = inc_CCW_speed(st->motorspeed_left,ACC_STEP);
+        st->motorspeed_right = inc_CW_speed(st->motorspeed_right,ACC_STEP);
         enter(MANUAL, st);
     } else if (st->mode == MANUAL && ( st->gear == REVERSE )) {
         #ifdef DBG
         _dbg_print_condition("st->mode == MANUAL && ( st->gear == REVERSE )");
         #endif
         leave(MANUAL, st);
-        st->motorspeed_left = inc_CCW_speed(motorspeed_left(st),ACC_STEP);
-        st->motorspeed_right = inc_CW_speed(motorspeed_right(st),ACC_STEP);
+        st->motorspeed_left = inc_CCW_speed(st->motorspeed_left,ACC_STEP);
+        st->motorspeed_right = inc_CW_speed(st->motorspeed_right,ACC_STEP);
         enter(MANUAL, st);
     }
     #ifdef DBG
@@ -117,16 +99,16 @@ State* brake(State* st) {
         _dbg_print_condition("st->mode == AUTO");
         #endif
         leave(AUTO, st);
-        st->motorspeed_left = dec_speed(motorspeed_left(st),BRAKE_STEP);
-        st->motorspeed_right = dec_speed(motorspeed_right(st),BRAKE_STEP);
+        st->motorspeed_left = dec_speed(st->motorspeed_left,BRAKE_STEP);
+        st->motorspeed_right = dec_speed(st->motorspeed_right,BRAKE_STEP);
         enter(MANUAL, st);
     } else if (st->mode == MANUAL) {
         #ifdef DBG
         _dbg_print_condition("st->mode == MANUAL");
         #endif
         leave(MANUAL, st);
-        st->motorspeed_left = dec_speed(motorspeed_left(st),BRAKE_STEP);
-        st->motorspeed_right = dec_speed(motorspeed_right(st),BRAKE_STEP);
+        st->motorspeed_left = dec_speed(st->motorspeed_left,BRAKE_STEP);
+        st->motorspeed_right = dec_speed(st->motorspeed_right,BRAKE_STEP);
         enter(MANUAL, st);
     }
     #ifdef DBG
@@ -136,31 +118,31 @@ State* brake(State* st) {
 }
 
 bool per_tick(State* st) {
-    return (st->mode == AUTO && ( lightsensor_right(st) < LSR_THRESHOLD && lightsensor_left(st) < LSR_THRESHOLD ))
-            || (st->mode == AUTO && ( lightsensor_right(st) > LSR_THRESHOLD && lightsensor_left(st) < LSR_THRESHOLD ))
-            || (st->mode == AUTO && ( lightsensor_right(st) > LSR_THRESHOLD && lightsensor_left(st) > LSR_THRESHOLD ));
+    return (st->mode == AUTO && ( st->lightsensor_right < LSR_THRESHOLD && st->lightsensor_left < LSR_THRESHOLD ))
+            || (st->mode == AUTO && ( st->lightsensor_right > LSR_THRESHOLD && st->lightsensor_left < LSR_THRESHOLD ))
+            || (st->mode == AUTO && ( st->lightsensor_right > LSR_THRESHOLD && st->lightsensor_left > LSR_THRESHOLD ));
 }
 State* tick(State* st) {
     assert( per_tick(st) );
-    if (st->mode == AUTO && ( lightsensor_right(st) < LSR_THRESHOLD && lightsensor_left(st) < LSR_THRESHOLD )) {
+    if (st->mode == AUTO && ( st->lightsensor_right < LSR_THRESHOLD && st->lightsensor_left < LSR_THRESHOLD )) {
         #ifdef DBG
-        _dbg_print_condition("st->mode == AUTO && ( lightsensor_right(st) < LSR_THRESHOLD && lightsensor_left(st) < LSR_THRESHOLD )");
+        _dbg_print_condition("st->mode == AUTO && ( st->lightsensor_right < LSR_THRESHOLD && st->lightsensor_left < LSR_THRESHOLD )");
         #endif
         leave(AUTO, st);
         st->motorspeed_left = SPEED4;
         st->motorspeed_right = - SPEED4;
         enter(AUTO, st);
-    } else if (st->mode == AUTO && ( lightsensor_right(st) > LSR_THRESHOLD && lightsensor_left(st) < LSR_THRESHOLD )) {
+    } else if (st->mode == AUTO && ( st->lightsensor_right > LSR_THRESHOLD && st->lightsensor_left < LSR_THRESHOLD )) {
         #ifdef DBG
-        _dbg_print_condition("st->mode == AUTO && ( lightsensor_right(st) > LSR_THRESHOLD && lightsensor_left(st) < LSR_THRESHOLD )");
+        _dbg_print_condition("st->mode == AUTO && ( st->lightsensor_right > LSR_THRESHOLD && st->lightsensor_left < LSR_THRESHOLD )");
         #endif
         leave(AUTO, st);
         st->motorspeed_left = SPEED5;
         st->motorspeed_right = - SPEED1;
         enter(AUTO, st);
-    } else if (st->mode == AUTO && ( lightsensor_right(st) > LSR_THRESHOLD && lightsensor_left(st) > LSR_THRESHOLD )) {
+    } else if (st->mode == AUTO && ( st->lightsensor_right > LSR_THRESHOLD && st->lightsensor_left > LSR_THRESHOLD )) {
         #ifdef DBG
-        _dbg_print_condition("st->mode == AUTO && ( lightsensor_right(st) > LSR_THRESHOLD && lightsensor_left(st) > LSR_THRESHOLD )");
+        _dbg_print_condition("st->mode == AUTO && ( st->lightsensor_right > LSR_THRESHOLD && st->lightsensor_left > LSR_THRESHOLD )");
         #endif
         leave(AUTO, st);
         st->motorspeed_left = SPEED1;

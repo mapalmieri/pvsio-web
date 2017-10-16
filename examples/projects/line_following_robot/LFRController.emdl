@@ -183,7 +183,7 @@
    },
    {
     "id": "T5",
-    "name": "accelerate\n[ gear = REVERSE ]\n{ motorspeed_left := inc_CCW_speed(motorspeed_left(st),ACC_STEP);\n  motorspeed_right := inc_CW_speed(motorspeed_right(st),ACC_STEP); }",
+    "name": "accelerate\n[ gear = REVERSE ]\n{ motorspeed_left := inc_CCW_speed(motorspeed_left,ACC_STEP);\n  motorspeed_right := inc_CW_speed(motorspeed_right,ACC_STEP); }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -288,7 +288,7 @@
    },
    {
     "id": "T8",
-    "name": "brake\n{ motorspeed_left := dec_speed(motorspeed_left(st),BRAKE_STEP);\n  motorspeed_right := dec_speed(motorspeed_right(st),BRAKE_STEP); }",
+    "name": "brake\n{ motorspeed_left := dec_speed(motorspeed_left,BRAKE_STEP);\n  motorspeed_right := dec_speed(motorspeed_right,BRAKE_STEP); }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -324,7 +324,7 @@
    },
    {
     "id": "T9",
-    "name": "brake\n{ motorspeed_left := dec_speed(motorspeed_left(st),BRAKE_STEP);\n  motorspeed_right := dec_speed(motorspeed_right(st),BRAKE_STEP); }",
+    "name": "brake\n{ motorspeed_left := dec_speed(motorspeed_left,BRAKE_STEP);\n  motorspeed_right := dec_speed(motorspeed_right,BRAKE_STEP); }",
     "source": {
      "id": "X3",
      "name": "MANUAL",
@@ -360,7 +360,7 @@
    },
    {
     "id": "T10",
-    "name": "accelerate\n[ gear = REVERSE ]\n{ motorspeed_left := inc_CCW_speed(motorspeed_left(st),ACC_STEP);\n  motorspeed_right := inc_CW_speed(motorspeed_right(st),ACC_STEP); }",
+    "name": "accelerate\n[ gear = REVERSE ]\n{ motorspeed_left := inc_CCW_speed(motorspeed_left,ACC_STEP);\n  motorspeed_right := inc_CW_speed(motorspeed_right,ACC_STEP); }",
     "source": {
      "id": "X3",
      "name": "MANUAL",
@@ -396,7 +396,7 @@
    },
    {
     "id": "T11",
-    "name": "accelerate\n[ gear = DRIVE ]\n{ motorspeed_left := inc_CW_speed(motorspeed_left(st),ACC_STEP);\n  motorspeed_right := inc_CCW_speed(motorspeed_right(st),ACC_STEP); ]",
+    "name": "accelerate\n[ gear = DRIVE ]\n{ motorspeed_left := inc_CW_speed(motorspeed_left,ACC_STEP);\n  motorspeed_right := inc_CCW_speed(motorspeed_right,ACC_STEP); ]",
     "source": {
      "id": "X3",
      "name": "MANUAL",

@@ -22,8 +22,8 @@ LFRController: THEORY
     gear: Gear,
     lightsensor_left: real,
     lightsensor_right: real,
-    motorspeed_left: Speed,
-    motorspeed_right: Speed
+    motorspeed_left: real,
+    motorspeed_right: real
   #]
 
   %-- init function
@@ -41,23 +41,11 @@ LFRController: THEORY
   leave(m: Mode)(st: State): State = st
 
   %-- triggers
-  per_accelerate(st: State): bool = (mode(st) = MANUAL AND ( gear(st) = DRIVE ))
-    OR (mode(st) = AUTO AND ( gear(st) = DRIVE ))
-    OR (mode(st) = AUTO AND ( gear(st) = NEUTRAL ))
+  per_accelerate(st: State): bool = (mode(st) = AUTO AND ( gear(st) = NEUTRAL ))
     OR (mode(st) = AUTO AND ( gear(st) = REVERSE ))
     OR (mode(st) = MANUAL AND ( gear(st) = REVERSE ))
   accelerate(st: (per_accelerate)): State =
     COND
-     mode(st) = MANUAL AND ( gear(st) = DRIVE )
-      -> LET st = leave(MANUAL)(st),
-             st = st WITH [ motorspeed_left := inc_CW_speed(motorspeed_left(st),ACC_STEP) ],
-             st = st WITH [ motorspeed_right := inc_CCW_speed(motorspeed_right(st),ACC_STEP) ]
-          IN enter(MANUAL)(st),
-     mode(st) = AUTO AND ( gear(st) = DRIVE )
-      -> LET st = leave(AUTO)(st),
-             st = st WITH [ motorspeed_left := inc_CW_speed(motorspeed_left(st),ACC_STEP) ],
-             st = st WITH [ motorspeed_right := inc_CCW_speed(motorspeed_right(st),ACC_STEP) ]
-          IN enter(MANUAL)(st),
      mode(st) = AUTO AND ( gear(st) = NEUTRAL )
       -> LET st = leave(AUTO)(st)
           IN enter(MANUAL)(st),
