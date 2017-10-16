@@ -1,0 +1,126 @@
+LFRController: THEORY
+ BEGIN IMPORTING LFR_utils
+  %-- user-defined constants
+  ACC_STEP: real = 0.1
+  BRAKE_STEP: real = 0.1
+  LSR_THRESHOLD: real = 150
+  SPEED1: real = 0.1
+  SPEED4: real = 0.4
+  SPEED5: real = 0.5
+
+  %-- user-defined datatypes
+  Color: TYPE = { BLACK, WHITE }
+  ControlMode: TYPE = { AUTO, MANUAL }
+  Gear: TYPE = { DRIVE, REVERSE, NEUTRAL }
+
+  %-- operating modes
+  Mode: TYPE = { AUTO, MANUAL }
+
+  %-- state attributes
+  State: TYPE = [#
+    mode: Mode,
+    gear: Gear,
+    lightsensor_left: real,
+    lightsensor_right: real,
+    motorspeed_left: Speed,
+    motorspeed_right: Speed
+  #]
+
+  %-- init function
+  init: State = (#
+    mode := AUTO, 
+    gear := DRIVE, 
+    lightsensor_left := 0, 
+    lightsensor_right := 0, 
+    motorspeed_left := 0, 
+    motorspeed_right := 0
+  #)
+
+  %-- leave/enter functions
+  enter(m: Mode)(st: State): State = st WITH [ mode := m ]
+  leave(m: Mode)(st: State): State = st
+
+  %-- triggers
+  per_accelerate(st: State): bool = (mode(st) = MANUAL AND ( gear(st) = DRIVE ))
+    OR (mode(st) = AUTO AND ( gear(st) = DRIVE ))
+    OR (mode(st) = AUTO AND ( gear(st) = NEUTRAL ))
+    OR (mode(st) = AUTO AND ( gear(st) = REVERSE ))
+    OR (mode(st) = MANUAL AND ( gear(st) = REVERSE ))
+  accelerate(st: (per_accelerate)): State =
+    COND
+     mode(st) = MANUAL AND ( gear(st) = DRIVE )
+      -> LET st = leave(MANUAL)(st),
+             st = st WITH [ motorspeed_left := inc_CW_speed(motorspeed_left(st),ACC_STEP) ],
+             st = st WITH [ motorspeed_right := inc_CCW_speed(motorspeed_right(st),ACC_STEP) ]
+          IN enter(MANUAL)(st),
+     mode(st) = AUTO AND ( gear(st) = DRIVE )
+      -> LET st = leave(AUTO)(st),
+             st = st WITH [ motorspeed_left := inc_CW_speed(motorspeed_left(st),ACC_STEP) ],
+             st = st WITH [ motorspeed_right := inc_CCW_speed(motorspeed_right(st),ACC_STEP) ]
+          IN enter(MANUAL)(st),
+     mode(st) = AUTO AND ( gear(st) = NEUTRAL )
+      -> LET st = leave(AUTO)(st)
+          IN enter(MANUAL)(st),
+     mode(st) = AUTO AND ( gear(st) = REVERSE )
+      -> LET st = leave(AUTO)(st),
+             st = st WITH [ motorspeed_left := inc_CCW_speed(motorspeed_left(st),ACC_STEP) ],
+             st = st WITH [ motorspeed_right := inc_CW_speed(motorspeed_right(st),ACC_STEP) ]
+          IN enter(MANUAL)(st),
+     mode(st) = MANUAL AND ( gear(st) = REVERSE )
+      -> LET st = leave(MANUAL)(st),
+             st = st WITH [ motorspeed_left := inc_CCW_speed(motorspeed_left(st),ACC_STEP) ],
+             st = st WITH [ motorspeed_right := inc_CW_speed(motorspeed_right(st),ACC_STEP) ]
+          IN enter(MANUAL)(st),
+     ELSE -> st
+    ENDCOND
+
+  per_autopilot(st: State): bool = (mode(st) = MANUAL)
+  autopilot(st: (per_autopilot)): State =
+    COND
+     mode(st) = MANUAL
+      -> LET st = leave(MANUAL)(st)
+          IN enter(AUTO)(st),
+     ELSE -> st
+    ENDCOND
+
+  per_brake(st: State): bool = (mode(st) = AUTO)
+    OR (mode(st) = MANUAL)
+  brake(st: (per_brake)): State =
+    COND
+     mode(st) = AUTO
+      -> LET st = leave(AUTO)(st),
+             st = st WITH [ motorspeed_left := dec_speed(motorspeed_left(st),BRAKE_STEP) ],
+             st = st WITH [ motorspeed_right := dec_speed(motorspeed_right(st),BRAKE_STEP) ]
+          IN enter(MANUAL)(st),
+     mode(st) = MANUAL
+      -> LET st = leave(MANUAL)(st),
+             st = st WITH [ motorspeed_left := dec_speed(motorspeed_left(st),BRAKE_STEP) ],
+             st = st WITH [ motorspeed_right := dec_speed(motorspeed_right(st),BRAKE_STEP) ]
+          IN enter(MANUAL)(st),
+     ELSE -> st
+    ENDCOND
+
+  per_tick(st: State): bool = (mode(st) = AUTO AND ( lightsensor_right(st) < LSR_THRESHOLD AND lightsensor_left(st) < LSR_THRESHOLD ))
+    OR (mode(st) = AUTO AND ( lightsensor_right(st) > LSR_THRESHOLD AND lightsensor_left(st) < LSR_THRESHOLD ))
+    OR (mode(st) = AUTO AND ( lightsensor_right(st) > LSR_THRESHOLD AND lightsensor_left(st) > LSR_THRESHOLD ))
+  tick(st: (per_tick)): State =
+    COND
+     mode(st) = AUTO AND ( lightsensor_right(st) < LSR_THRESHOLD AND lightsensor_left(st) < LSR_THRESHOLD )
+      -> LET st = leave(AUTO)(st),
+             st = st WITH [ motorspeed_left := SPEED4 ],
+             st = st WITH [ motorspeed_right := - SPEED4 ]
+          IN enter(AUTO)(st),
+     mode(st) = AUTO AND ( lightsensor_right(st) > LSR_THRESHOLD AND lightsensor_left(st) < LSR_THRESHOLD )
+      -> LET st = leave(AUTO)(st),
+             st = st WITH [ motorspeed_left := SPEED5 ],
+             st = st WITH [ motorspeed_right := - SPEED1 ]
+          IN enter(AUTO)(st),
+     mode(st) = AUTO AND ( lightsensor_right(st) > LSR_THRESHOLD AND lightsensor_left(st) > LSR_THRESHOLD )
+      -> LET st = leave(AUTO)(st),
+             st = st WITH [ motorspeed_left := SPEED1 ],
+             st = st WITH [ motorspeed_right := - SPEED5 ]
+          IN enter(AUTO)(st),
+     ELSE -> st
+    ENDCOND
+
+ END LFRController
