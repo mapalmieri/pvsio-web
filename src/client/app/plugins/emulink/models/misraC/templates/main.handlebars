@@ -11,7 +11,7 @@
 
 
 int main(){
-    UC_8 *MachineState[] = { {{#each states~}}(UC_8*)"{{name}}"{{#unless @last}}, {{/unless}}{{/each}} };   // Useful for printf()
+    char_t *MachineState[] = { {{#each states~}}(char_t*)"{{name}}"{{#unless @last}}, {{/unless}}{{/each}} };   // Useful for printf()
     /*
      * At first instantiate state variable and call init() in order to initialise it as follow:
      */

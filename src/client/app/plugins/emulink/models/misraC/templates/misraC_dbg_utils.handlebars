@@ -12,7 +12,7 @@
 #include "dbg_utils.h"
 {{/if}}
 //- print condition
-void _dbg_print_condition(UC_8* const cond){{#if is_header_file}};{{else}} {
+void _dbg_print_condition(char_t* const cond){{#if is_header_file}};{{else}} {
     printf("Condition: %s/n", cond);
 }{{/if}}
 //- print state //-- FIXME: we need to define function toString for each variable type

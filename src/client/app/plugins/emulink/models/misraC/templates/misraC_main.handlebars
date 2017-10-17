@@ -9,8 +9,8 @@
 const char* function_names[] = { {{#each functions}}
     "{{name}}"{{#unless @last}}, {{/unless}} //-- id: {{id}}{{/each}}
 };
-UC_8* mode_names[] = { {{#each modes}}
-    (UC_8*) "{{this}}"{{#unless @last}}, {{/unless}}{{/each}}
+char_t* mode_names[] = { {{#each modes}}
+    (char_t*) "{{this}}"{{#unless @last}}, {{/unless}}{{/each}}
 };
 void print_menu() {
     printf("List of functions:\n");

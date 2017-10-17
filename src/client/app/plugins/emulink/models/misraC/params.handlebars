@@ -78,13 +78,13 @@ state {{0.id}}(state *st);{{/if}}
  *    \param st state structure pointer
  *    \return boolean
  */
-UC_8 per_{{id}}(const state *st);{{else}}/** {{0.id}} permission function for transition.
+char_t per_{{id}}(const state *st);{{else}}/** {{0.id}} permission function for transition.
  * Use to check if functions can be performed, it controls if the current state is eligible.
  * (i.e., current state is {{#each 0.listSources}}"{{&.}}"{{#unless @last}} or {{/unless}}{{/each}})
  *    \param st state structure pointer
  *    \return boolean
  */
-UC_8 per_{{0.id}}(const state *st);{{/if}}
+char_t per_{{0.id}}(const state *st);{{/if}}
 
 {{/each}}{{/if}}
 {{&disclaimer}}

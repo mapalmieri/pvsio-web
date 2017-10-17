@@ -56,11 +56,11 @@
 {{/each}}{{/if}}
 
 {{#if transitions}}/* definition of permission function for transition functions */
-{{#each transitions}}{{#if id}}UC_8 per_{{id}}(const state *st) {
+{{#each transitions}}{{#if id}}char_t per_{{id}}(const state *st) {
     if (st->current_state == {{source.name}}){ return true; }
     return false;
 }
-{{else}}UC_8 per_{{0.id}}(const state *st) {
+{{else}}char_t per_{{0.id}}(const state *st) {
     if ({{#each 0.listSources}}st->current_state ==  {{&.}} {{#unless @last}}|| {{/unless}}{{/each}}){
         return true;
     }
