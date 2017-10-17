@@ -399,7 +399,8 @@ define(function (require, exports, module) {
         x.records.keys().forEach(function (key) {
             variables.push({
                 name: key,
-                children: x.records.get(key)
+                children: x.records.get(key),
+                type: "record"
             });
         });
         var data = {
