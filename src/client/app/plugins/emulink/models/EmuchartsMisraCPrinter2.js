@@ -69,6 +69,7 @@ define(function (require, exports, module) {
         "long"  : "int64_t",
         "float" : "float32_t",
         "double": "float64_t",
+        "char"  : "char_t",
         //--
         "real"  : "float64_t",
         "nat"   : "uint32_t"
@@ -273,6 +274,7 @@ define(function (require, exports, module) {
         }
         data.modes = this.genericPrinter.get_modes(emuchart);
         var ans = Handlebars.compile(main_template, { noEscape: true })({
+            typesTable: typesTable,
             functions: data.triggers,
             modes: data.modes.modes,
             filename: emuchart.name,
@@ -294,6 +296,9 @@ define(function (require, exports, module) {
                 convert_variable: convert_variable,
                 convert_constant: convert_constant
             });
+            if (opt.mode_type && model && model.modes && model.modes.type) {
+                model.modes.type = opt.mode_type;
+            }
 
             // console.log("********* MODEL.ENTER_LEAVE.CHAR_T ABSENT!");
 
@@ -388,8 +393,13 @@ define(function (require, exports, module) {
             });
 
             //-- these are utility functions
-            var pvsioweb_utils_header = Handlebars.compile(pvsioweb_utils_template, { noEscape: true })({ is_header_file: true });
-            var pvsioweb_utils_body = Handlebars.compile(pvsioweb_utils_template, { noEscape: true })({});
+            var pvsioweb_utils_header = Handlebars.compile(pvsioweb_utils_template, { noEscape: true })({
+                typesTable: typesTable,
+                is_header_file: true
+            });
+            var pvsioweb_utils_body = Handlebars.compile(pvsioweb_utils_template, { noEscape: true })({
+                typesTable: typesTable
+            });
 
             //-- these are basic types definitions (bool, int, real
             //-- renamed using misraC conventions)

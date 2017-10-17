@@ -528,14 +528,6 @@
   ],
   "datatypes": [
    {
-    "id": "DATATYPE_ControlMode",
-    "name": "ControlMode",
-    "constructors": [
-     "AUTO",
-     "MANUAL"
-    ]
-   },
-   {
     "id": "DATATYPE_Color",
     "name": "Color",
     "constructors": [
