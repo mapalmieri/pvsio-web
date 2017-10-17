@@ -12,9 +12,9 @@ const char* function_names[] = {
     "brake",  //-- id: 2
     "tick" //-- id: 3
 };
-UC_8* mode_names[] = { 
-    (UC_8*) "AUTO", 
-    (UC_8*) "MANUAL"
+char_t* mode_names[] = { 
+    (char_t*) "AUTO", 
+    (char_t*) "MANUAL"
 };
 void print_menu() {
     printf("List of functions:\n");

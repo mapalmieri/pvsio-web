@@ -5,7 +5,7 @@
 #include "pvsioweb_utils.h"
 
 //- get today's date and time in compact format DD.MM.YYYY hh:mm
-UC_8* get_todays_date() {
+char_t* get_todays_date() {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
     return tm.tm_mday + "." + (tm.tm_mon + 1) + "." + (tm.tm_year + 1900) + " " + tm.tm_hour + ":" + tm.tm_min;
@@ -13,9 +13,9 @@ UC_8* get_todays_date() {
 
 //- C has a built-in function pow10, which computes 10^i -- no need to define it
 //- trims the fractional number to the number of digits indicated as argument
-D_64 trim(double x, int n) {
+float_64 trim(double x, int n) {
     if (n == 0) { return floor(x); }
-    D_64 div = pow10(n);
+    float_64 div = pow10(n);
     return floor(x * div) / div;
 }
 

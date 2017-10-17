@@ -9,13 +9,12 @@
  * user-defined datatypes
  */
 typedef enum { BLACK, WHITE } Color;
-typedef enum { AUTO, MANUAL } ControlMode;
 typedef enum { DRIVE, REVERSE, NEUTRAL } Gear;
 
 /**
  * operating modes
  */
-typedef enum { AUTO, MANUAL } Mode;
+typedef enum { AUTO, MANUAL } ControlMode;
 
 /**
  * state attributes
@@ -23,10 +22,10 @@ typedef enum { AUTO, MANUAL } Mode;
 typedef struct { 
     Mode mode;
     Gear gear;
-    D_64 lightsensor_left; //-- real
-    D_64 lightsensor_right; //-- real
-    D_64 motorspeed_left; //-- real
-    D_64 motorspeed_right; //-- real
+    float64_t lightsensor_left; //-- real
+    float64_t lightsensor_right; //-- real
+    float64_t motorspeed_left; //-- real
+    float64_t motorspeed_right; //-- real
 } State;
 
 /**

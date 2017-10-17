@@ -10,7 +10,6 @@ LFRController: THEORY
 
   %-- user-defined datatypes
   Color: TYPE = { BLACK, WHITE }
-  ControlMode: TYPE = { AUTO, MANUAL }
   Gear: TYPE = { DRIVE, REVERSE, NEUTRAL }
 
   %-- operating modes
@@ -22,8 +21,8 @@ LFRController: THEORY
     gear: Gear,
     lightsensor_left: real,
     lightsensor_right: real,
-    motorspeed_left: real,
-    motorspeed_right: real
+    motorspeed_left: Speed,
+    motorspeed_right: Speed
   #]
 
   %-- init function

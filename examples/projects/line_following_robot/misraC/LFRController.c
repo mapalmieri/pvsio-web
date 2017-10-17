@@ -2,12 +2,12 @@
 /**
  * user-defined constants
  */
-const D_64 ACC_STEP = 0.1f;
-const D_64 BRAKE_STEP = 0.1f;
-const D_64 LSR_THRESHOLD = 150.0f;
-const D_64 SPEED1 = 0.1f;
-const D_64 SPEED4 = 0.4f;
-const D_64 SPEED5 = 0.5f;
+const float64_t ACC_STEP = 0.1f;
+const float64_t BRAKE_STEP = 0.1f;
+const float64_t LSR_THRESHOLD = 150.0f;
+const float64_t SPEED1 = 0.1f;
+const float64_t SPEED4 = 0.4f;
+const float64_t SPEED5 = 0.5f;
 
 /**
  * init function
