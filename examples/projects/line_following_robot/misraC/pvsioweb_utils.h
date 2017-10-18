@@ -9,4 +9,4 @@
 char_t* get_todays_date();
 //- C has a built-in function pow10, which computes 10^i -- no need to define it
 //- trims the fractional number to the number of digits indicated as argument
-float_64 trim(double x, int n);
+float64_t trim(double x, int n);

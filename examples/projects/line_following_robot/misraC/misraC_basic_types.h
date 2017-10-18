@@ -14,7 +14,7 @@ typedef float float32_t;
 typedef double float64_t;
 typedef long double float128_t;
 
-// typedef bool uint8_t;
+typedef unsigned char bool;
 // typedef int bool;
 typedef char* string;
 

@@ -14,13 +14,14 @@ typedef enum { DRIVE, REVERSE, NEUTRAL } Gear;
 /**
  * operating modes
  */
-typedef enum { AUTO, MANUAL } ControlMode;
+typedef enum { AUTO, MANUAL } Mode;
 
 /**
  * state attributes
  */
 typedef struct { 
     Mode mode;
+    Mode previous_mode;
     Gear gear;
     float64_t lightsensor_left; //-- real
     float64_t lightsensor_right; //-- real

@@ -9,10 +9,48 @@ const float64_t SPEED1 = 0.1f;
 const float64_t SPEED4 = 0.4f;
 const float64_t SPEED5 = 0.5f;
 
+/* ADDED MANUALLY */
+
+const float64_t MAX_CW_SPEED = 1.0f;
+const float64_t MAX_CCW_SPEED = -1.0f;
+const float64_t IDLE = 0.0f;
+
+float64_t inc_CW_speed(float64_t s, float64_t x)
+{
+    if (s + x < MAX_CW_SPEED)
+        return s + x;
+    else
+        return MAX_CW_SPEED;
+}
+
+float64_t inc_CCW_speed(float64_t s, float64_t x)
+{
+    if (s - x > MAX_CCW_SPEED)
+        return s - x;
+    else
+        return MAX_CCW_SPEED;
+}
+
+float64_t dec_speed(float64_t s, float64_t x)
+{
+    if (s >= IDLE) {
+        if (s - x > IDLE)
+            return s - x;
+        else
+            return IDLE;
+    } else {
+        if (s + x < IDLE)
+            return s + x;
+        else
+            return IDLE;
+    }
+}
+
 /**
  * init function
  */
 void init(State* st) { 
+    st->previous_mode = AUTO;
     st->mode = AUTO;
     st->gear = DRIVE;
     st->lightsensor_left = 0.0f;
@@ -28,7 +66,7 @@ void enter(Mode m, State* st) {
     st->mode = m;
 }
 void leave(Mode m, State* st) { 
-    //-- nothing to do, previous state is not part of the state variables
+    st->previous_mode = m;
 }
 
 /**
