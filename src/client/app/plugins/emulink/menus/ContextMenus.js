@@ -356,7 +356,7 @@ define(function (require, exports, module) {
             _this.delete_constant();
         });
         d3.select("#btn_menuNewDatatype").on("click", function () {
-            _this.new_datatype();
+            _this.add_datatype();
         });
         d3.select("#btn_menuEditDatatype").on("click", function () {
             _this.edit_datatype();
