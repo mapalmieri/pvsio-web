@@ -10,7 +10,7 @@
 define(function (require, exports, module) {
     "use strict";
     // var printer_version = "1.0";
-    var GenericPrinter = require("plugins/emulink/models/EmuchartsGenericPrinter");
+    var GenericPrinter = require("plugins/emulink/models/EmuchartsFMIPrinter");
     var projectManager = require("project/ProjectManager").getInstance();
     var skeleton_cpp_template = require("text!plugins/emulink/models/fmi-pvs/templates/skeleton_cpp.handlebars");
     var fmu_h_template = require("text!plugins/emulink/models/fmi-pvs/templates/fmu_h.handlebars");
@@ -54,7 +54,7 @@ define(function (require, exports, module) {
      */
     EmuchartsFMIPVSPrinter.prototype.print = function (emuchart, opt) {
         opt = opt || {};
-        opt.interactive = false;
+        opt.interactive = true;
         var _this = this;
         function finalize(resolve, reject, par) {
             var count = {
@@ -64,10 +64,10 @@ define(function (require, exports, module) {
                 "string": 0
             };
             var valueReference = {
-                "int": 0,
-                "bool": 0,
-                "real": 0,
-                "string": 0
+                "int": 1,
+                "bool": 1,
+                "real": 1,
+                "string": 1
             };
             var skeleton_cpp = "";
             var fmu_h = "";
@@ -75,41 +75,50 @@ define(function (require, exports, module) {
             var modelDescription_xml = "";
             var Makefile = "";
             var model = _this.genericPrinter.print(emuchart);
+            var i= 0;
+            var variability = par.variability.split(',');
+            var causality = par.causality.split(',');
             if (model && model.state_variables && model.state_variables.variables
                     && model.state_variables.variables.length > 0) {
                 // process the array of variables to add information necessary for the fmi
                 model.state_variables.variables.forEach(function (v) {
                     v.fmi = get_buffer(v.type, count);
                     if (v.fmi) {
-                        v.fmi.variability = "discrete";
-                        v.fmi.causality = "input"; //TODO: this information needs to be provided by the emuchart model
+                        v.fmi.variability = variability[i];
+                        v.fmi.causality = causality[i]; //TODO: this information needs to be provided by the emuchart model
                         v.fmi.valueReference = valueReference[v.type];
                         valueReference[v.type]++;
+                        v.output = (causality[i]=="output")?true:null;
+                        v.input = (causality[i]=="input")?true:null;
+                        v.real = (v.type=="real")?true:null;
+                        v.int = (v.type=="int")?true:null;
+                        v.bool = (v.type=="bool")?true:null;
+                        v.string = (v.type=="string")?true:null;
+                        i++;
                     }
                 });
 
                 try {
                     skeleton_cpp = Handlebars.compile(skeleton_cpp_template, { noEscape: true })({
                         variables: model.state_variables.variables,
-                        buffer_names: buffer_names
+                        modelName: emuchart.name
                     });
 
                     fmu_h = Handlebars.compile(fmu_h_template, { noEscape: true })({
                         variables: model.state_variables.variables,
-                        buffer_names: buffer_names,
                         count: count
                     });
 
                     fmu_cpp = Handlebars.compile(fmu_cpp_template, { noEscape: true })({
-                        variables: model.state_variables.variables,
-                        buffer_names: buffer_names
+                        variables: model.state_variables.variables
+                        
                     });
 
                     modelDescription_xml = Handlebars.compile(modelDescription_xml_template, { noEscape: true })({
                         variables: model.state_variables.variables,
                         author: (emuchart.author) ? emuchart.author.name : "pvsioweb",
                         date: new Date().toString(),
-                        modelName: emuchart.name,
+                        modelName: emuchart.name
                     });
 
                     Makefile = Handlebars.compile(Makefile_template, { noEscape: true })({
@@ -139,6 +148,7 @@ define(function (require, exports, module) {
             projectManager.project().addFile(folder + "/fmi/fmi2Functions.h", fmi2Functions_h, overWrite);
             projectManager.project().addFile(folder + "/fmi/fmi2FunctionTypes.h", fmi2FunctionTypes_h, overWrite);
             projectManager.project().addFile(folder + "/fmi/fmi2TypesPlatform.h", fmi2TypesPlatform_h, overWrite);
+            projectManager.project().addFile(folder + "/binaries/linux64/something", null, overWrite);
             resolve(true);
         }
         return new Promise (function (resolve, reject) {
