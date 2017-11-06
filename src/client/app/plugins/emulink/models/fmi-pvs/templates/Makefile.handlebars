@@ -4,10 +4,10 @@ CFLAGS=-I.
 %.o: %.c
 	$(CC) -c -o $@ $< $(CFLAGS)
 all:
-	g++ -fPIC -Wall -c fmu.cpp
-	g++ -fPIC -Wall -c skeleton.cpp
-	g++ -fPIC -Wall -c ../misraC/{{name}}.c
-	g++ -shared -o {{name}}.so skeleton.o fmu.o {{name}}.o -lwebsockets -lssl -lcrypto
+	gcc -fPIC -Wall -c fmu.c
+	gcc -fPIC -Wall -c skeleton.c
+	gcc -fPIC -Wall -c ../misraC/{{name}}.c
+	gcc -shared -o {{name}}.so skeleton.o fmu.o {{name}}.o -lwebsockets -lssl -lcrypto
 	mv {{name}}.so binaries/linux64/
 	zip -r {{name}}.fmu modelDescription.xml binaries/ resources/
 
