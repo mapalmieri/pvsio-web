@@ -39,7 +39,7 @@
   "transitions": [
    {
     "id": "T1",
-    "name": "tick\n[ lightsensor_right(st) < LSR_THRESHOLD AND lightsensor_left(st) < LSR_THRESHOLD ]\n{ motorspeed_left := SPEED4;\n  motorspeed_right := -SPEED4; }",
+    "name": "tick\n[ lightsensor_right < LSR_THRESHOLD AND lightsensor_left < LSR_THRESHOLD ]\n{ motorspeed_left := SPEED4;\n  motorspeed_right := -SPEED4; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -75,7 +75,7 @@
    },
    {
     "id": "T2",
-    "name": "tick\n[ lightsensor_right(st) < LSR_THRESHOLD AND lightsensor_left(st) > LSR_THRESHOLD ]\n{ motorspeed_left := SPEED1; \n  motorspeed_right := -SPEED5; }",
+    "name": "tick\n[ lightsensor_right < LSR_THRESHOLD AND lightsensor_left > LSR_THRESHOLD ]\n{ motorspeed_left := SPEED1; \n  motorspeed_right := -SPEED5; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -111,7 +111,7 @@
    },
    {
     "id": "T3",
-    "name": "tick\n[ lightsensor_right(st) > LSR_THRESHOLD AND lightsensor_left(st) < LSR_THRESHOLD ]\n{ motorspeed_left := SPEED5;\n  motorspeed_right := -SPEED1; }",
+    "name": "tick\n[ lightsensor_right > LSR_THRESHOLD AND lightsensor_left < LSR_THRESHOLD ]\n{ motorspeed_left := SPEED5;\n  motorspeed_right := -SPEED1; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -432,7 +432,7 @@
    },
    {
     "id": "T12",
-    "name": "tick [ lightsensor_right(st) > LSR_THRESHOLD AND lightsensor_left(st) > LSR_THRESHOLD ] { motorspeed_left := motorspeed_left;   motorspeed_right := motorspeed_right; }",
+    "name": "tick [ lightsensor_right > LSR_THRESHOLD AND lightsensor_left > LSR_THRESHOLD ] { motorspeed_left := motorspeed_left;   motorspeed_right := motorspeed_right; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
