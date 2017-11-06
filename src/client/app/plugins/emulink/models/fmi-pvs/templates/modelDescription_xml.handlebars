@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <fmiModelDescription 	fmiVersion="2.0"
-						modelName="LFRController"
+						modelName="{{modelName}}"
 						guid="{abb4bff1-d423-4e02-90d9-011f519869ff}"
 						description=""
 						author="{{author}}"
@@ -8,7 +8,6 @@
 						copyright=""
 						license="PVS License"
 						generationTool="PVSio-web"
-						generationDateAndTime="{{date}}"
 						variableNamingConvention="flat"
 						numberOfEventIndicators="0">
 	<CoSimulation 	modelIdentifier="{{modelName}}"
@@ -31,14 +30,17 @@
 		<Category name="Error" />
 	</LogCategories>
 
-	<ModelVariables>{{#each variables}}{{#if fmi}}
+	<ModelVariables>{{#each variables}}{{#if fmi}}{{#if input}}
 		<ScalarVariable name="{{name}}" valueReference="{{fmi.valueReference}}" causality="{{fmi.causality}}" variability="{{fmi.variability}}"><{{fmi.descriptor}} start="{{value}}" /></ScalarVariable>
-    {{/if}}{{/each}}</ModelVariables>
+    {{/if}}{{/if}}{{/each}}
+    {{#each variables}}{{#if fmi}}{{#if output}}
+		<ScalarVariable name="{{name}}" valueReference="{{fmi.valueReference}}" causality="{{fmi.causality}}" variability="{{fmi.variability}}"><{{fmi.descriptor}}/></ScalarVariable>
+    {{/if}}{{/if}}{{/each}}</ModelVariables>
 
 	<ModelStructure>
-	<Outputs>
-			<Unknown index="3"  dependencies=""/>
-            <Unknown index="4"  dependencies=""/>
+	<Outputs>{{#each variables}}{{#if fmi}}{{#if output}}
+			<Unknown index="{{fmi.valueReference}}"  dependencies=""/>
+            {{/if}}{{/if}}{{/each}}
 	</Outputs>
 
 	</ModelStructure>

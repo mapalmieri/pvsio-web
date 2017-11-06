@@ -6,7 +6,8 @@ CFLAGS=-I.
 all:
 	g++ -fPIC -Wall -c fmu.cpp
 	g++ -fPIC -Wall -c skeleton.cpp
-	g++ -shared -o {{name}}.so skeleton.o fmu.o -lwebsockets -lssl -lcrypto
+	g++ -fPIC -Wall -c ../misraC/{{name}}.c
+	g++ -shared -o {{name}}.so skeleton.o fmu.o {{name}}.o -lwebsockets -lssl -lcrypto
 	mv {{name}}.so binaries/linux64/
 	zip -r {{name}}.fmu modelDescription.xml binaries/ resources/
 
@@ -16,4 +17,4 @@ run1:
 	./fmuCheck.linux64 -h 1E-02 {{name}}.fmu
 
 clean:
-	rm -rf {{name}}.fmu {{name}}.o fmu.o
+	rm -rf {{name}}.fmu {{name}}.o fmu.o skeleton.o
