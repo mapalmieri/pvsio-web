@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="S2Y" version="4">
+  <OBJECT>
+    <ID name="S2Y" mc="Standard.Class" uid="d0b66f00-c318-4008-8135-89be1e7b80d6"/>
+    <PID name="DSE" mc="Standard.Package" uid="bc3ff0f3-2a1c-4483-ae60-939a2691b1eb"/>
+    <ATTRIBUTES>
+      <ATT name="IsActive">false</ATT>
+      <ATT name="IsMain">false</ATT>
+      <ATT name="IsElementary">false</ATT>
+      <ATT name="IsAbstract">false</ATT>
+      <ATT name="IsLeaf">false</ATT>
+      <ATT name="IsRoot">false</ATT>
+      <ATT name="Visibility">Public</ATT>
+      <ATT name="Name"><![CDATA[S2Y]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <LINK relation="Extension">
+        <FOREIGNID name="DSEParameter" mc="Standard.Stereotype" uid="389712c5-96e3-41a9-8995-60a4a50dfa50"/>
+      </LINK>
+      <COMP relation="Tag">
+        <OBJECT>
+          <ID name="" mc="Standard.TaggedValue" uid="3a5058dd-a9e8-4d34-9917-1850f5c4c583"/>
+          <ATTRIBUTES>
+            <ATT name="Name"></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <COMP relation="Actual">
+              <OBJECT>
+                <ID name="" mc="Standard.TagParameter" uid="401005b6-47a8-4b6c-9c09-eb00305f3fc6"/>
+                <ATTRIBUTES>
+                  <ATT name="Value"><![CDATA[0.07]]></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES></DEPENDENCIES>
+              </OBJECT>
+              <OBJECT>
+                <ID name="" mc="Standard.TagParameter" uid="e9f37021-7da2-4521-ad1e-834c395ec146"/>
+                <ATTRIBUTES>
+                  <ATT name="Value"><![CDATA[0.13]]></ATT>
+                  <ATT name="status">1970354901745664</ATT>
+                </ATTRIBUTES>
+                <DEPENDENCIES></DEPENDENCIES>
+              </OBJECT>
+            </COMP>
+            <LINK relation="Definition">
+              <FOREIGNID name="Parameter_values" mc="Standard.TagType" uid="dc5a476d-fc9d-4e41-96c1-72074511b70b"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

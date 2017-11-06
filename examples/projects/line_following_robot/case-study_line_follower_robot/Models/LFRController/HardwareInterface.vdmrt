@@ -1,0 +1,31 @@
+class HardwareInterface
+
+values
+    -- @ interface: type = parameter, name="forwardSpeed";
+    public forwardSpeed : RealPort = new RealPort(4.0);
+    -- @ interface: type = parameter, name="forwardRotate";
+    public forwardRotate : RealPort = new RealPort(5.0);
+    -- @ interface: type = parameter, name="backwardRotate";
+    public backwardRotate : RealPort = new RealPort(1.0);
+
+
+instance variables
+    
+  -- @ interface: type = input, name="lfLeftVal";
+  public leftVal : RealPort := new RealPort(0.0);
+  -- @ interface: type = input, name="lfRightVal";
+  public rightVal : RealPort := new RealPort(0.0);
+  -- @ interface: type = input, name="total_energy_used";
+  public total_energy_used : RealPort := new RealPort(0.0);
+  
+instance variables
+
+  -- @ interface: type = output, name="servoRightVal";
+  public servo_right_out : RealPort := new RealPort(0.0);
+  -- @ interface: type = output, name="servoLeftVal";
+  public servo_left_out : RealPort := new RealPort(0.0);
+  
+end HardwareInterface
+
+
+  

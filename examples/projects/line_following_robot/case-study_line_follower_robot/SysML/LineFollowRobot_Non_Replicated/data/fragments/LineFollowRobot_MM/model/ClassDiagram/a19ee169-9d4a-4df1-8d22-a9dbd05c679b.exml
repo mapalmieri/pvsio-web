@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="DSE Parameter Connections diagram" version="4">
+  <OBJECT>
+    <ID name="DSE Parameter Connections diagram" mc="Standard.ClassDiagram" uid="a19ee169-9d4a-4df1-8d22-a9dbd05c679b"/>
+    <PID name="DSE" mc="Standard.Package" uid="bc3ff0f3-2a1c-4483-ae60-939a2691b1eb"/>
+    <ATTRIBUTES>
+      <ATT name="UiDataVersion">441</ATT>
+      <ATT name="UiData"><![CDATA[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]]></ATT>
+      <ATT name="PdeProperties"></ATT>
+      <ATT name="Name"><![CDATA[DSE Parameter Connections diagram]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <LINK relation="Extension">
+        <FOREIGNID name="DSEParameterConnectionDiagram" mc="Standard.Stereotype" uid="a10fcfd0-2e47-4221-81f3-85478febdca3"/>
+      </LINK>
+      <COMP relation="Descriptor">
+        <OBJECT>
+          <ID name="" mc="Standard.Note" uid="f0e8568f-7125-439a-bdca-c5318b10e345"/>
+          <ATTRIBUTES>
+            <ATT name="Content"></ATT>
+            <ATT name="MimeType"></ATT>
+            <ATT name="Name"></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Model">
+              <FOREIGNID name="description" mc="Standard.NoteType" uid="00000000-0000-3e81-0000-000000000000"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>

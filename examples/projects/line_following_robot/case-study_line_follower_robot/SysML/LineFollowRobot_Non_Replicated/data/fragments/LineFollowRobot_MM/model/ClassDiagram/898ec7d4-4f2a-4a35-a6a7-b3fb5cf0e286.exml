@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<!--GENERATED FILE, PLEASE DO NOT EDIT!!!--><EXT object="DSE Ranking" version="4">
+  <OBJECT>
+    <ID name="DSE Ranking" mc="Standard.ClassDiagram" uid="898ec7d4-4f2a-4a35-a6a7-b3fb5cf0e286"/>
+    <PID name="DSE" mc="Standard.Package" uid="bc3ff0f3-2a1c-4483-ae60-939a2691b1eb"/>
+    <ATTRIBUTES>
+      <ATT name="UiDataVersion">316</ATT>
+      <ATT name="UiData"><![CDATA[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]]></ATT>
+      <ATT name="PdeProperties"></ATT>
+      <ATT name="Name"><![CDATA[DSE Ranking]]></ATT>
+      <ATT name="status">1970354901745664</ATT>
+    </ATTRIBUTES>
+    <DEPENDENCIES>
+      <LINK relation="Extension">
+        <FOREIGNID name="DSERankingDiagram" mc="Standard.Stereotype" uid="57c988ca-69cc-4d39-94e2-559f956c08d8"/>
+      </LINK>
+      <COMP relation="Descriptor">
+        <OBJECT>
+          <ID name="" mc="Standard.Note" uid="4c5d25a9-b65f-4f08-99cb-3bd3212f8318"/>
+          <ATTRIBUTES>
+            <ATT name="Content"></ATT>
+            <ATT name="MimeType"></ATT>
+            <ATT name="Name"></ATT>
+            <ATT name="status">1970354901745664</ATT>
+          </ATTRIBUTES>
+          <DEPENDENCIES>
+            <LINK relation="Model">
+              <FOREIGNID name="description" mc="Standard.NoteType" uid="00000000-0000-3e81-0000-000000000000"/>
+            </LINK>
+          </DEPENDENCIES>
+        </OBJECT>
+      </COMP>
+    </DEPENDENCIES>
+  </OBJECT>
+</EXT>
