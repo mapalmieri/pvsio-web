@@ -1,1 +1,0 @@
-{"startTime":0,"endTime":40,"multimodel_path":"Multi-models/lfr-3d-rep-OM/lfr-3d-rep-OM.mm.json","livestream":{"{sensorFMU}.sensor2":["lf_1_sensor_reading"],"{sensorFMU}.sensor1":["lf_1_sensor_reading"]},"algorithm":{"type":"fixed-step","size":0.01}}

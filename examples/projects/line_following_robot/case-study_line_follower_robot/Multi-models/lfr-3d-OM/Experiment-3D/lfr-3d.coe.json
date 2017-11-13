@@ -1,1 +1,0 @@
-{"startTime":0,"endTime":40,"multimodel_path":"Multi-Models\\lfr-3d\\lfr-3d.mm.json","livestream":{"{sensor2FMU}.sensor2":["lf_1_sensor_reading"],"{sensor1FMU}.sensor1":["lf_1_sensor_reading"]},"visible":false,"loggingOn":false,"overrideLogLevel":null,"enableAllLogCategoriesPerInstance":false,"algorithm":{"type":"fixed-step","size":0.01}}

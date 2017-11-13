@@ -140,9 +140,9 @@ define(function (require, exports, module) {
             //-- write data to disk
             var overWrite = {overWrite: true};
             var folder = "fmu-pvs/";
-            projectManager.project().addFile(folder + "skeleton.cpp", skeleton_cpp, overWrite);
+            projectManager.project().addFile(folder + "skeleton.c", skeleton_cpp, overWrite);
             projectManager.project().addFile(folder + "fmu.h", fmu_h, overWrite);
-            projectManager.project().addFile(folder + "fmu.cpp", fmu_cpp, overWrite);
+            projectManager.project().addFile(folder + "fmu.c", fmu_cpp, overWrite);
             projectManager.project().addFile(folder + "modelDescription.xml", modelDescription_xml, overWrite);
             projectManager.project().addFile(folder + "Makefile", Makefile, overWrite);
             projectManager.project().addFile(folder + "/fmi/fmi2Functions.h", fmi2Functions_h, overWrite);
