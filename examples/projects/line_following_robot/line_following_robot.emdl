@@ -1,0 +1,255 @@
+{
+ "descriptor": {
+  "file_type": "emdl",
+  "version": "2.0",
+  "description": "emucharts model",
+  "chart_name": "line_following_robot"
+ },
+ "chart": {
+  "states": [
+   {
+    "id": "X1",
+    "name": "AUTO",
+    "color": "#1f77b4",
+    "width": 36,
+    "height": 36,
+    "x": 318.0138854980469,
+    "y": 262.7673645019531,
+    "enter": "",
+    "exit": "",
+    "pmr": [],
+    "widgets": [],
+    "components": []
+   }
+  ],
+  "transitions": [
+   {
+    "id": "T1",
+    "name": "tick\n[ lightsensor_right < LSR_THRESHOLD AND lightsensor_left < LSR_THRESHOLD ]\n{ motorspeed_left := SPEED4;\n  motorspeed_right := -SPEED4; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 318.0138854980469,
+     "y": 262.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 318.0138854980469,
+     "y": 262.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 432.0138854980469,
+     "y": 26.76735496520996
+    }
+   },
+   {
+    "id": "T2",
+    "name": "tick\n[ lightsensor_right < LSR_THRESHOLD AND lightsensor_left > LSR_THRESHOLD ]\n{ motorspeed_left := SPEED1; \n  motorspeed_right := -SPEED5; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 318.0138854980469,
+     "y": 262.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 318.0138854980469,
+     "y": 262.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 475.0138854980469,
+     "y": 58.76735305786133
+    }
+   },
+   {
+    "id": "T3",
+    "name": "tick\n[ lightsensor_right > LSR_THRESHOLD AND lightsensor_left < LSR_THRESHOLD ]\n{ motorspeed_left := SPEED5;\n  motorspeed_right := -SPEED1; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 318.0138854980469,
+     "y": 262.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 318.0138854980469,
+     "y": 262.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 451.0138854980469,
+     "y": 43.76735305786133
+    }
+   },
+   {
+    "id": "T4",
+    "name": "tick [ lightsensor_right > LSR_THRESHOLD AND lightsensor_left > LSR_THRESHOLD]{\nmotorspeed_left := motorspeed_left ;\n  motorspeed_right := motorspeed_right;}",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 318.0138854980469,
+     "y": 262.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 318.0138854980469,
+     "y": 262.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 501,
+     "y": 76
+    }
+   }
+  ],
+  "initial_transitions": [
+   {
+    "id": "IT1",
+    "name": "",
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 318.0138854980469,
+     "y": 262.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    }
+   }
+  ],
+  "variables": [
+   {
+    "type": "real",
+    "repr": "float64_t",
+    "name": "lightsensor_left",
+    "value": "0",
+    "scope": "Input",
+    "id": "VAR_lightsensor_left:real(Input)"
+   },
+   {
+    "type": "real",
+    "repr": "float64_t",
+    "name": "motorspeed_left",
+    "value": "0",
+    "scope": "Output",
+    "id": "VAR_motorspeed_left:real(Output)"
+   },
+   {
+    "type": "real",
+    "repr": "float64_t",
+    "name": "motorspeed_right",
+    "value": "0",
+    "scope": "Output",
+    "id": "VAR_motorspeed_right:real(Output)"
+   },
+   {
+    "type": "real",
+    "repr": "float64_t",
+    "name": "lightsensor_right",
+    "value": "0",
+    "scope": "Input",
+    "id": "VAR_lightsensor_right:real(Input)"
+   }
+  ],
+  "constants": [
+   {
+    "id": "CONST_LSR_THRESHOLD:real",
+    "name": "LSR_THRESHOLD",
+    "type": "real",
+    "value": "150"
+   },
+   {
+    "id": "CONST_SPEED1:real",
+    "name": "SPEED1",
+    "type": "real",
+    "value": "0.1"
+   },
+   {
+    "id": "CONST_SPEED4:real",
+    "name": "SPEED4",
+    "type": "real",
+    "value": "0.4"
+   },
+   {
+    "id": "CONST_SPEED5:real",
+    "name": "SPEED5",
+    "type": "real",
+    "value": "0.5"
+   }
+  ],
+  "datatypes": [],
+  "pmr": {},
+  "isPIM": false
+ }
+}
