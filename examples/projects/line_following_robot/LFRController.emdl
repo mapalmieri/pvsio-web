@@ -20,20 +20,6 @@
     "pmr": [],
     "widgets": [],
     "components": []
-   },
-   {
-    "id": "X3",
-    "name": "MANUAL",
-    "color": "#2ca02c",
-    "width": 36,
-    "height": 36,
-    "x": 990.013916015625,
-    "y": 264.7673645019531,
-    "enter": "",
-    "exit": "",
-    "pmr": [],
-    "widgets": [],
-    "components": []
    }
   ],
   "transitions": [
@@ -144,297 +130,12 @@
      "x": 451.0138854980469,
      "y": 43.76735305786133
     }
-   },
-   {
-    "id": "T4",
-    "name": "accelerate\n[ gear = DRIVE ]\n{ motorspeed_left := inc_CW_speed(motorspeed_left,ACC_STEP);\n  motorspeed_right := inc_CCW_speed(motorspeed_right,ACC_STEP); ]",
-    "source": {
-     "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
-     "width": 36,
-     "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "target": {
-     "id": "X3",
-     "name": "MANUAL",
-     "color": "#2ca02c",
-     "width": 36,
-     "height": 36,
-     "x": 990.013916015625,
-     "y": 264.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "controlPoint": {
-     "x": 887.0138549804688,
-     "y": 192.9895782470703
-    }
-   },
-   {
-    "id": "T5",
-    "name": "accelerate\n[ gear = REVERSE ]\n{ motorspeed_left := inc_CCW_speed(motorspeed_left,ACC_STEP);\n  motorspeed_right := inc_CW_speed(motorspeed_right,ACC_STEP); }",
-    "source": {
-     "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
-     "width": 36,
-     "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "target": {
-     "id": "X3",
-     "name": "MANUAL",
-     "color": "#2ca02c",
-     "width": 36,
-     "height": 36,
-     "x": 990.013916015625,
-     "y": 264.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "controlPoint": {
-     "x": 853.0138549804688,
-     "y": 167.9895782470703
-    }
-   },
-   {
-    "id": "T6",
-    "name": "accelerate\n[ gear = NEUTRAL ]",
-    "source": {
-     "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
-     "width": 36,
-     "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "target": {
-     "id": "X3",
-     "name": "MANUAL",
-     "color": "#2ca02c",
-     "width": 36,
-     "height": 36,
-     "x": 990.013916015625,
-     "y": 264.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "controlPoint": {
-     "x": 813.0138549804688,
-     "y": 146.9895782470703
-    }
-   },
-   {
-    "id": "T7",
-    "name": "autopilot",
-    "source": {
-     "id": "X3",
-     "name": "MANUAL",
-     "color": "#2ca02c",
-     "width": 36,
-     "height": 36,
-     "x": 990.013916015625,
-     "y": 264.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "target": {
-     "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
-     "width": 36,
-     "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "controlPoint": null
-   },
-   {
-    "id": "T8",
-    "name": "brake\n{ motorspeed_left := dec_speed(motorspeed_left,BRAKE_STEP);\n  motorspeed_right := dec_speed(motorspeed_right,BRAKE_STEP); }",
-    "source": {
-     "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
-     "width": 36,
-     "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "target": {
-     "id": "X3",
-     "name": "MANUAL",
-     "color": "#2ca02c",
-     "width": 36,
-     "height": 36,
-     "x": 990.013916015625,
-     "y": 264.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "controlPoint": {
-     "x": 766.0138549804688,
-     "y": 132.9895782470703
-    }
-   },
-   {
-    "id": "T9",
-    "name": "brake\n{ motorspeed_left := dec_speed(motorspeed_left,BRAKE_STEP);\n  motorspeed_right := dec_speed(motorspeed_right,BRAKE_STEP); }",
-    "source": {
-     "id": "X3",
-     "name": "MANUAL",
-     "color": "#2ca02c",
-     "width": 36,
-     "height": 36,
-     "x": 990.013916015625,
-     "y": 264.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "target": {
-     "id": "X3",
-     "name": "MANUAL",
-     "color": "#2ca02c",
-     "width": 36,
-     "height": 36,
-     "x": 990.013916015625,
-     "y": 264.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "controlPoint": {
-     "x": 1125.013916015625,
-     "y": 56.98957824707031
-    }
-   },
-   {
-    "id": "T10",
-    "name": "accelerate\n[ gear = REVERSE ]\n{ motorspeed_left := inc_CCW_speed(motorspeed_left,ACC_STEP);\n  motorspeed_right := inc_CW_speed(motorspeed_right,ACC_STEP); }",
-    "source": {
-     "id": "X3",
-     "name": "MANUAL",
-     "color": "#2ca02c",
-     "width": 36,
-     "height": 36,
-     "x": 990.013916015625,
-     "y": 264.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "target": {
-     "id": "X3",
-     "name": "MANUAL",
-     "color": "#2ca02c",
-     "width": 36,
-     "height": 36,
-     "x": 990.013916015625,
-     "y": 264.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "controlPoint": {
-     "x": 1148.013916015625,
-     "y": 76.98957824707031
-    }
-   },
-   {
-    "id": "T11",
-    "name": "accelerate\n[ gear = DRIVE ]\n{ motorspeed_left := inc_CW_speed(motorspeed_left,ACC_STEP);\n  motorspeed_right := inc_CCW_speed(motorspeed_right,ACC_STEP); ]",
-    "source": {
-     "id": "X3",
-     "name": "MANUAL",
-     "color": "#2ca02c",
-     "width": 36,
-     "height": 36,
-     "x": 990.013916015625,
-     "y": 264.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "target": {
-     "id": "X3",
-     "name": "MANUAL",
-     "color": "#2ca02c",
-     "width": 36,
-     "height": 36,
-     "x": 990.013916015625,
-     "y": 264.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "controlPoint": {
-     "x": 1176.013916015625,
-     "y": 94.98957824707031
-    }
    }
   ],
   "initial_transitions": [
    {
     "id": "IT1",
-    "name": "IT1",
+    "name": "",
     "target": {
      "id": "X1",
      "name": "AUTO",
@@ -453,54 +154,39 @@
   ],
   "variables": [
    {
-    "id": "VAR_lightsensor_left:real(Local)",
+    "type": "real",
+    "repr": "char_t",
     "name": "lightsensor_left",
-    "type": "real",
     "value": "0",
-    "scope": "Local"
+    "scope": "Input",
+    "id": "VAR_lightsensor_left:real(Input)"
    },
    {
-    "id": "VAR_lightsensor_right:real(Local)",
+    "type": "real",
+    "repr": "char_t",
     "name": "lightsensor_right",
-    "type": "real",
     "value": "0",
-    "scope": "Local"
+    "scope": "Input",
+    "id": "VAR_lightsensor_right:real(Input)"
    },
    {
-    "id": "VAR_motorspeed_left:real(Local)",
+    "type": "real",
+    "repr": "char_t",
     "name": "motorspeed_left",
-    "type": "real",
     "value": "0",
-    "scope": "Local"
+    "scope": "Output",
+    "id": "VAR_motorspeed_left:real(Output)"
    },
    {
-    "id": "VAR_motorspeed_right:real(Local)",
+    "type": "real",
+    "repr": "char_t",
     "name": "motorspeed_right",
-    "type": "real",
     "value": "0",
-    "scope": "Local"
-   },
-   {
-    "id": "VAR_gear:Gear(Local)",
-    "name": "gear",
-    "type": "Gear",
-    "value": "DRIVE",
-    "scope": "Local"
+    "scope": "Output",
+    "id": "VAR_motorspeed_right:real(Output)"
    }
   ],
   "constants": [
-   {
-    "id": "CONST_ACC_STEP:real",
-    "name": "ACC_STEP",
-    "type": "real",
-    "value": "0.1"
-   },
-   {
-    "id": "CONST_BRAKE_STEP:real",
-    "name": "BRAKE_STEP",
-    "type": "real",
-    "value": "0.1"
-   },
    {
     "id": "CONST_LSR_THRESHOLD:real",
     "name": "LSR_THRESHOLD",
@@ -526,25 +212,7 @@
     "value": "0.5"
    }
   ],
-  "datatypes": [
-   {
-    "id": "DATATYPE_Color",
-    "name": "Color",
-    "constructors": [
-     "BLACK",
-     "WHITE"
-    ]
-   },
-   {
-    "id": "DATATYPE_Gear",
-    "name": "Gear",
-    "constructors": [
-     "DRIVE",
-     "REVERSE",
-     "NEUTRAL"
-    ]
-   }
-  ],
+  "datatypes": [],
   "pmr": {},
   "isPIM": false
  }

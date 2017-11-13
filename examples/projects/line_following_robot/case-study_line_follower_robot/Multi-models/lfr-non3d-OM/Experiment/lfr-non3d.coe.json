@@ -1,1 +1,0 @@
-{"startTime":0,"endTime":40,"multimodel_path":"Multi-models/lfr-non3d-OM/lfr-non3d-OM.mm.json","livestream":{"{sensor2FMU}.sensor2":["lf_1_sensor_reading"],"{sensor1FMU}.sensor1":["lf_1_sensor_reading"]},"algorithm":{"type":"fixed-step","size":0.01}}
