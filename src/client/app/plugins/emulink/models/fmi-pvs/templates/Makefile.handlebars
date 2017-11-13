@@ -6,7 +6,7 @@ CFLAGS=-I.
 all:
 	gcc -fPIC -Wall -c fmu.c
 	gcc -fPIC -Wall -c skeleton.c
-	gcc -fPIC -Wall -c ../misraC/{{name}}.c
+	gcc -fPIC -Wall -c misraC/{{name}}.c
 	gcc -shared -o {{name}}.so skeleton.o fmu.o {{name}}.o -lwebsockets -lssl -lcrypto
 	mv {{name}}.so binaries/linux64/
 	zip -r {{name}}.fmu modelDescription.xml binaries/ resources/
