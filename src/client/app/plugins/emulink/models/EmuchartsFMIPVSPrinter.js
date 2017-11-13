@@ -148,7 +148,7 @@ define(function (require, exports, module) {
                     }).catch(function (err) {
                         console.log(err);
                         reject(err);
-                    })
+                    });
                 }).catch(function (err) {
                     console.log(err);
                     reject(err);
