@@ -130,42 +130,6 @@
      "x": 451.0138854980469,
      "y": 43.76735305786133
     }
-   },
-   {
-    "id": "T4",
-    "name": "tick [ lightsensor_right > LSR_THRESHOLD AND lightsensor_left > LSR_THRESHOLD]{\nmotorspeed_left := motorspeed_left ;\n  motorspeed_right := motorspeed_right;}",
-    "source": {
-     "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
-     "width": 36,
-     "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "target": {
-     "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
-     "width": 36,
-     "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
-     "enter": "",
-     "exit": "",
-     "pmr": [],
-     "widgets": [],
-     "components": []
-    },
-    "controlPoint": {
-     "x": 501,
-     "y": 76
-    }
    }
   ],
   "initial_transitions": [
@@ -190,36 +154,36 @@
   ],
   "variables": [
    {
-    "type": "real",
-    "repr": "float64_t",
+    "id": "VAR_lightsensor_left:real(Input)",
     "name": "lightsensor_left",
-    "value": "0",
-    "scope": "Input",
-    "id": "VAR_lightsensor_left:real(Input)"
-   },
-   {
     "type": "real",
     "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_motorspeed_left:real(Output)",
     "name": "motorspeed_left",
-    "value": "0",
-    "scope": "Output",
-    "id": "VAR_motorspeed_left:real(Output)"
-   },
-   {
     "type": "real",
     "repr": "float64_t",
+    "value": "0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_motorspeed_right:real(Output)",
     "name": "motorspeed_right",
-    "value": "0",
-    "scope": "Output",
-    "id": "VAR_motorspeed_right:real(Output)"
-   },
-   {
     "type": "real",
     "repr": "float64_t",
-    "name": "lightsensor_right",
     "value": "0",
-    "scope": "Input",
-    "id": "VAR_lightsensor_right:real(Input)"
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_lightsensor_right:real(Input)",
+    "name": "lightsensor_right",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
    }
   ],
   "constants": [
