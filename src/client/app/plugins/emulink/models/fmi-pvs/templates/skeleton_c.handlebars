@@ -1,4 +1,4 @@
-/**
+/*! \file skeleton.c 
  * In this file there are the implementations
  * of the fuctions declared in fmu.h
  * along with the data needed.
@@ -6,8 +6,16 @@
 #include "fmu.h"
 #include "misraC/{{modelName}}.h"
 
-State st;
+State st; /*!< structure containing the state of the model */
 
+
+ /**
+       * function for the initialization of the model.
+       * It calls the init function of the model and
+       * 	sets the output
+       * @param location is the directory where the fmu has been unzipped. Might be used in future version
+       * 
+       */
 void initialize(const char* location) {
     init(&st);{{#each variables}}{{#if fmi}}{{#if output}}{{#if real}}
     fmiBuffer.realBuffer[{{fmi.valueReference}}] = st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if int}}
@@ -17,8 +25,11 @@ void initialize(const char* location) {
 }
 
 /**
- * This function exchanges messages with the PVSio process
- * Received messages are saved in the variable state
+ * function that performs a step of the simulation model.
+ * At first the inputs of the are updated with the values fom the master algorithm
+ * Then the tick function is called
+ * Finally the outputs of the model are forwarded to the master algorithm 
+ * @param action is the action to perform. Might be used in future version
  */
 void doStep(const char* action) { {{#each variables}}{{#if fmi}}{{#if input}}{{#if real}}
     st.{{name}} = fmiBuffer.realBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if input}}{{#if int}}
