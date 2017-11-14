@@ -32,7 +32,7 @@ struct FmiBuffer {
 extern struct FmiBuffer fmiBuffer;
 
 void initialize(fmi2String);
-void sendToPVS(const char*);
+void doStep(const char*);
 void terminate();
 
 

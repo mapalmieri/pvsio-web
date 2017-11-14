@@ -20,7 +20,7 @@ void initialize(const char* location) {
  * This function exchanges messages with the PVSio process
  * Received messages are saved in the variable state
  */
-void sendToPVS(const char* action) { {{#each variables}}{{#if fmi}}{{#if input}}{{#if real}}
+void doStep(const char* action) { {{#each variables}}{{#if fmi}}{{#if input}}{{#if real}}
     st.{{name}} = fmiBuffer.realBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if input}}{{#if int}}
 	st.{{name}} = fmiBuffer.intBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if input}}{{#if bool}}
 	st.{{name}} = fmiBuffer.booleanBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if input}}{{#if string}}
