@@ -113,7 +113,15 @@ define(function (require, exports, module) {
                     });
 
                     modelDescription_xml = Handlebars.compile(modelDescription_xml_template, { noEscape: true })({
-                        variables: model.state_variables.variables,
+                        variables: model.state_variables.variables.sort(function (a,b) { // variables are ordered by valueReference (ascending order)
+                                        if (a.fmi) {
+                                            if (b.fmi && a.fmi.valueReference > b.fmi.valueReference) {
+                                                return 1;
+                                            }
+                                            return -1;
+                                        }
+                                        return 1;
+                                    }),
                         author: (emuchart.author) ? emuchart.author.name : "pvsioweb",
                         date: new Date().toString(),
                         modelName: emuchart.name
