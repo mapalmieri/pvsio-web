@@ -41,10 +41,11 @@ define(function (require, exports, module) {
 
     function get_buffer(t, count) {
         switch (t) {
-            case "int" : count.int++;  return { printf_type: "%i", buffer_name: buffer_names.int, descriptor: "Int" };
-            case "real": count.real++; return { printf_type: "%f", buffer_name: buffer_names.real, descriptor: "Real" };
-            case "bool": count.bool++; return { printf_type: "%i", buffer_name: buffer_names.bool, descriptor: "Bool"};
-            case "string": count.string++; return { printf_type: "%s", buffer_name: buffer_names.string, descriptor: "String"};
+            case "int" : count++;  return { printf_type: "%i", buffer_name: buffer_names.int, descriptor: "Integer" };
+            case "real": count++; return { printf_type: "%f", buffer_name: buffer_names.real, descriptor: "Real" };
+            case "bool": count++; return { printf_type: "%i", buffer_name: buffer_names.bool, descriptor: "Bool"};
+            case "string": count++; return { printf_type: "%s", buffer_name: buffer_names.string, descriptor: "String"};
+            case "float64_t": count++; return { printf_type: "%f", buffer_name: buffer_names.real, descriptor: "Real" };
             default: return null;
         }
         return null;
@@ -53,24 +54,26 @@ define(function (require, exports, module) {
     /**
      * Prints the FMU package
      * When opt.interactive is true, a dialog is shown to the user to enter/select parameters.
+     * 
+     * @count is global to all the type
+     * 	this make things easier, I think Peter did the same with Overture
+     * 	but it is far less efficient than the original approach of Paolo.
+     * 
+     * if ( v.fmi.causality === "local"){	//TODO: introduce scope parameter as an option in Emuchart variables
+							v.fmi.variability = "fixed"; 
+							v.fmi.causality = "parameter";
+							v.fmi.initial = "exact";
+							}
+							* 
+	* the snippet above is used as a walkaround until we introduce the scope @parameter in PVSio-web 
      */
     EmuchartsFMIPVSPrinter.prototype.print = function (emuchart, opt) {
         opt = opt || {};
         opt.interactive = true;
         var _this = this;
         function finalize(resolve, reject, par) {
-            var count = {
-                "int": 0,
-                "bool": 0,
-                "real": 0,
-                "string": 0
-            };
-            var valueReference = {
-                "int": 1,
-                "bool": 1,
-                "real": 1,
-                "string": 1
-            };
+            var count = 1;
+            var valueReference = 1;
             var skeleton_c = "";
             var fmu_h = "";
             var fmu_c = "";
@@ -85,16 +88,39 @@ define(function (require, exports, module) {
                     if (v.fmi) {
                         v.fmi.variability = "continuous"; // TODO: introduce variability as a field in Emucharts variables
                         v.fmi.causality = (v.scope && typeof v.scope === "string") ? v.scope.toLowerCase() : null;
-                        v.fmi.valueReference = valueReference[v.type];
-                        valueReference[v.type]++;
+                        if ( v.fmi.causality === "local"){	//TODO: introduce scope parameter as an option in Emuchart variables
+							v.fmi.variability = "fixed"; 
+							v.fmi.causality = "parameter";
+							v.fmi.initial = "exact";
+							}
+                        v.fmi.valueReference = valueReference;
+                        valueReference++;
+                        count++;
                         v.output = (v.scope && v.scope.toLowerCase() === "output");
                         v.input = (v.scope && v.scope.toLowerCase() === "input");
+                        v.local = (v.scope && v.scope.toLowerCase() === "local");
+                        v.parameter = (v.fmi.causality && v.fmi.causality.toLowerCase() === "parameter");
                         v.real = (v.type === "real");
                         v.int = (v.type === "int");
                         v.bool = (v.type === "bool");
                         v.string = (v.type === "string");
                     }
                 });
+               /* model.constants.forEach(function (c) {
+                    c.fmi = get_buffer(c.type, count);
+                    if (c.fmi) {
+                        c.fmi.variability = "fixed"; // TODO: introduce variability as a field in Emucharts variables
+                        c.fmi.causality = "parameter";
+                        c.fmi.initial = "exact";
+                        c.fmi.valueReference = valueReference;
+                        valueReference++;
+                        count++;
+                        c.real = (c.type === "real");
+                        c.int = (c.type === "int");
+                        c.bool = (c.type === "bool");
+                        c.string = (c.type === "string");
+                    }
+                });*/
 
                 try {
                     skeleton_c = Handlebars.compile(skeleton_c_template, { noEscape: true })({
