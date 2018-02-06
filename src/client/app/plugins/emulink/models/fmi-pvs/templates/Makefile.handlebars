@@ -9,8 +9,12 @@ all:
 	gcc -fPIC -Wall -c misraC/{{name}}.c
 	gcc -shared -o {{name}}.so skeleton.o fmu.o {{name}}.o -lwebsockets -lssl -lcrypto
 	rm -rf sources
+	rm -rf binaries
 	mkdir sources
+	mkdir  binaries
+	mkdir binaries/linux64
 	cp fmu.h sources
+	cp FmuGUID.h sources
 	cp fmu.c sources
 	cp skeleton.c sources
 	rm -f misraC/main.c
@@ -18,6 +22,8 @@ all:
 	cp -r fmi sources
 	mv {{name}}.so binaries/linux64/
 	zip -r {{name}}.fmu modelDescription.xml binaries/ resources/ sources/
+	rm -rf sources
+	rm -rf binaries
 
 run:
 	./fmuCheck.linux64 -h 1E-01 {{name}}.fmu
