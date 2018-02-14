@@ -6,7 +6,7 @@
 #include "fmu.h"
 #include "libwebsockets.h"
 #include "signal.h"
-#include "misraC/{{modelName}}.h"
+#include "misraC/line_following_robot1.h"
 
 
 State st; /*!< structure containing the state of the model */
@@ -36,11 +36,9 @@ char lwssendvariables[LWS_SEND_BUFFER_PRE_PADDING + LWS_SEND_BUFFER_POST_PADDING
 
 
 void initialize(const char* location) {
-    init(&st);{{#each variables}}{{#if fmi}}{{#if output}}{{#if real}}
-    fmiBuffer.realBuffer[{{fmi.valueReference}}] = st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if int}}
-    fmiBuffer.intBuffer[{{fmi.valueReference}}] = st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if bool}}
-    fmiBuffer.booleanBuffer[{{fmi.valueReference}}] = st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
-    fmiBuffer.stringBuffer[{{fmi.valueReference}}] = st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}
+    init(&st);
+    fmiBuffer.realBuffer[3] = st.motorspeed_left;
+    fmiBuffer.realBuffer[4] = st.motorspeed_right;
     
     
 }
@@ -54,32 +52,20 @@ void initialize(const char* location) {
  */
 void doStep(const char* action) { 
 if(first == 0){
-{{#each variables}}{{#if fmi}}{{#if parameter}}{{#if real}}
-    st.{{name}} = fmiBuffer.realBuffer[{{fmi.valueReference}}] ;{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if int}}
-    st.{{name}} = fmiBuffer.intBuffer[{{fmi.valueReference}}] ;{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if bool}}
-    st.{{name}} = fmiBuffer.booleanBuffer[{{fmi.valueReference}}] ;{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
-    st.{{name}} = fmiBuffer.stringBuffer[{{fmi.valueReference}}] ;{{/if}}{{/if}}{{/if}}{{/each}}
+
     
     first = 1;
 }
-	{{#each variables}}{{#if fmi}}{{#if input}}{{#if real}}
-    st.{{name}} = fmiBuffer.realBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if input}}{{#if int}}
-	st.{{name}} = fmiBuffer.intBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if input}}{{#if bool}}
-	st.{{name}} = fmiBuffer.booleanBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if input}}{{#if string}}
-	st.{{name}} = fmiBuffer.stringBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}
+	
+    st.lightsensor_left = fmiBuffer.realBuffer[1];
+    st.lightsensor_right = fmiBuffer.realBuffer[2];
 	
     tick(&st);
     
-    {{#each variables}}{{#if fmi}}{{#if output}}{{#if real}}
-    fmiBuffer.realBuffer[{{fmi.valueReference}}] = st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if int}}
-    fmiBuffer.intBuffer[{{fmi.valueReference}}] = st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if bool}}
-    fmiBuffer.booleanBuffer[{{fmi.valueReference}}] = st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
-    fmiBuffer.stringBuffer[{{fmi.valueReference}}] = st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}
-    /*{{#each variables}}{{#if fmi}}{{#if local}}{{#if real}}
-    fmiBuffer.realBuffer[{{fmi.valueReference}}] = st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if local}}{{#if int}}
-    fmiBuffer.intBuffer[{{fmi.valueReference}}] = st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if local}}{{#if bool}}
-    fmiBuffer.booleanBuffer[{{fmi.valueReference}}] = st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if local}}{{#if string}}
-    fmiBuffer.stringBuffer[{{fmi.valueReference}}] = st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}*/
+    
+    fmiBuffer.realBuffer[3] = st.motorspeed_left;
+    fmiBuffer.realBuffer[4] = st.motorspeed_right;
+    /**/
 }
 
 void terminate(){ }

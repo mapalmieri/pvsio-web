@@ -1,0 +1,22 @@
+LFR_utils: THEORY
+ BEGIN
+
+  MAX_CCW_SPEED: real = -1
+  MAX_CW_SPEED: real = 1
+  Speed: TYPE = { x: real | x >= MAX_CCW_SPEED AND x <= MAX_CW_SPEED }
+  IDLE: Speed = 0
+
+  %-- utility functions for setting clockwise/counterclockwise motor rotation speed (low-level APIs)
+  inc_CW_speed(s: Speed, x: nonneg_real): Speed =
+   IF s + x < MAX_CW_SPEED THEN s + x ELSE MAX_CW_SPEED ENDIF
+
+  inc_CCW_speed(s: Speed, x: nonneg_real): Speed =
+   IF s - x > MAX_CCW_SPEED THEN s - x ELSE MAX_CCW_SPEED ENDIF
+
+  dec_speed(s: Speed, x: nonneg_real): Speed =
+   COND
+    s >= IDLE -> IF s - x > IDLE THEN s - x ELSE IDLE ENDIF,
+    s < IDLE ->  IF s + x < IDLE THEN s + x ELSE IDLE ENDIF
+   ENDCOND
+
+ END LFR_utils
