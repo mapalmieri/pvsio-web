@@ -262,12 +262,12 @@ are post-processed using specific functions provided by language-specific printe
 define(function (require, exports, module) {
     "use strict";
     // var printer_version = "2.2";
-    var EmuchartsParser = require("plugins/emulink/EmuchartsParser");
+    // var EmuchartsParser = require("plugins/emulink/EmuchartsParser");
     var EmuchartsParser2 = require("plugins/emulink/EmuchartsParser2");
     // var projectManager = require("project/ProjectManager").getInstance();
     var displayAskParameters = require("plugins/emulink/forms/displayAskParameters");
 
-    var parser;
+    // var parser;
     var parser2;
 
     var undef = "UNINITIALIZED";
@@ -303,7 +303,7 @@ define(function (require, exports, module) {
      */
     function EmuchartsGenericPrinter(opt) {
         opt = opt || {};
-        parser = EmuchartsParser.getInstance();
+        // parser = EmuchartsParser.getInstance();
         parser2 = EmuchartsParser2.getInstance();
         return this;
     }
@@ -649,7 +649,9 @@ define(function (require, exports, module) {
                 var trigger = parser2.parseTrigger(t.name);
                 if (trigger.res && trigger.res.val) {
                     trigger = trigger.res.val;
-                    var trigger_id = { type: "identifier", val: trigger.identifier };
+                    var trigger_id = (trigger.identifier.type === "identifier") ?
+                                        trigger.identifier
+                                        : { type: "identifier", val: trigger.identifier };
                     var trigger_cond = predefined_variables.current_mode.name + "=" + t.source.name;
                     if (trigger.cond) {
                         trigger_cond += " && (" + trigger.cond.trim() + ")";

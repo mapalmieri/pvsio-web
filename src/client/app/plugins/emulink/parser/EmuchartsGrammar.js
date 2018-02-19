@@ -110,15 +110,13 @@ define(function (require, exports, module) {
             lex: {
                 rules: [
                     ["\\s+", "/* skip whitespace */", "whitespace"],
-                    ["(?!(?:IMPLIES|implies|AND|and|OR|or|NOT|not|TRUE|true|FALSE|false))"
-                             + // keywords shall not be used as identifiers
-                     "([a-zA-Z][a-zA-Z0-9_]*)", "return 'IDENTIFIER'", "identifier"],
+                    ["([a-zA-Z][a-zA-Z0-9_]*)", "return 'IDENTIFIER'", "identifier"],
                     ["[0-9]+(?:\\.[0-9]+)?\\b", "return 'NUMBER'", "number"],
                     ['\\"([^\\"]+)\\"',         "return 'STRING'", "string"], // anything but double quotes
                     ["\\*",                     "return '*'"],
                     ["\\/",                     "return '/'"],
                     ["-",                       "return '-'"],
-                    ["(?!(?:(\\!\\=)))" + // filtering out !=
+                    ["(?!(?:(\\!\\=|not[a-zA-Z0-9_]|NOT[a-zA-Z0-9_])))" + // filtering out != and identifiers starting with NOT/not
                      "(\\!|NOT|not)",           "return 'NOT'"],
                     ["\\+",                     "return '+'"],
                     ["(\\!\\=)",                "return '!='"],
@@ -131,11 +129,16 @@ define(function (require, exports, module) {
                     ["(?!(?:(\\<\\=)))" + // filtering out <=
                      "(\\<)",   "return '<'"],
                     ["(\\<\\=)",                "return '<='"],
-                    ["(IMPLIES|implies|(\\=\\>))", "return 'IMPLIES'"],
-                    ["(AND|&&)",                "return 'AND'"],
-                    ["(OR|\\|\\|)",             "return 'OR'"],
-                    ["(TRUE|true)",             "return 'TRUE'"],
-                    ["(FALSE|false)",           "return 'FALSE'"],
+                    ["(?!(?:(implies[a-zA-Z0-9_]|IMPLIES[a-zA-Z0-9_])))" + // filtering out identifiers starting with IMPLIES/implies
+                        "(IMPLIES|implies|(\\=\\>))", "return 'IMPLIES'"],
+                    ["(?!(?:(and[a-zA-Z0-9_]|AND[a-zA-Z0-9_])))" + // filtering out identifiers starting with AND/and
+                        "(AND|&&)",                "return 'AND'"],
+                    ["(?!(?:(or[a-zA-Z0-9_]|OR[a-zA-Z0-9_])))" + // filtering out identifiers starting with OR/or
+                        "(OR|\\|\\|)",             "return 'OR'"],
+                    ["(?!(?:(true[a-zA-Z0-9_]|TRUE[a-zA-Z0-9_])))" + // filtering out identifiers starting with TRUE/true
+                        "(TRUE|true)",             "return 'TRUE'"],
+                    ["(?!(?:(false[a-zA-Z0-9_]|FALSE[a-zA-Z0-9_])))" + // filtering out identifiers starting with TRUE/true
+                        "(FALSE|false)",           "return 'FALSE'"],
                     ["\\(",                     "return '('"],
                     ["\\)",                     "return ')'"],
                     ["\\[",                     "return '['"],
@@ -158,7 +161,7 @@ define(function (require, exports, module) {
             bnf: {
                 production: [ ["cond", "return $1"] ],
                 cond: [
-                    ["bool_expr", "$$ = { type: 'bool_expr', val: $1 }"]
+                    ["e", "$$ = { type: 'bool_expr', val: $1 }"]
                 ],
                 bool_expr:  [
                     ["bool_e",   "$$ = $1"]
@@ -169,17 +172,28 @@ define(function (require, exports, module) {
                     ["bool_e = bool_e", exprWithBinaryOp()],  // comparison of equality of two terms
                     ["bool_e == bool_e", exprWithBinaryOp()],  // comparison of equality of two terms
                     ["bool_e != bool_e", exprWithBinaryOp()],  // comparison of inequality of two terms
-                    ["bool_e > bool_e", exprWithBinaryOp()],
-                    ["bool_e >= bool_e", exprWithBinaryOp()],
-                    ["bool_e < bool_e", exprWithBinaryOp()],
-                    ["bool_e <= bool_e", exprWithBinaryOp()],
                     ["bool_e AND bool_e", exprWithBinaryOp()],
                     ["bool_e OR bool_e", exprWithBinaryOp()],
                     ["bool_e IMPLIES bool_e", exprWithBinaryOp()],
-                    ["term", "$$ = [$1]"]
-                ],
-                arith_expr:  [
-                    ["arith_e",   "$$ = $1"]
+
+                    ["arith_e = arith_e", exprWithBinaryOp()],
+                    ["arith_e == arith_e", exprWithBinaryOp()],
+                    ["arith_e != arith_e", exprWithBinaryOp()],
+                    ["arith_e > arith_e", exprWithBinaryOp()],
+                    ["arith_e >= arith_e", exprWithBinaryOp()],
+                    ["arith_e < arith_e", exprWithBinaryOp()],
+                    ["arith_e <= arith_e", exprWithBinaryOp()],
+
+                    ["bool_e = arith_e", exprWithBinaryOp()],
+                    ["bool_e == arith_e", exprWithBinaryOp()],
+                    ["bool_e != arith_e", exprWithBinaryOp()],
+                    ["bool_e > arith_e", exprWithBinaryOp()],
+                    ["bool_e >= arith_e", exprWithBinaryOp()],
+                    ["bool_e < arith_e", exprWithBinaryOp()],
+                    ["bool_e <= arith_e", exprWithBinaryOp()],
+
+                    ["true_false", "$$ = [$1]"],
+                    ["id", "$$ = [$1]"]
                 ],
                 arith_e:  [
                     ["arith_e + arith_e", exprWithBinaryOp()],
@@ -187,13 +201,15 @@ define(function (require, exports, module) {
                     ["arith_e * arith_e", exprWithBinaryOp()],
                     ["arith_e / arith_e", exprWithBinaryOp()],
                     ["- arith_e", exprWithUnaryOp(), {"prec": "UMINUS"}],
-                    ["bool_e", "$$ = $1"]
+                    ["number", "$$ = [$1]"],
+                    ["string", "$$ = [$1]"]
                 ],
                 expression:  [
                     ["e", "$$ = { type: 'expression', val: $e }"]
                 ],
                 e: [
-                    ["arith_expr", "$$ = $1"]
+                    ["arith_e", "$$ = $1"],
+                    ["bool_e", "$$ = $1"]
                 ],
                 term: [
                     ["number", "$$ = $1"],
@@ -230,9 +246,7 @@ define(function (require, exports, module) {
             lex: {
                 rules: [
                     ["\\s+", "/* skip whitespace */", "whitespace"],
-                    ["(?!(?:IMPLIES|implies|AND|and|OR|or|NOT|not|TRUE|true|FALSE|false))"
-                             + // keywords shall not be used as identifiers
-                     "([a-zA-Z][a-zA-Z0-9_]*)", "return 'IDENTIFIER'", "identifier"],
+                    ["([a-zA-Z][a-zA-Z0-9_]*)", "return 'IDENTIFIER'", "identifier"],
                     ["[0-9]+(?:\\.[0-9]+)?\\b", "return 'NUMBER'", "number"],
                     ['\\"([^\\"]+)\\"',         "return 'STRING'", "string"], // anything but double quotes
                     ["\\*",                     "return '*'"],
@@ -252,11 +266,16 @@ define(function (require, exports, module) {
                     ["(?!(?:(\\<\\=)))" + // filtering out <=
                      "(\\<)",   "return '<'"],
                     ["(\\<\\=)",                "return '<='"],
-                    ["(IMPLIES|implies|(\\=\\>))", "return 'IMPLIES'"],
-                    ["(AND|&&)",                "return 'AND'"],
-                    ["(OR|\\|\\|)",             "return 'OR'"],
-                    ["(TRUE|true)",             "return 'TRUE'"],
-                    ["(FALSE|false)",           "return 'FALSE'"],
+                    ["(?!(?:(implies[a-zA-Z0-9_]|IMPLIES[a-zA-Z0-9_])))" + // filtering out identifiers starting with IMPLIES/implies
+                        "(IMPLIES|implies|(\\=\\>))", "return 'IMPLIES'"],
+                    ["(?!(?:(and[a-zA-Z0-9_]|AND[a-zA-Z0-9_])))" + // filtering out identifiers starting with AND/and
+                        "(AND|&&)",                "return 'AND'"],
+                    ["(?!(?:(or[a-zA-Z0-9_]|OR[a-zA-Z0-9_])))" + // filtering out identifiers starting with OR/or
+                        "(OR|\\|\\|)",             "return 'OR'"],
+                    ["(?!(?:(true[a-zA-Z0-9_]|TRUE[a-zA-Z0-9_])))" + // filtering out identifiers starting with TRUE/true
+                        "(TRUE|true)",             "return 'TRUE'"],
+                    ["(?!(?:(false[a-zA-Z0-9_]|FALSE[a-zA-Z0-9_])))" + // filtering out identifiers starting with TRUE/true
+                        "(FALSE|false)",           "return 'FALSE'"],
                     ["\\(",                     "return '('"],
                     ["\\)",                     "return ')'"],
                     ["\\[",                     "return '['"],

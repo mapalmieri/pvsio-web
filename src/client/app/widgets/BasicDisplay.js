@@ -49,23 +49,22 @@ define(function (require, exports, module) {
      *        the left, top corner, and the width and height of the (rectangular) display.
      *        Default is { top: 0, left: 0, width: 200, height: 80 }.
      * @param opt {Object} Options:
-     *          <li>displayKey (string): the name of the state attribute defining the display content. This information will be used by the render method. Default is the ID of the display.
-     *          <li>visibleWhen (string): boolean expression indicating when the display is visible. The expression can use only simple comparison operators (=, !=) and boolean constants (true, false). Default is true (i.e., always visible).
-     *          <li>fontfamily (String): font type (default is "sans-serif")</li>
-     *          <li>fontsize (Number): font size (default is 0.8 * height)</li>
-     *          <li>fontfamily (String): font family, must be a valid HTML5 font name (default is "sans-serif")</li>
-     *          <li>fontColor (String): font color, must be a valid HTML5 color (default is "white", i.e., "#fff")</li>
-     *          <li>backgroundColor (String): background display color (default is black, "#000")</li>
      *          <li>align (String): text alignment (available options are "left", "right", anc "center". Default is "center")</li>
-     *          <li>letterSpacing (Number): spacing between characters, in pixels (default is 0)</li>
-     *          <li>inverted (Bool): if true, the text has inverted colors,
-     *              i.e., fontColor becomes backgroundColor, and backgroundColor becomes fontColor (default is false)</li>
+     *          <li>backgroundColor (String): background display color (default is black, "#000")</li>
      *          <li>borderWidth (Number): border width (default is 0, i.e., no border, unless option borderColor has been specified -- in this case, the border is 2px)</li>
      *          <li>borderStyle (String): border style, must be a valid HTML5 border style, e.g., "solid" (default is "none")</li>
      *          <li>borderColor (String): border color, must be a valid HTML5 color (default color used in the widget is "black")</li>
-     *          <li>blinking (Bool): true means the text is blinking (default is false, i.e., not blinking)</li>
+     *          <li>blinking (Bool): true means the display is blinking (default is false, i.e., not blinking)</li>
+     *          <li>displayKey (string): name of the state attribute defining the display content. This information will be used by the render method. Default is the ID of the display.</li>
+     *          <li>fontSize (Number): font size (default is 0.8 * coords.height)</li>
+     *          <li>fontFamily (String): font family, must be a valid HTML5 font name (default is "sans-serif")</li>
+     *          <li>fontColor (String): font color, must be a valid HTML5 color (default is "white", i.e., "#fff")</li>
      *          <li>format (String): sets the display format. When this option is set to "mm:ss", the display value represents seconds, and format to be displayed is mm:ss</li>
+     *          <li>inverted (Bool): if true, the text has inverted colors,
+     *              i.e., fontColor becomes backgroundColor, and backgroundColor becomes fontColor (default is false)</li>
+     *          <li>letterSpacing (Number): spacing between characters, in pixels (default is 0)</li>
      *          <li>parent (String): the HTML element where the display will be appended (default is "body")</li>
+     *          <li>visibleWhen (string): boolean expression indicating when the display is visible. The expression can use only simple comparison operators (=, !=) and boolean constants (true, false). Default is true (i.e., always visible).</li>
      * @memberof module:BasicDisplay
      * @instance
      */
@@ -82,17 +81,19 @@ define(function (require, exports, module) {
         this.left = coords.left || 0;
         this.width = coords.width || 200;
         this.height = coords.height || 80;
-        this.fontsize = opt.fontsize || (this.height * 0.9);
-        this.fontfamily = opt.fontfamily || "sans-serif";
-        this.font = [this.fontsize, "px ", this.fontfamily];
-        this.smallFont = [(this.fontsize * 0.7), "px ", this.fontfamily];
+
+        this.borderColor = opt.borderColor || "inherit";
+        this.borderWidth = (opt.borderColor) ? ((opt.borderWidth) ? parseFloat(opt.borderWidth) : 2) : 0;
+        this.borderStyle = (opt.borderColor) ? ((opt.borderStyle) ? opt.borderStyle : "solid") : "none";
+
+        this.fontSize = opt.fontsize || opt.fontSize || this.height * 0.8;
+        this.fontFamily = opt.fontfamily || opt.fontFamily || "sans-serif";
+        this.font = [this.fontSize, "px ", this.fontFamily];
+        this.smallFont = [(this.fontSize * 0.7), "px ", this.fontFamily];
         this.letterSpacing = opt.letterSpacing;
         this.align = opt.align || "center";
         this.backgroundColor = opt.backgroundColor || "black";
         this.fontColor = opt.fontColor || "white";
-        this.borderColor = opt.borderColor || "inherit";
-        this.borderWidth = (opt.borderColor) ? ((opt.borderWidth) ? parseFloat(opt.borderWidth) : 2) : 0;
-        this.borderStyle = (opt.borderColor) ? ((opt.borderStyle) ? opt.borderStyle : "solid") : "none";
         this.cursor = opt.cursor || "default";
         if (opt.inverted) {
             var tmp = this.backgroundColor;
@@ -110,7 +111,7 @@ define(function (require, exports, module) {
         this.div = d3.select(this.parent)
                         .append("div").style("position", opt.position)
                         .style("top", this.top + "px").style("left", this.left + "px")
-                        .style("width", (this.width + this.borderWidth) + "px").style("height", (this.height + this.borderWidth) + "px")
+                        .style("width",(this.width + this.borderWidth) + "px").style("height", (this.height + this.borderWidth) + "px")
                         .style("margin", 0).style("padding", 0).style("border-radius", opt.borderRadius).style("opacity", opt.opacity)
                         .style("background-color", this.backgroundColor)
                         .style("border-width", this.borderWidth + "px")
@@ -122,7 +123,7 @@ define(function (require, exports, module) {
                         .style("margin", 0).style("padding", 0)
                         .style("vertical-align", "top").style("border-radius", opt.borderRadius);//.style("opacity", opt.opacity);
         this.div.append("canvas").attr("id", id + "_canvas").attr("class", id + "_canvas")
-                        .attr("width", (this.width - this.borderWidth)).attr("height", (this.height - this.borderWidth))
+                        .attr("width", this.width - this.borderWidth).attr("height", this.height - this.borderWidth)
                         .style("margin", 0).style("padding", 0).style("border-radius", opt.borderRadius)//.style("opacity", opt.opacity)
                         .style("vertical-align", "top");
         var x2 = this.left + this.width;
@@ -142,105 +143,12 @@ define(function (require, exports, module) {
     BasicDisplay.prototype.parentClass = Widget.prototype;
 
     /**
-     * @function <a name="toJSON">toJSON</a>
-     * @description Returns a serialised version of the widget in JSON format.
-     *              This is useful for saving/loading a specific instance of the widget.
-     *              In the current implementation, the following attributes are included in the JSON object:
-     *              <li> type (string): widget type, i.e., "display" in this case
-     *              <li> id (string): the unique identifier of the widget instance
-     *              <li> fontsize (string): the font size of the display
-     *              <li> fontColor (string): the font color of the display
-     *              <li> backgroundColor (string): the background color of the display
-     *              <li> displayKey (string): the name of the state attribute defining the display content.
-     *              <li> visibleWhen (string): a booloan expression defining when the condition under which the widget is visible
-     *              <li> auditoryFeedback (string): whether display readback is enabled
-     * @returns JSON object
-     * @memberof module:BasicDisplay
-     * @instance
-     */
-    BasicDisplay.prototype.toJSON = function () {
-        return {
-            type: this.type(),
-            id: this.id(),
-            displayKey: this.displayKey(),
-            auditoryFeedback: this.auditoryFeedback(),
-            visibleWhen: this.visibleWhen(),
-            fontsize: this.fontsize,
-            fontColor: this.fontColor,
-            backgroundColor: this.backgroundColor
-        };
-    };
-    /**
-    * Updates the location and size of the widget according to the given position and size
-     */
-    BasicDisplay.prototype.updateLocationAndSize = function (pos, opt) {
-        opt = opt || {};
-        if (opt.imageMap) {
-            BasicDisplay.prototype.parentClass.updateLocationAndSize.apply(this, arguments);
-        }
-        this.top = pos.y || 0;
-        this.left = pos.x || 0;
-        this.width = pos.width || 200;
-        this.height = pos.height || 80;
-        // this.fontsize = this.height * 0.9;
-        // this.font = [this.fontsize, "px ", this.fontfamily];
-        // this.smallFont = [(this.fontsize * 0.7), "px ", this.fontfamily];
-        d3.select("div." + this.id()).style("left", this.left + "px").style("top", this.top + "px")
-            .style("width", this.width + "px").style("height", this.height + "px").style("font-size", this.fontsize + "px");
-        d3.select("div." + this.id()).select("span").attr("width", this.width + "px").attr("height", this.height + "px"); // used for glyphicon
-        d3.select("div." + this.id()).select("canvas").attr("width", this.width + "px").attr("height", this.height + "px"); // used for standard text and numbers
-        return this.render(this.example, opt);
-    };
-    BasicDisplay.prototype.updateStyle = function (data) {
-        data = data || {};
-        this.fontsize = data.fontsize || this.fontsize;
-        this.font = [this.fontsize, "px ", this.fontfamily];
-        this.smallFont = [(this.fontsize * 0.7), "px ", this.fontfamily];
-        this.fontColor = data.fontColor || this.fontColor;
-        this.backgroundColor = data.backgroundColor || this.backgroundColor;
-        return this;
-    };
-    /**
-     * Removes the widget's div
-     */
-    BasicDisplay.prototype.remove = function () {
-        BasicDisplay.prototype.parentClass.remove.apply(this);
-        d3.select("div." + this.id()).remove();
-    };
-    BasicDisplay.prototype.setColors = function (colors, opt) {
-        colors = colors || {};
-        opt = opt || {};
-        opt.auditoryFeedback = opt.auditoryFeedback || "disabled";
-        this.fontColor = colors.fontColor || this.fontColor;
-        this.backgroundColor = colors.backgroundColor || this.backgroundColor;
-        return this.render(this.txt, opt);
-    };
-    BasicDisplay.prototype.invertColors = function () {
-        var tmp = this.backgroundColor;
-        this.backgroundColor = this.fontColor;
-        this.fontColor = tmp;
-        var elemIsBlinking = (document.getElementById(this.id()).getAttribute("class").indexOf("blink") >= 0);
-        return this.render(this.txt, { blinking: elemIsBlinking });
-    };
-    BasicDisplay.prototype.invertGlyphiconColors = function () {
-        var tmp = this.backgroundColor;
-        this.backgroundColor = this.fontColor;
-        this.fontColor = tmp;
-        var elemIsBlinking = (document.getElementById(this.id()).getAttribute("class").indexOf("blink") >= 0);
-        return this.renderGlyphicon(this.txt, { blinking: elemIsBlinking });
-    };
-    BasicDisplay.prototype.renderSample = function (opt) {
-        opt = opt || {};
-        var txt = opt.txt || this.example;
-        return this.render(txt, { visibleWhen: "true" });
-    };
-    /**
      * @function <a name="render">render</a>
      * @param data {Object} JSON object representing the display to be rendered.
      *                      The display value is specified in the attribute <displayKey>
      *                      (the actual value of <displayKey> is instantiated when creating the widget, see constructor's options)
      * @param opt {Object} Override options for the display style, useful to dynamically change the display style during simulations. Available options include:
-     *              <li> fontsize (string): the font size of the display
+     *              <li> fontSize (string): the font size of the display
      *              <li> fontColor (string): the font color of the display
      *              <li> backgroundColor (string): the background color of the display
      *              <li> borderWidth (Number): border width (default is 0, i.e., no border, unless option borderColor has been specified -- in this case, the border is 2px)</li>
@@ -373,7 +281,7 @@ define(function (require, exports, module) {
                 context: context,
                 align: align,
                 height: this.height,
-                width: this.width
+                width: this.width - 2 * this.borderWidth
             }, opt);
             d3.select("#" + this.id() + "_canvas").style("display", "block");
             d3.select("#" + this.id() + "_span").style("display", "none");
@@ -382,6 +290,69 @@ define(function (require, exports, module) {
         return this.hide();
     };
 
+    /**
+     * @function <a name="setColors">setColors</a>
+     * @description Sets the font color and background color.
+     * @param colors {Object} Font color and background color. Attributed of the object are fontColor: (string) and backgroundColor (string).
+     * @param opt {Object} Override options for the display style, useful to dynamically change the display style during a simulation. Available options include:
+     *              <li> fontSize (string): the font size of the display
+     *              <li> fontColor (string): the font color of the display
+     *              <li> backgroundColor (string): the background color of the display
+     *              <li> blinking (Bool): true means the text is blinking
+     * @memberof module:BasicDisplay
+     * @instance
+     */
+    BasicDisplay.prototype.setColors = function (colors, opt) {
+        colors = colors || {};
+        opt = opt || {};
+        opt.auditoryFeedback = opt.auditoryFeedback || "disabled";
+        this.fontColor = colors.fontColor || this.fontColor;
+        this.backgroundColor = colors.backgroundColor || this.backgroundColor;
+        if (colors.opacity) {
+            this.div.style("opacity", colors.opacity);
+        }
+        return this.render(this.txt, opt);
+    };
+    /**
+     * @function <a name="invertColors">invertColors</a>
+     * @description Inverts the colors of the display (as in a negative).
+     * @memberof module:BasicDisplay
+     * @instance
+     */
+    BasicDisplay.prototype.invertColors = function () {
+        var tmp = this.backgroundColor;
+        this.backgroundColor = this.fontColor;
+        this.fontColor = tmp;
+        var elemIsBlinking = (document.getElementById(this.id()).getAttribute("class").indexOf("blink") >= 0);
+        return this.render(this.txt, { blinking: elemIsBlinking });
+    };
+    /**
+     * @function <a name="invertGlyphiconColors">invertGlyphiconColors</a>
+     * @description Inverts the colors of the glyphicond rendered with the display widget.
+     * @memberof module:BasicDisplay
+     * @instance
+     */
+    BasicDisplay.prototype.invertGlyphiconColors = function () {
+        var tmp = this.backgroundColor;
+        this.backgroundColor = this.fontColor;
+        this.fontColor = tmp;
+        var elemIsBlinking = (document.getElementById(this.id()).getAttribute("class").indexOf("blink") >= 0);
+        return this.renderGlyphicon(this.txt, { blinking: elemIsBlinking });
+    };
+    BasicDisplay.prototype.renderSample = function (opt) {
+        opt = opt || {};
+        var txt = opt.txt || this.example;
+        return this.render(txt, { visibleWhen: "true" });
+    };
+
+    /**
+     * @function <a name="renderGlyphicon">renderGlyphicon</a>
+     * @description Renders a glyphicon.
+     * @param icon (String) Name of the glyphicon to be rendered, e.g., glyphicon-time. Glyphicon names are those of the bootstrap library (https://getbootstrap.com/docs/3.3/components/)
+     * @param opt {Object} Override options. Same options available for the render() method.
+     * @memberof module:BasicDisplay
+     * @instance
+     */
     BasicDisplay.prototype.renderGlyphicon = function (icon, opt) {
         opt = opt || {};
         this.txt = icon;
@@ -403,6 +374,29 @@ define(function (require, exports, module) {
         return this;
     };
 
+
+    /**
+     * @function <a name="renderMultiline">renderMultiline</a>
+     * @description Renders an array of display elements. Useful for displaying menus.
+     * @example var disp = new BasicDisplay("disp");
+                disp.renderMultiline([ res.bagsval0 + " ml",
+                                       res.bagsval1 + " ml",
+                                       res.bagsval2 + " ml",
+                                       res.bagsval3 + " ml",
+                                       res.bagsval4 + " ml",
+                                       res.bagsval5 + " ml",
+                                       res.bagsval6 + " ml",
+                                       res.bagsval7 + " ml",
+                                       res.bagsval8 + " ml",
+                                       res.bagsval9 + " ml" ], { selected: 0, direction: "inverted" });
+     * @param opt {Object} Override options
+     *           <li>blinking (bool) Whether the widget is blinking (default: false, i.e., not blinking)</li>
+     *           <li>direction (String) Whether the display elements are rendered from top to bottom,
+     *               or from bottom to top. Default direction is top to bottom. Use "inverted" to render from bottom to top.</li>
+     *           <li>selected (Number) A number representing the index of the selected display element.</li>
+     * @memberof module:BasicDisplay
+     * @instance
+     */
     BasicDisplay.prototype.renderMultiline = function (txt, opt) {
         function clearContext(context, width, height) {
             context.save();
@@ -436,8 +430,8 @@ define(function (require, exports, module) {
         context.textBaseline = this.textBaseline;
         var align = opt.align || this.align;
         if (typeof txt === "object" && txt.length) {
-            var fontsize = opt.menuFontSize || (this.height / txt.length);
-            var newFont = [ fontsize ].concat(this.font.slice(1));
+            var fontSize = opt.menuFontSize || (this.height / txt.length);
+            var newFont = [ fontSize ].concat(this.font.slice(1));
             context.font = newFont.join("");
             var i = 0;
             for (i = 0; i < txt.length; i++) {
@@ -509,6 +503,76 @@ define(function (require, exports, module) {
             this.div.style("left", this.left + "px");
         }
         return this;
+    };
+
+    /**
+     * @function <a name="toJSON">toJSON</a>
+     * @description Returns a serialised version of the widget in JSON format.
+     *              This is useful for saving/loading a specific instance of the widget.
+     *              In the current implementation, the following attributes are included in the JSON object:
+     *              <li> type (string): widget type, i.e., "display" in this case
+     *              <li> id (string): the unique identifier of the widget instance
+     *              <li> fontSize (string): the font size of the display
+     *              <li> fontColor (string): the font color of the display
+     *              <li> backgroundColor (string): the background color of the display
+     *              <li> displayKey (string): the name of the state attribute defining the display content.
+     *              <li> visibleWhen (string): a booloan expression defining when the condition under which the widget is visible
+     *              <li> auditoryFeedback (string): whether display readback is enabled
+     * @returns JSON object
+     * @memberof module:BasicDisplay
+     * @instance
+     */
+    BasicDisplay.prototype.toJSON = function () {
+        return {
+            type: this.type(),
+            id: this.id(),
+            displayKey: this.displayKey(),
+            auditoryFeedback: this.auditoryFeedback(),
+            visibleWhen: this.visibleWhen(),
+            fontSize: this.fontSize,
+            fontColor: this.fontColor,
+            backgroundColor: this.backgroundColor
+        };
+    };
+    /**
+    * Updates the location and size of the widget according to the given position and size
+     */
+    BasicDisplay.prototype.updateLocationAndSize = function (pos, opt) {
+        opt = opt || {};
+        if (opt.imageMap) {
+            BasicDisplay.prototype.parentClass.updateLocationAndSize.apply(this, arguments);
+        }
+        this.top = pos.y || 0;
+        this.left = pos.x || 0;
+        this.width = pos.width || 200;
+        this.height = pos.height || 80;
+        // this.fontsize = this.height * 0.9;
+        // this.font = [this.fontsize, "px ", this.fontfamily];
+        // this.smallFont = [(this.fontsize * 0.7), "px ", this.fontfamily];
+        d3.select("div." + this.id()).style("left", this.left + "px").style("top", this.top + "px")
+            .style("width", this.width + "px").style("height", this.height + "px").style("font-size", this.fontSize + "px");
+        d3.select("div." + this.id()).select("span").attr("width", this.width + "px").attr("height", this.height + "px"); // used for glyphicon
+        d3.select("div." + this.id()).select("canvas").attr("width", this.width + "px").attr("height", this.height + "px"); // used for standard text and numbers
+        return this.render(this.example, opt);
+    };
+    BasicDisplay.prototype.updateStyle = function (data) {
+        data = data || {};
+        this.fontSize = data.fontSize || this.fontSize;
+        this.font = [this.fontSize, "px ", this.fontFamily];
+        this.smallFont = [(this.fontSize * 0.7), "px ", this.fontFamily];
+        this.fontColor = data.fontColor || this.fontColor;
+        this.backgroundColor = data.backgroundColor || this.backgroundColor;
+        return this;
+    };
+    /**
+     * @function <a name="remove">remove</a>
+     * @description Removes the div elements of the widget from the html page -- useful to programmaticaly remove widgets from a page.
+     * @memberof module:TouchscreenButton
+     * @instance
+     */
+    BasicDisplay.prototype.remove = function () {
+        BasicDisplay.prototype.parentClass.remove.apply(this);
+        d3.select("div." + this.id()).remove();
     };
 
     module.exports = BasicDisplay;
