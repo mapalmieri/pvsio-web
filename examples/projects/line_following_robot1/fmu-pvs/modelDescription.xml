@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <fmiModelDescription 	fmiVersion="2.0"
-						modelName="{{modelName}}"
+						modelName="line_following_robot1"
 						guid="{abb4bff1-d423-4e02-90d9-011f519869ff}"
 						description=""
-						author="{{author}}"
+						author="..author name.."
 						version="Version 1"
 						copyright=""
 						license="PVS License"
 						generationTool="PVSio-web"
 						variableNamingConvention="flat"
 						numberOfEventIndicators="0">
-	<CoSimulation 	modelIdentifier="{{modelName}}"
+	<CoSimulation 	modelIdentifier="line_following_robot1"
 					needsExecutionTool="false"
 					canHandleVariableCommunicationStepSize="true"
 					canInterpolateInputs="false"
@@ -30,14 +30,22 @@
 		<Category name="Error" />
 	</LogCategories>
 
-	<ModelVariables>{{#each variables}}{{#if fmi}}
-		<ScalarVariable name="{{name}}" valueReference="{{fmi.valueReference}}" causality="{{fmi.causality}}" variability="{{fmi.variability}}" {{#if parameter}} initial="{{fmi.initial}}" {{/if}}><{{fmi.descriptor}} {{#if input}}start="{{value}}"{{/if}}{{#if parameter}}start="{{value}}"{{/if}} /></ScalarVariable>
-    {{/if}}{{/each}}</ModelVariables>
+	<ModelVariables>
+		<ScalarVariable name="lightsensor_left" valueReference="1" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
+    
+		<ScalarVariable name="lightsensor_right" valueReference="2" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
+    
+		<ScalarVariable name="motorspeed_left" valueReference="3" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+    
+		<ScalarVariable name="motorspeed_right" valueReference="4" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+    </ModelVariables>
 
 	<ModelStructure>
-	<Outputs>{{#each variables}}{{#if fmi}}{{#if output}}
-			<Unknown index="{{fmi.valueReference}}"  dependencies=""/>
-            {{/if}}{{/if}}{{/each}}
+	<Outputs>
+			<Unknown index="3"  dependencies=""/>
+            
+			<Unknown index="4"  dependencies=""/>
+            
 	</Outputs>
 
 	</ModelStructure>

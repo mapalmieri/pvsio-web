@@ -368,11 +368,12 @@ define(function (require, exports, module) {
                         name: tmp[1],
                         type: variable.type,
                         repr: variable.repr, //PM!
-                        value: variable.value
+                        value: variable.value,
+                        scope: variable.scope
                     });
                     records.set(tmp[0], l1);
                 } else {
-                    basic.push({ name: variable.name, type: variable.type, repr: variable.repr, value: variable.value }); //PM
+                    basic.push({ name: variable.name, type: variable.type, repr: variable.repr, value: variable.value, scope: variable.scope }); //PM
                 }
             });
         }
@@ -394,7 +395,7 @@ define(function (require, exports, module) {
         }
         var x = split_variables(emuchart);
         x.basic.forEach(function (basic) {
-            variables.push({ name: basic.name, type: basic.type, repr: basic.repr, value: basic.value }); //PM!
+            variables.push({ name: basic.name, type: basic.type, repr: basic.repr, value: basic.value, scope: basic.scope }); //PM!
         });
         x.records.keys().forEach(function (key) {
             variables.push({

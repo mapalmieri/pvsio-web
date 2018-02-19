@@ -21,7 +21,7 @@
             || {{/unless}}{{/each}};
 }{{/if}}
 State* {{name}}(State* st){{#if ../is_header_file}};{{else}} {
-    assert( per_{{name}}(st) );
+    // assert( per_{{name}}(st) );
     {{#each cases}}if ({{cond}}) {
         #ifdef DBG
         _dbg_print_condition("{{cond}}");

@@ -17,10 +17,10 @@
 #include "FmuGUID.h"
 
 
-#define BOOL_COUNT {{count}}
-#define INT_COUNT {{count}}
-#define REAL_COUNT {{count}}
-#define STRING_COUNT {{count}}
+#define BOOL_COUNT 5
+#define INT_COUNT 5
+#define REAL_COUNT 5
+#define STRING_COUNT 5
 #define FMI_COSIMULATION
 
 struct FmiBuffer {

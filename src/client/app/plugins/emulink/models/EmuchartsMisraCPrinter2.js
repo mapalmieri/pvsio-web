@@ -283,11 +283,20 @@ define(function (require, exports, module) {
         return ans;
     };
 
+    function get_basic_types() {
+        var basic_types = {};
+        misraC_params.forEach(function (par) {
+            basic_types[par.name] = par.value;
+        });
+        return basic_types;
+    }
+
     // This is the main API.
     // TODO: When opt.interactive is true, a dialog is shown to the user to
     // select compilation parameters.
     Printer.prototype.print = function (emuchart, opt) {
         opt = opt || {};
+        opt = Object.assign(get_basic_types(), opt);
         var _this = this;
 
         function finalize(resolve, reject, opt) {
@@ -412,7 +421,7 @@ define(function (require, exports, module) {
             //-- finally, write everything to disk, in subfolder /misraC
             //   of the current project
             var overWrite = {overWrite: true};
-            var folder = "/misraC";
+            var folder = opt.folder || "/misraC";
             projectManager.project().addFile(folder + "/" + emuchart.name + ".h", header, overWrite);
             projectManager.project().addFile(folder + "/" + emuchart.name + ".c", body, overWrite);
 

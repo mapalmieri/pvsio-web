@@ -1,0 +1,5 @@
+{
+ "version": "2.1",
+ "prototypeImage": "joypad.png",
+ "mainPVSFile": "LFRController.pvs"
+}

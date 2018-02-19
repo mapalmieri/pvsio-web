@@ -1,4 +1,4 @@
-/*
+/*! \file fmu.c
  * In this file there is the implementation of the functions required
  * by the FMI standard.
  * Most of them just return "fmi2OK" or "fmi2Error"
@@ -191,7 +191,7 @@ extern /*"C"*/fmi2Status fmi2CancelStep(fmi2Component c) {
 
 extern /*"C"*/fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicationPoint, fmi2Real communicationStepSize,
 		fmi2Boolean noSetFMUStatePriorToCurrentPoint) {
-	sendToPVS("tick");
+	doStep("tick");
 	return fmi2OK;
 }
 
