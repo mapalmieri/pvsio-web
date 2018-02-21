@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<fmiModelDescription 	fmiVersion="2.0"
+						modelName="{{modelName}}"
+						guid="{abb4bff1-d423-4e02-90d9-011f519869ff}"
+						description=""
+						author="{{author}}"
+						version="Version 1"
+						copyright=""
+						license="PVS License"
+						generationTool="PVSio-web"
+						variableNamingConvention="flat"
+						numberOfEventIndicators="0">
+	<CoSimulation 	modelIdentifier="{{modelName}}"
+					needsExecutionTool="false"
+					canHandleVariableCommunicationStepSize="true"
+					canInterpolateInputs="false"
+					maxOutputDerivativeOrder="0"
+					canRunAsynchronuously="false"
+					canBeInstantiatedOnlyOncePerProcess="false"
+					canNotUseMemoryManagementFunctions="true"
+					canGetAndSetFMUstate="false"
+					canSerializeFMUstate="false"
+					providesDirectionalDerivative="false">
+		</CoSimulation>
+	<LogCategories>
+		<Category name="logAll" />
+		<Category name="logError" />
+		<Category name="logFmiCall" />
+		<Category name="Protocol" />
+		<Category name="Error" />
+	</LogCategories>
+
+	<ModelVariables>{{#each variables}}{{#if fmi}}
+		<ScalarVariable name="{{name}}" valueReference="{{fmi.valueReference}}" causality="{{fmi.causality}}" variability="{{fmi.variability}}" {{#if parameter}} initial="{{fmi.initial}}" {{/if}}><{{fmi.descriptor}} {{#if input}}start="{{value}}"{{/if}}{{#if parameter}}start="{{value}}"{{/if}} /></ScalarVariable>
+    {{/if}}{{/each}}</ModelVariables>
+
+	<ModelStructure>
+	<Outputs>{{#each variables}}{{#if fmi}}{{#if output}}
+			<Unknown index="{{fmi.valueReference}}"  dependencies=""/>
+            {{/if}}{{/if}}{{/each}}
+	</Outputs>
+
+	</ModelStructure>
+</fmiModelDescription>
