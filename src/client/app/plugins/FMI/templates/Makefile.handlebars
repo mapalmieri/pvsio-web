@@ -22,9 +22,9 @@ all:
 	rm -rf binaries
 
 run:
-	./fmuCheck.linux64 -h 1E-01 {{name}}.fmu
+	./fmuCheck.linux64 -h 1E-03 {{name}}.fmu
 run1:
-	./fmuCheck.linux64 -h 1E-02 {{name}}.fmu
+	./fmuCheck.linux64 -h 1E-04 {{name}}.fmu
 
 clean:
 	rm -rf  {{name}}.o fmu.o skeleton.o

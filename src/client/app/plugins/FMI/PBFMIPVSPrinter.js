@@ -50,10 +50,13 @@ define(function (require, exports, module) {
     }
 
 
-	PBFMIPVSPrinter.prototype.print_front = function (elements) {
+	PBFMIPVSPrinter.prototype.print_front = function (fmi,elements) {
 		var index_html = "";
 		var index_js = "";
 		  
+		fmi.state_variables.variables.forEach(function (v) {
+			v.output=(v.scope && v.scope.toLowerCase() === "output");
+		});
 		try {
                     index_html = Handlebars.compile(index_html_template, { noEscape: true })({
                         
@@ -61,6 +64,7 @@ define(function (require, exports, module) {
 					console.log(index_html);
 					
                     index_js = Handlebars.compile(index_js_template, { noEscape: true })({
+						variables: fmi.state_variables.variables,
 						elements: elements
                     });
                     console.log(index_js);

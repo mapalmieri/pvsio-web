@@ -214,6 +214,16 @@ void doStep(const char* action) {
 	convertDoubletoString(index_state,2);
 	
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	sprintf(sendbuff,"%s(",action);
 	strcat(sendbuff,state);
 	strcat(sendbuff,");");
@@ -245,9 +255,21 @@ void doStep(const char* action) {
 	
     index_state=findVariable("servoLeftVal",state);
 	convertStringtoDouble(index_state,3);
-		
+	
+	
     index_state=findVariable("servoRightVal",state);
-	convertStringtoDouble(index_state,4);	
+	convertStringtoDouble(index_state,4);
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+	
 }
 	
     
@@ -289,10 +311,21 @@ static int WebSocketCallback(struct lws* wsi, enum lws_callback_reasons reason, 
     case LWS_CALLBACK_RECEIVE:
         printf("LWS_CALLBACK_RECEIVE\n");
         //printf("Received message: %s\n", (char*) in);
-        doStep((char*) in);
-        memcpy(lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, state, strlen(state) );
-        lws_write(wsi,(unsigned char *)lwssendstate + LWS_SEND_BUFFER_PRE_PADDING,strlen(state),LWS_WRITE_TEXT);
-        break;
+        
+        if(findVariable("accelerate",(char*) in) != -1){
+			doStep("accelerate");
+			memcpy(lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, state, strlen(state) );
+			lws_write(wsi,(unsigned char *)lwssendstate + LWS_SEND_BUFFER_PRE_PADDING,strlen(state),LWS_WRITE_TEXT);
+			break;
+        }
+        
+        if(findVariable("brake",(char*) in) != -1){
+			doStep("brake");
+			memcpy(lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, state, strlen(state) );
+			lws_write(wsi,(unsigned char *)lwssendstate + LWS_SEND_BUFFER_PRE_PADDING,strlen(state),LWS_WRITE_TEXT);
+			break;
+        }
+        
     case LWS_CALLBACK_HTTP:
         printf("LWS_CALLBACK_HTTP\n");
         break;

@@ -54,11 +54,16 @@ line_following_robot1: THEORY
      ELSE -> st
     ENDCOND
     
- click_accelerate(st:State): State =
+ accelerate(st:State): State =
 	LET
 		st = st WITH [servoLeftVal := st`servoLeftVal + ACC_STEP],
 		st = st WITH [servoRightVal := st`servoRightVal + ACC_STEP]
 		IN st
-
+		
+brake(st:State): State =
+	LET
+		st = st WITH [servoLeftVal := st`servoLeftVal - BRAKE_STEP],
+		st = st WITH [servoRightVal := st`servoRightVal - BRAKE_STEP]
+		IN st
 
  END line_following_robot1

@@ -268,5 +268,3 @@ fmi2Status fmi2GetNominalsOfContinuousStates(fmi2Component c, fmi2Real x_nominal
 	return fmi2Error;
 }
 #endif // Model Exchange
-
-

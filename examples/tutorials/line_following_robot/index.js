@@ -143,18 +143,18 @@ require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
     var statevariables = [
 		{name:"lfLeftVal", type: "real", variability: "discrete", scope:"input", value: "0"},
 		{name:"lfRightVal", type:"real",variability: "discrete", scope:"input", value:"0"},
-		{name:"servoLeftVal", type:"real",variability: "discrete", scope:"output", value:"0"},
-		{name:"servoRightVal", type:"real",variability: "discrete", scope:"output", value:"0"},
+		{name:"servoLeftVal", type:"real",variability: "discrete", scope:"output", value:"0", top: 20},
+		{name:"servoRightVal", type:"real",variability: "discrete", scope:"output", value:"0", top: 120},
 		{name:"on_off", type:"real",variability: "discrete", scope:"local", value:"0"}
 	];
 	var fmi = {name: "line_following_robot1", state_variables : {variables: statevariables}, last: 4};
 	
-	var accelerate = { id: "accelerate", widget: "Button",
+	var accelerate = { id: "accelerate", widget: "TouchscreenButton",
         top: 493, left: 168, height: 54, width: 54, callback : "onMessageReceived"
     };
-    var brake = {id : "brake", widget: "Button", color: "Red",
+    var brake = {id : "brake", widget: "TouchscreenButton", color: "Red",
 		top: 293, left: 168, height: 54, width: 54, callback : "onMessageReceived"};
     var printer = new PBFMIPVSPrinter();
     printer.print(fmi,[accelerate,brake]);
-    printer.print_front([accelerate,brake]);
+    printer.print_front(fmi,[accelerate,brake]);
 });

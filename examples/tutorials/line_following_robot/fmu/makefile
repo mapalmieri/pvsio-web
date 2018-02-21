@@ -22,9 +22,9 @@ all:
 	rm -rf binaries
 
 run:
-	./fmuCheck.linux64 -h 1E-01 line_following_robot1.fmu
-run1:
 	./fmuCheck.linux64 -h 1E-03 line_following_robot1.fmu
+run1:
+	./fmuCheck.linux64 -h 1E-04 line_following_robot1.fmu
 
 clean:
 	rm -rf  line_following_robot1.o fmu.o skeleton.o
