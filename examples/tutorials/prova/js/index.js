@@ -6,8 +6,9 @@ require.config({
 require([
     "widgets/TouchscreenButton",
     "widgets/BasicDisplay",
+    "widgets/ButtonActionsQueue",
     "websockets/FMIClient"
-], function (TouchscreenButton, BasicDisplay, FMIClient) {
+], function (TouchscreenButton, BasicDisplay, ButtonActionsQueue, FMIClient) {
     "use strict";
     // callback function
     var PVSioStateParser = require("util/PVSioStateParser");
@@ -52,17 +53,35 @@ require([
 	
 	
 		system.servoLeftVal = new BasicDisplay("servoLeftVal",{
-		top: 20 
-	
-	
+		
+		
+		top: 120 
 	},{},{parent:"image"});
 	system.servoLeftVal.render(); 
 		system.servoRightVal = new BasicDisplay("servoRightVal",{
+		
+		left: 300, 
 		top: 120 
-	
-	
 	},{},{parent:"image"});
 	system.servoRightVal.render(); 
+	
+	
+	
+	
+		system.lfLeftVal = new BasicDisplay("lfLeftVal",{
+		
+		
+		top: 20 
+	},{},{parent:"image"});
+	system.lfLeftVal.render(); 
+		system.lfRightVal = new BasicDisplay("lfRightVal",{
+		
+		left: 300, 
+		top: 20 
+	},{},{parent:"image"});
+	system.lfRightVal.render(); 
+	
+	
 	
     
     function onMessageReceived(err, res) {
@@ -70,9 +89,14 @@ require([
 		state = PVSioStateParser.parse(res);
         
 	
+		system.lfLeftVal.render(PVSioStateParser.evaluate(state.lfLeftVal)); 
 	
-		system.servoLeftVal.render(state.servoLeftVal); 
-		system.servoRightVal.render(state.servoRightVal); 
+		system.lfRightVal.render(PVSioStateParser.evaluate(state.lfRightVal)); 
+		system.servoLeftVal.render(PVSioStateParser.evaluate(state.servoLeftVal)); 
+	
+		system.servoRightVal.render(PVSioStateParser.evaluate(state.servoRightVal)); 
+	
+	
 	
     }
 
@@ -85,4 +109,19 @@ require([
         console.log("Connection closed :((");
     });
     //client.connectToServer();
+     var tick;
+        function start_tick(interval) {
+            if (!tick) {
+                tick = setInterval(function () {
+                    ButtonActionsQueue.getInstance().queueGUIAction("tick", onMessageReceived);
+                }, interval);
+            }
+        }
+        function stop_tick() {
+            if (tick) {
+                clearInterval(tick);
+                tick = null;
+            }
+        }
+        start_tick(250);
 });

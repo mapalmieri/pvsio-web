@@ -56,6 +56,7 @@ define(function (require, exports, module) {
 		  
 		fmi.state_variables.variables.forEach(function (v) {
 			v.output=(v.scope && v.scope.toLowerCase() === "output");
+			v.input=(v.scope && v.scope.toLowerCase() === "input");
 		});
 		try {
                     index_html = Handlebars.compile(index_html_template, { noEscape: true })({

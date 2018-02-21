@@ -6,8 +6,9 @@ require.config({
 require([
     "widgets/TouchscreenButton",
     "widgets/BasicDisplay",
+    "widgets/ButtonActionsQueue",
     "websockets/FMIClient"
-], function (TouchscreenButton, BasicDisplay, FMIClient) {
+], function (TouchscreenButton, BasicDisplay, ButtonActionsQueue, FMIClient) {
     "use strict";
     // callback function
     var PVSioStateParser = require("util/PVSioStateParser");
@@ -32,10 +33,19 @@ require([
     system.{{id}}.render();
     {{/each}}
 	{{#each variables}}
-	{{#if output}}	system.{{name}} = new BasicDisplay("{{name}}",{
+	{{#if output}}	system.{{name}} = new {{widget}}("{{name}}",{
+		
+		{{#if left}}left: {{left}}, {{/if}}
 		{{#if top}}top: {{top}} {{/if}}
+	},{},{parent:"image"});
+	system.{{name}}.render(); {{/if}}{{/each}}
 	
 	
+	{{#each variables}}
+	{{#if input}}	system.{{name}} = new {{widget}}("{{name}}",{
+		
+		{{#if left}}left: {{left}}, {{/if}}
+		{{#if top}}top: {{top}} {{/if}}
 	},{},{parent:"image"});
 	system.{{name}}.render(); {{/if}}{{/each}}
     
@@ -43,7 +53,8 @@ require([
 		var state = {};
 		state = PVSioStateParser.parse(res);
         {{#each variables}}
-	{{#if output}}	system.{{name}}.render(state.{{name}}); {{/if}}{{/each}}
+	{{#if output}}	system.{{name}}.render(PVSioStateParser.evaluate(state.{{name}})); {{/if}}
+	{{#if input}}	system.{{name}}.render(PVSioStateParser.evaluate(state.{{name}})); {{/if}}{{/each}}
     }
 
     // web socket client
@@ -55,4 +66,19 @@ require([
         console.log("Connection closed :((");
     });
     //client.connectToServer();
+     var tick;
+        function start_tick(interval) {
+            if (!tick) {
+                tick = setInterval(function () {
+                    ButtonActionsQueue.getInstance().queueGUIAction("tick", onMessageReceived);
+                }, interval);
+            }
+        }
+        function stop_tick() {
+            if (tick) {
+                clearInterval(tick);
+                tick = null;
+            }
+        }
+        start_tick(250);
 });

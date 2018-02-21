@@ -326,6 +326,11 @@ static int WebSocketCallback(struct lws* wsi, enum lws_callback_reasons reason, 
 			break;
         }
         
+        if(findVariable("tick",(char*) in) != -1){
+        memcpy(lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, state, strlen(state) );
+		lws_write(wsi,(unsigned char *)lwssendstate + LWS_SEND_BUFFER_PRE_PADDING,strlen(state),LWS_WRITE_TEXT);
+		break;
+        }
     case LWS_CALLBACK_HTTP:
         printf("LWS_CALLBACK_HTTP\n");
         break;

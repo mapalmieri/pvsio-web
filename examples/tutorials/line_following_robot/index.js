@@ -141,10 +141,10 @@ require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
     "use strict";
     
     var statevariables = [
-		{name:"lfLeftVal", type: "real", variability: "discrete", scope:"input", value: "0"},
-		{name:"lfRightVal", type:"real",variability: "discrete", scope:"input", value:"0"},
-		{name:"servoLeftVal", type:"real",variability: "discrete", scope:"output", value:"0", top: 20},
-		{name:"servoRightVal", type:"real",variability: "discrete", scope:"output", value:"0", top: 120},
+		{name:"lfLeftVal", type: "real", variability: "discrete", scope:"input", value: "0", top: 20, widget: "BasicDisplay"},
+		{name:"lfRightVal", type:"real",variability: "discrete", scope:"input", value:"0", top :20, left : 300, widget: "BasicDisplay"},
+		{name:"servoLeftVal", type:"real",variability: "discrete", scope:"output", value:"0", top: 120, widget: "BasicDisplay"},
+		{name:"servoRightVal", type:"real",variability: "discrete", scope:"output", value:"0", top: 120, left:300, widget: "BasicDisplay"},
 		{name:"on_off", type:"real",variability: "discrete", scope:"local", value:"0"}
 	];
 	var fmi = {name: "line_following_robot1", state_variables : {variables: statevariables}, last: 4};
