@@ -16,15 +16,15 @@ require([
     // input widget
     
     system.accelerate = new TouchscreenButton("accelerate", {
-        top: 493, 
-        left: 168,
-        height: 54, 
-        width: 54 
+        top: 362, 
+        left: 288,
+        height: 30, 
+        width: 25 
     }, {
         
         
 		
-		
+		 backgroundColor: "transparent", 
 		callback: onMessageReceived 
     }, {
             parent: "image"
@@ -33,15 +33,15 @@ require([
     system.accelerate.render();
     
     system.brake = new TouchscreenButton("brake", {
-        top: 293, 
-        left: 168,
-        height: 54, 
-        width: 54 
+        top: 412, 
+        left: 288,
+        height: 30, 
+        width: 25 
     }, {
         
         
 		
-		 backgroundColor: "Red", 
+		 backgroundColor: "transparent", 
 		callback: onMessageReceived 
     }, {
             parent: "image"
@@ -54,15 +54,21 @@ require([
 	
 		system.servoLeftVal = new BasicDisplay("servoLeftVal",{
 		
-		
-		top: 120 
-	},{},{parent:"image"});
+		left: 250, 
+		width: 100, 
+		top: 160 
+	},{
+		 backgroundColor: "transparent", 
+	},{parent:"image"});
 	system.servoLeftVal.render(); 
 		system.servoRightVal = new BasicDisplay("servoRightVal",{
 		
-		left: 300, 
-		top: 120 
-	},{},{parent:"image"});
+		left: 450, 
+		width: 100, 
+		top: 160 
+	},{
+		 backgroundColor: "transparent", 
+	},{parent:"image"});
 	system.servoRightVal.render(); 
 	
 	
@@ -70,15 +76,21 @@ require([
 	
 		system.lfLeftVal = new BasicDisplay("lfLeftVal",{
 		
-		
-		top: 20 
-	},{},{parent:"image"});
+		left: 250, 
+		width: 100, 
+		top: 60 
+	},{
+		 backgroundColor: "transparent", 
+	},{parent:"image"});
 	system.lfLeftVal.render(); 
 		system.lfRightVal = new BasicDisplay("lfRightVal",{
 		
-		left: 300, 
-		top: 20 
-	},{},{parent:"image"});
+		left: 450, 
+		width: 100, 
+		top: 60 
+	},{
+		 backgroundColor: "transparent", 
+	},{parent:"image"});
 	system.lfRightVal.render(); 
 	
 	
@@ -123,5 +135,5 @@ require([
                 tick = null;
             }
         }
-        start_tick(250);
+        start_tick(500);
 });

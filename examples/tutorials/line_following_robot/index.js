@@ -140,20 +140,21 @@ require.config({
 require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
     "use strict";
     
+    /*fino a value sono campi obbligatori, dopo sono facoltativi*/
     var statevariables = [
-		{name:"lfLeftVal", type: "real", variability: "discrete", scope:"input", value: "0", top: 20, widget: "BasicDisplay"},
-		{name:"lfRightVal", type:"real",variability: "discrete", scope:"input", value:"0", top :20, left : 300, widget: "BasicDisplay"},
-		{name:"servoLeftVal", type:"real",variability: "discrete", scope:"output", value:"0", top: 120, widget: "BasicDisplay"},
-		{name:"servoRightVal", type:"real",variability: "discrete", scope:"output", value:"0", top: 120, left:300, widget: "BasicDisplay"},
+		{name:"lfLeftVal", type: "real", variability: "continuous", scope:"input", value: "0", top: 60,left : 250, width: 100, color: "transparent", widget: "BasicDisplay"},
+		{name:"lfRightVal", type:"real",variability: "continuous", scope:"input", value:"0", top :60, left : 450, width: 100, color: "transparent", widget: "BasicDisplay"},
+		{name:"servoLeftVal", type:"real",variability: "discrete", scope:"output", value:"0", top: 160, left: 250, width: 100, color: "transparent", widget: "BasicDisplay"},
+		{name:"servoRightVal", type:"real",variability: "discrete", scope:"output", value:"0", top: 160, left:450, width: 100, color: "transparent", widget: "BasicDisplay"},
 		{name:"on_off", type:"real",variability: "discrete", scope:"local", value:"0"}
 	];
 	var fmi = {name: "line_following_robot1", state_variables : {variables: statevariables}, last: 4};
 	
-	var accelerate = { id: "accelerate", widget: "TouchscreenButton",
-        top: 493, left: 168, height: 54, width: 54, callback : "onMessageReceived"
+	var accelerate = { id: "accelerate", widget: "TouchscreenButton", color: "transparent",
+        top: 362, left: 288, height: 30, width: 25, callback : "onMessageReceived"
     };
-    var brake = {id : "brake", widget: "TouchscreenButton", color: "Red",
-		top: 293, left: 168, height: 54, width: 54, callback : "onMessageReceived"};
+    var brake = {id : "brake", widget: "TouchscreenButton", color: "transparent",
+		top: 412, left: 288, height: 30, width: 25, callback : "onMessageReceived"};
     var printer = new PBFMIPVSPrinter();
     printer.print(fmi,[accelerate,brake]);
     printer.print_front(fmi,[accelerate,brake]);

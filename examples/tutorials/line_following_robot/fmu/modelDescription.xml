@@ -31,9 +31,9 @@
 	</LogCategories>
 
 	<ModelVariables>
-		<ScalarVariable name="lfLeftVal" valueReference="1" causality="input" variability="discrete" ><Real start="0" /></ScalarVariable>
+		<ScalarVariable name="lfLeftVal" valueReference="1" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="lfRightVal" valueReference="2" causality="input" variability="discrete" ><Real start="0" /></ScalarVariable>
+		<ScalarVariable name="lfRightVal" valueReference="2" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
     
 		<ScalarVariable name="servoLeftVal" valueReference="3" causality="output" variability="discrete" ><Real  /></ScalarVariable>
     

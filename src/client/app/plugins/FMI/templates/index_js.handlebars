@@ -36,8 +36,11 @@ require([
 	{{#if output}}	system.{{name}} = new {{widget}}("{{name}}",{
 		
 		{{#if left}}left: {{left}}, {{/if}}
+		{{#if width}}width: {{width}}, {{/if}}
 		{{#if top}}top: {{top}} {{/if}}
-	},{},{parent:"image"});
+	},{
+		{{#if color}} backgroundColor: "{{color}}", {{/if}}
+	},{parent:"image"});
 	system.{{name}}.render(); {{/if}}{{/each}}
 	
 	
@@ -45,8 +48,11 @@ require([
 	{{#if input}}	system.{{name}} = new {{widget}}("{{name}}",{
 		
 		{{#if left}}left: {{left}}, {{/if}}
+		{{#if width}}width: {{width}}, {{/if}}
 		{{#if top}}top: {{top}} {{/if}}
-	},{},{parent:"image"});
+	},{
+		{{#if color}} backgroundColor: "{{color}}", {{/if}}
+	},{parent:"image"});
 	system.{{name}}.render(); {{/if}}{{/each}}
     
     function onMessageReceived(err, res) {

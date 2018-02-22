@@ -36,7 +36,7 @@ line_following_robot1: THEORY
  
  tick(st:State): State =
     COND
-      lfRightVal(st) > LSR_THRESHOLD AND lfLeftVal(st) > LSR_THRESHOLD 
+      lfRightVal(st) < LSR_THRESHOLD AND lfLeftVal(st) < LSR_THRESHOLD 
       -> LET 
              st = st WITH [ servoLeftVal := SPEED4 ],
              st = st WITH [ servoRightVal := - SPEED4 ]
@@ -46,7 +46,7 @@ line_following_robot1: THEORY
              st = st WITH [ servoLeftVal := SPEED5 ],
              st = st WITH [ servoRightVal := - SPEED1 ]
           IN st,
-      lfRightVal(st) > LSR_THRESHOLD AND lfLeftVal(st) > LSR_THRESHOLD 
+      lfRightVal(st) < LSR_THRESHOLD AND lfLeftVal(st) > LSR_THRESHOLD 
       -> LET 
              st = st WITH [ servoLeftVal := SPEED1 ],
              st = st WITH [ servoRightVal := - SPEED5 ]

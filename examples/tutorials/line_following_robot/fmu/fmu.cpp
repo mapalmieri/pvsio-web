@@ -1,17 +1,3 @@
-/*! \file fmu.c
- * In this file there is the implementation of the functions required
- * by the FMI standard.
- * Most of them just return "fmi2OK" or "fmi2Error"
- * the most relevant so far are:
- * 		fmi2Instantiate
- * 		fmi2DoStep
- * 		fmi2FreeInstance
- * 		fmi2GetXXX
- * 		fmi2SetXXX
- *
- * This file is largely copied from the Fmu.cpp file
- * of Overture Extension for FMI
- * */
 #include "fmu.h"
 
 FmiBuffer fmiBuffer;

@@ -1,15 +1,3 @@
-/*! \file fmu.h
- * This file contains the definitions of the functions used by myfmu.cpp:
- * 		initialize(fmi2String );
- * 			this one needs the string as parameter to forward the path where the resources folder is unzipped
- *		void doStep(const char*);
- * 			this is the function called every time the fmi2DoStep is invoked
- *		void terminate();
- * 			this is the function called when the co-simulation terminates
- * 		FmiBuffer
- * 			This structure maintains all the variables that are accessed by means of fmi2GetXXX and fmi2SetXXX
- *
- **/
 #ifndef FMU_H
 #define FMU_H
 

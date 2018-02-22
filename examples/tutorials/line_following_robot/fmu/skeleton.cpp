@@ -1,8 +1,3 @@
-/*! \file skeleton.c 
- * In this file there are the implementations
- * of the fuctions declared in fmu.h
- * along with the data needed.
- */
 #include "fmu.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -347,8 +342,8 @@ static int WebSocketCallback(struct lws* wsi, enum lws_callback_reasons reason, 
         printf("LWS_CALLBACK_PROTOCOL_INIT\n");
         break;
     case LWS_CALLBACK_GET_THREAD_ID:
-        printf("TIMEOUT\n");
-        printf("LWS_CALLBACK_GET_THREAD_ID\n");
+        //printf("TIMEOUT\n");
+       // printf("LWS_CALLBACK_GET_THREAD_ID\n");
         break;
     case LWS_CALLBACK_WSI_DESTROY:
         printf("Timeout Happened %i\n", callback_reason);
