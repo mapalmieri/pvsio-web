@@ -1,0 +1,402 @@
+{
+ "descriptor": {
+  "file_type": "emdl",
+  "version": "2.0",
+  "description": "emucharts model",
+  "chart_name": "EMUCHART__0"
+ },
+ "chart": {
+  "states": [
+   {
+    "id": "X1",
+    "name": "hovering",
+    "color": "#1f77b4",
+    "width": 36,
+    "height": 36,
+    "x": 201,
+    "y": 228,
+    "enter": "",
+    "exit": "",
+    "pmr": [],
+    "widgets": [],
+    "components": []
+   }
+  ],
+  "transitions": [
+   {
+    "id": "T1",
+    "name": "tick\n[ TRUE ]\n{  \t\n\tphi_c = -( 2 * Lp * d_x + Lp*Lp * (current_x - x_d)) * (sin(pdi_d)/G) + (2 * Lp * d_y+ Lp*Lp*(current_y - y_d )) * ( cos(psi_d )/G);\n \n\n\n\n\tw_1 := w_z / 4 + 0 \t\t\t- w_theta / 2 \t+ w_psi / 4;\n    w_2 := w_z / 4 + w_phi / 2 \t+ 0 \t\t\t- w_psi / 4;\n    w_3 := w_z / 4 + 0 \t\t\t+ w_theta / 2 \t+ w_psi / 4;\n    w_4 := w_z / 4 - w_phi / 2  + 0 \t\t\t- w_psi / 4;\n}",
+    "source": {
+     "id": "X1",
+     "name": "hovering",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 201,
+     "y": 228,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "hovering",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 201,
+     "y": 228,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 281,
+     "y": 278.4
+    }
+   }
+  ],
+  "initial_transitions": [
+   {
+    "id": "IT1",
+    "name": "IT1",
+    "target": {
+     "id": "X1",
+     "name": "hovering",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 201,
+     "y": 228,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    }
+   }
+  ],
+  "variables": [
+   {
+    "id": "VAR_psi_d:real(Input)",
+    "name": "psi_d",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_current_y:real(Input)",
+    "name": "current_y",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_current_z:real(Input)",
+    "name": "current_z",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_vel_z:real(Input)",
+    "name": "vel_z",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_vel_x:real(Input)",
+    "name": "vel_x",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_vel_y:real(Input)",
+    "name": "vel_y",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_vel_phi:real(Input)",
+    "name": "vel_phi",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_vel_psi:real(Input)",
+    "name": "vel_psi",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_vel_theta:real(Input)",
+    "name": "vel_theta",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_current_psi:real(Input)",
+    "name": "current_psi",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_current_phi:real(Input)",
+    "name": "current_phi",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_current_theta:real(Input)",
+    "name": "current_theta",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_x_d:real(Input)",
+    "name": "x_d",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_y_d:real(Input)",
+    "name": "y_d",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_z_d:real(Input)",
+    "name": "z_d",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_current_x:real(Input)",
+    "name": "current_x",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_w_1:real(Output)",
+    "name": "w_1",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_w_2:real(Output)",
+    "name": "w_2",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_w_3:real(Output)",
+    "name": "w_3",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_w_4:real(Output)",
+    "name": "w_4",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_Kf:real(Local)",
+    "name": "Kf",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "1",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_Km:real(Local)",
+    "name": "Km",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "1",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_M:real(Local)",
+    "name": "M",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "1",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_G:real(Local)",
+    "name": "G",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "9.81",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_L:real(Local)",
+    "name": "L",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.3",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_Ix:real(Local)",
+    "name": "Ix",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.001",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_Iy:real(Local)",
+    "name": "Iy",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.001",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_C_z:real(Local)",
+    "name": "C_z",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "6.264183905",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_La:real(Local)",
+    "name": "La",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "4",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_Lp:real(Local)",
+    "name": "Lp",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.4",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_Iz:real(Local)",
+    "name": "Iz",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.001",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_C_phi:real(Local)",
+    "name": "C_phi",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "939.627586",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_C_theta:real(Local)",
+    "name": "C_theta",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "939.627586",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_phi_c:real(Local)",
+    "name": "phi_c",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_theta_c:real(Local)",
+    "name": "theta_c",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_w_z:real(Local)",
+    "name": "w_z",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_w_phi:real(Local)",
+    "name": "w_phi",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_w_theta:real(Local)",
+    "name": "w_theta",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_w_psi:real(Local)",
+    "name": "w_psi",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Local"
+   }
+  ],
+  "constants": [],
+  "datatypes": [],
+  "pmr": {},
+  "isPIM": false
+ }
+}

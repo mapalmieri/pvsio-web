@@ -31,7 +31,7 @@
 	</LogCategories>
 
 	<ModelVariables>{{#each variables}}{{#if fmi}}
-		<ScalarVariable name="{{name}}" valueReference="{{fmi.valueReference}}" causality="{{fmi.causality}}" variability="{{fmi.variability}}" {{#if parameter}} initial="{{fmi.initial}}" {{/if}}><{{fmi.descriptor}} {{#if input}}start="{{value}}"{{/if}}{{#if parameter}}start="{{value}}"{{/if}} /></ScalarVariable>
+		<ScalarVariable name="{{name}}" valueReference="{{fmi.valueReference}}" causality="{{fmi.causality}}" variability="{{fmi.variability}}" ><{{fmi.descriptor}} {{#if input}}start="{{value}}"{{/if}}{{#if parameter}}start="{{value}}"{{/if}} /></ScalarVariable>
     {{/if}}{{/each}}</ModelVariables>
 
 	<ModelStructure>

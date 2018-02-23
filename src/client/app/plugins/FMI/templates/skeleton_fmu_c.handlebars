@@ -206,10 +206,33 @@ void doStep(const char* action) {
 	 * we need to change the state according to the input of the FMU
 	 *since we DO change the state we have to access all variables one by one
 	 * **/
+	 if(first == 0){
+		{{#each variables}}
+	{{#if fmi}}{{#if parameter}}{{#if real}}
+    index_state=findVariable("{{name}}",state);
+	convertDoubletoString(index_state,fmiBuffer.realBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+	{{/if}}{{/if}}{{/if}}{{/each}}
+	
+	{{#each variables}}{{#if fmi}}{{#if parameter}}{{#if int}}
+    index_state=findVariable("{{name}}",state);
+	//convertInttoString(index_state,fmiBuffer.intBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+	{{/if}}{{/if}}{{/if}}{{/each}}
+	
+	{{#each variables}}{{#if fmi}}{{#if parameter}}{{#if bool}}
+    index_state=findVariable("{{name}}",state);
+	//convertBooltoString(index_state,fmiBuffer.boolBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+	{{/if}}{{/if}}{{/if}}{{/each}}
+	
+	{{#each variables}}{{#if fmi}}{{#if parameter}}{{#if string}}
+    index_state=findVariable("{{name}}",state);
+	//convertStringtoString(index_state,fmiBuffer.stringBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+	{{/if}}{{/if}}{{/if}}{{/each}}
+		first = 1;
+	 }
 	{{#each variables}}
 	{{#if fmi}}{{#if input}}{{#if real}}
     index_state=findVariable("{{name}}",state);
-	convertDoubletoString(index_state,{{fmi.valueReference}});
+	convertDoubletoString(index_state,fmiBuffer.realBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if input}}{{#if int}}
@@ -238,7 +261,7 @@ void doStep(const char* action) {
 		fgets(r3, sizeof(r3),fd);
 		//printf("%s\n", r3);
 	}
-	while((strcmp(" ==>\n",r3)!=0) && (strcmp("==>\n",r3)!=0)); //  ";;;;;GC:;;;;;finished"  followed by "==>" without whitespace
+	while((strcmp(" ==>\n",r3)!=0) && (strcmp("==>\n",r3)!=0) && (strcmp("<PVSio> ==>\n",r3)!=0));//  ";;;;;GC:;;;;;finished"  followed by "==>" without whitespace
 
 	ret = fread(state,1,1,fd); // 
 	while(findVariable("<PVSio>",state) == -1){
@@ -481,7 +504,7 @@ void convertStringtoDouble(int state_index, int buffer_index){
 		temp1=atof(r1);
 		temp2=atof(r2);
 
-		if(strlen(r1) > 5){
+		if(strlen(r1) > 7){
 			fmiBuffer.realBuffer[buffer_index] =temp1;
 		}
 		else{
@@ -495,9 +518,9 @@ void convertStringtoDouble(int state_index, int buffer_index){
 	}
 }
 
-void convertDoubletoString(int state_index, int buffer_index){
+void convertDoubletoString(int state_index, double value,int buffer_index){
 	char temp[1000];
-	char value[20];
+	char temp_value[20];
 	int offset;
 
 	if(buffer_index == {{last}}){
@@ -509,8 +532,44 @@ void convertDoubletoString(int state_index, int buffer_index){
 		strcpy(temp,&state[state_index+offset]);
 	}
 	state[state_index-1]='\0';
-	sprintf(value,"%f",fmiBuffer.realBuffer[buffer_index]);
+	sprintf(temp_value,"%f",value);
+	//printf("%s\n",temp_value);
 	strcat(state, " ");
-	strcat(state,value);
+	strcat(state,temp_value);
 	strcat(state,temp);
+}
+
+void convertNotation(const char name[], int buffer_index){
+	index_state=findVariable(name,state);  
+	sscanf(&state[index_state],"%s,%*s",r2 );
+	//fmiprintf("%s\n", r2);
+	if(buffer_index !={{last}})r2[strlen(r2)-1]='\0'; // removes comma
+//	std::string str(r2);
+//	std::cout << str << "\n";
+	if(strcmp(r2,"0")==0)return;
+	sprintf(sendbuff,"str2real(\"%s\");\n",r2);				
+	write(FtS[1], sendbuff,strlen(sendbuff));
+	do{
+		fgets(r3, sizeof(r3),fd);
+		//printf("%s\n", r3);
+	}
+	while((strcmp(" ==>\n",r3)!=0) && (strcmp("==>\n",r3)!=0) && (strcmp("<PVSio> ==>\n",r3)!=0));
+	fgets(r3, sizeof(r3),fd);
+	//printf("%s\n", r3);
+	sscanf(r3,"%[^'/']/%s",r1,r2);
+	temp1=atof(r1);
+	temp2=atof(r2);
+	//printf("%s\n", r1);
+	//printf("%s\n", r2);
+	//printf("%f\n", temp1);
+	//printf("%f\n", temp2);
+	//printf("%f\n", temp1/temp2);
+	fgets(r3,sizeof(r3),fd);	
+	if ( temp1 == temp2 )  convertDoubletoString(index_state,temp1,buffer_index);
+	else{
+		if(temp1 != 0)	convertDoubletoString(index_state,temp1/temp2,buffer_index);	// sometimes this might not be sufficient, see function convertStringtoDouble
+		else{
+			convertDoubletoString(index_state,temp1,buffer_index);
+		}
+	}	
 }

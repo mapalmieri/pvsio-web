@@ -15,6 +15,7 @@
 #include "fmu.h"
 
 FmiBuffer fmiBuffer;
+fmi2String location;
 
 extern "C" fmi2Component fmi2Instantiate(
 				fmi2String instanceName,
@@ -25,7 +26,9 @@ extern "C" fmi2Component fmi2Instantiate(
 				fmi2Boolean visible,
 				fmi2Boolean loggingOn
 			) {
-	initialize(fmuResourceLocation);
+			
+	location=fmuResourceLocation;
+	initialize(location);
 	return (void*) 1;
 }
 
@@ -36,6 +39,8 @@ extern "C" fmi2Status fmi2SetupExperiment(
 				fmi2Real startTime,
 				fmi2Boolean stopTimeDefined,
 				fmi2Real stopTime) {
+				
+	
 	return fmi2OK;
 }
 
