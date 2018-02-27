@@ -84,8 +84,8 @@ define(function (require, exports, module) {
         this.maxX = opt.maxX || this.default.maxX;
         this.maxY = opt.maxY || this.default.maxY;
         this.autoscale = opt.autoscale || true;
-        this.scaleX = this.width / (2 * this.maxX);
-        this.scaleY = this.height / (2 * this.maxY);
+        this.scaleX = this.width / ( this.maxX);
+        this.scaleY = this.height / ( this.maxY);
 
         this.lineColor = opt.lineColor || colors[this.colorIndex];
         this.arrowColor = opt.arrowColor || this.lineColor;
@@ -115,7 +115,7 @@ define(function (require, exports, module) {
         var svg = this.div.append("svg").attr("version", 1.1).attr("xmlns", "http://www.w3.org/2000/svg")
                         .attr("id", id + "_svg").attr("class", id + "_svg")
                         .attr("width", this.width).attr("height", this.height);
-        var markerSize = 10;
+        var markerSize = 20;
         this.defs = svg.append("svg:defs");
 
         // this.filters = this.defs.append("filter").attr("id", "f2")
@@ -131,13 +131,28 @@ define(function (require, exports, module) {
         this.defs.append("svg:marker")
                     .attr("id", "end-arrow")
                     .attr("viewBox", "0 -5 10 10")
-                    .attr("refX", 2)
+                    .attr("refX", 5)
+                    .attr("refY", 0)
                     .attr("markerWidth", markerSize)
                     .attr("markerHeight", markerSize)
                     .attr("orient", "auto")
                     .append("svg:path")
-                    .attr("d", "M4,0 L1,-3 L10,0 L1,3 L4,0")
-                    .attr("fill", this.arrowColor);
+                    .attr("d", "M5,-2 L5,2 M3,0 L7,0 ")
+                    .attr("stroke", "Black")
+                    .attr("stroke-width",0.5)
+                    .attr("fill", "Black");
+        this.defs.append("svg:marker")
+                    .attr("id", "start-arrow")
+                    .attr("viewBox", "0 -5 10 10")
+                    .attr("refX", 5)
+                    .attr("refY", 0)
+                    .attr("markerWidth", markerSize)
+                    .attr("markerHeight", markerSize)
+                    .attr("orient", "auto")
+                    .append("svg:path")
+                    .attr("d", "M4,1 L4,-1 L6,-1 L6,1 L4,1 ")
+                    .attr("fill", "Red");
+                    
 
         opt.x0 = (isNaN(parseFloat(opt.x0)))? 0 : parseFloat(opt.x0);
         opt.y0 = (isNaN(parseFloat(opt.y0)))? 0 : parseFloat(opt.y0);
@@ -152,9 +167,10 @@ define(function (require, exports, module) {
         this.path = svg.append("path")
                         .attr("d", this.line_function(this.data))
                         .attr("stroke", this.lineColor)
-                        .attr("stroke-width", "2")
+                        .attr("stroke-width", "4")
                         .attr("fill", "none");
         this.path.style("marker-end","url(#end-arrow)");
+        this.path.style("marker-start","url(#start-arrow)");
 
         this.example = opt.example || [ { x:0, y:50 }, { x:100, y:50 }, { x:200, y:40 }, { x:300, y:60 }, { x:400, y:30 } ]; // example is used in the prototype builder to demonstrate the widget
         Widget.call(this, id, "navigator");
@@ -209,7 +225,7 @@ define(function (require, exports, module) {
             var _this = this;
             this.data = getRouteData(_this, data);
             var plot_data = this.data.map(function (d) {
-                return { x: Math.abs((_this.maxX + d.x) * _this.scaleX), y: Math.abs((_this.maxY - d.y) * _this.scaleY) }; // we want to have (0,0) as in Cartesian coordinates -- with svg, (0,0) is the top left corner, so we need to flip the Y axis
+                return { x: Math.abs((d.x) * _this.scaleX), y: Math.abs((_this.maxY- d.y) * _this.scaleY) }; // we want to have (0,0) in bottom left corner -- with svg, (0,0) is the top left corner, so we need to flip the Y axis
             });
             this.path.attr("d", this.line_function(plot_data));
         }

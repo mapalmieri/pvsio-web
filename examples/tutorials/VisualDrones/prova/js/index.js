@@ -125,13 +125,13 @@ require([
                 {
                     top: 0,
                     left: 0,
-                    width: 980,
-                    height: 717
+                    width: 900,
+                    height: 900
                 }, {
                     // autoscale: true,
                     
-		            maxX: 10.1,
-                    maxY: 1.1,
+		            maxX: 10,
+                    maxY: 10,
                    
                     lineColor: "blue",
                     arrowColor: "blue",
@@ -145,13 +145,13 @@ require([
                 {
                     top: 0,
                     left: 0,
-                    width: 980,
-                    height: 717
+                    width: 900,
+                    height: 900
                 }, {
                     // autoscale: true,
                     
-		            maxX: 10.1,
-                    maxY: 1.1,
+		            maxX: 10,
+                    maxY: 10,
                     
         		    
         		    backgroundColor: "transparent",
@@ -164,13 +164,13 @@ require([
                 {
                     top: 0,
                     left: 0,
-                    width: 980,
-                    height: 717
+                    width: 900,
+                    height: 900
                 }, {
                     // autoscale: true,
                     
-		            maxX: 10.1,
-                    maxY: 1.1,
+		            maxX: 10,
+                    maxY: 10,
                     
         		    
         		    backgroundColor: "transparent",
@@ -183,13 +183,13 @@ require([
                 {
                     top: 0,
                     left: 0,
-                    width: 980,
-                    height: 717
+                    width: 900,
+                    height: 900
                 }, {
                     // autoscale: true,
                     
-		            maxX: 10.1,
-                    maxY: 1.1,
+		            maxX: 10,
+                    maxY: 10,
                    
         		    
         		    backgroundColor: "transparent",
@@ -202,13 +202,13 @@ require([
                 {
                     top: 0,
                     left: 0,
-                    width: 980,
-                    height: 717
+                    width: 900,
+                    height: 900
                 }, {
                     // autoscale: true,
                     
-		            maxX: 10.1,
-                    maxY: 1.1,
+		            maxX: 10,
+                    maxY: 10,
                    
         		    
         		    backgroundColor: "transparent",
