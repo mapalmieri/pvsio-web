@@ -68,7 +68,7 @@ char lwssendvariables[LWS_SEND_BUFFER_PRE_PADDING + LWS_SEND_BUFFER_POST_PADDING
        * function for the initialization of the model.
        * It calls the init function of the model and
        * 	sets the output
-       * @param location is the directory where the fmu has been unzipped. Might be used in future version
+       * @param location is the directory where the fmu has been unzipped. 
        * 
        */
 
@@ -148,7 +148,7 @@ void initialize(const char* location) {
 	close(FtS[0]);	//	closes the unnecessary pipe extremity
 	close(StF[1]);	//  closes the unnecessary pipe extremity
 
-	sleep(2);
+	sleep(1);
 	read(StF[0], banner, sizeof(banner));		// removes the  banner
 	fd=fdopen(StF[0], "r");
 	setlocale(LC_ALL, "C");						// needed for INTO-CPS
@@ -219,15 +219,15 @@ void doStep(const char* action) {
 	
 	
     index_state=findVariable("delay",state);
-	convertDoubletoString(index_state,fmiBuffer.realBuffer[6],6);
+	convertDoubletoString(index_state,fmiBuffer.realBuffer[8],8);
 	
 	
     index_state=findVariable("delayMax",state);
-	convertDoubletoString(index_state,fmiBuffer.realBuffer[7],7);
+	convertDoubletoString(index_state,fmiBuffer.realBuffer[9],9);
 	
 	
     index_state=findVariable("sequence",state);
-	convertDoubletoString(index_state,fmiBuffer.realBuffer[8],8);
+	convertDoubletoString(index_state,fmiBuffer.realBuffer[10],10);
 	
 	
 	
@@ -248,6 +248,14 @@ void doStep(const char* action) {
 	
     index_state=findVariable("x_succ",state);
 	convertDoubletoString(index_state,fmiBuffer.realBuffer[5],5);
+	
+	
+    index_state=findVariable("y_ant",state);
+	convertDoubletoString(index_state,fmiBuffer.realBuffer[6],6);
+	
+	
+    index_state=findVariable("y_succ",state);
+	convertDoubletoString(index_state,fmiBuffer.realBuffer[7],7);
 	
 	
 	
@@ -527,11 +535,7 @@ void convertDoubletoString(int state_index, double value,int buffer_index){
 	char temp[1000];
 	char temp_value[20];
 	int offset;
-/**
- * il caso con ' ' serve per gestire la variabile che appare per ultima
- * nello stato perchè non è seguita dal '.'  
- * TODO l'indice dell'ultimo elemento va messo a mano
- **/
+
 	if(buffer_index == 3){
 		offset=strchr(&state[state_index],' ')-&state[state_index];
 		strcpy(temp,&state[state_index+offset]);
@@ -551,7 +555,7 @@ void convertDoubletoString(int state_index, double value,int buffer_index){
 void convertNotation(const char name[], int buffer_index){
 	index_state=findVariable(name,state);  
 	sscanf(&state[index_state],"%s,%*s",r2 );
-	//printf("%s\n", r2);
+	//fmiprintf("%s\n", r2);
 	if(buffer_index !=3)r2[strlen(r2)-1]='\0'; // removes comma
 //	std::string str(r2);
 //	std::cout << str << "\n";

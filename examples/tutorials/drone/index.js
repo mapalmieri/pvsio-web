@@ -147,7 +147,9 @@ require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
 		{name:"z_d", type:"real",variability: "discrete", scope:"output", value:"0",top:220, widget: "BasicDisplay"},
 		{name:"x_ant", type:"real",variability: "discrete", scope:"input", value:"0",top:320, widget: "BasicDisplay"},
 		{name:"x_succ", type:"real",variability: "discrete", scope:"input", value:"0",top:420, widget: "BasicDisplay"},
-		{name:"delay", type:"real",variability: "tunable", scope:"parameter", value:"0",top:520, widget: "BasicDisplay"},
+		{name:"y_ant", type:"real",variability: "discrete", scope:"input", value:"0",top:520, widget: "BasicDisplay"},
+		{name:"y_succ", type:"real",variability: "discrete", scope:"input", value:"0",top:620, widget: "BasicDisplay"},
+		{name:"delay", type:"real",variability: "tunable", scope:"parameter", value:"0", widget: "BasicDisplay"},
 		{name:"delayMax", type:"real",variability: "tunable", scope:"parameter", value:"0", widget: "BasicDisplay"},
 		{name:"sequence", type:"real",variability: "tunable", scope:"parameter", value:"0", widget: "BasicDisplay"}
 	];

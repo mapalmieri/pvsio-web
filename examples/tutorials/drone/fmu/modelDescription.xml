@@ -41,11 +41,15 @@
     
 		<ScalarVariable name="x_succ" valueReference="5" causality="input" variability="discrete" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="delay" valueReference="6" causality="parameter" variability="tunable" ><Real start="0" /></ScalarVariable>
+		<ScalarVariable name="y_ant" valueReference="6" causality="input" variability="discrete" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="delayMax" valueReference="7" causality="parameter" variability="tunable" ><Real start="0" /></ScalarVariable>
+		<ScalarVariable name="y_succ" valueReference="7" causality="input" variability="discrete" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="sequence" valueReference="8" causality="parameter" variability="tunable" ><Real start="0" /></ScalarVariable>
+		<ScalarVariable name="delay" valueReference="8" causality="parameter" variability="tunable" ><Real start="0" /></ScalarVariable>
+    
+		<ScalarVariable name="delayMax" valueReference="9" causality="parameter" variability="tunable" ><Real start="0" /></ScalarVariable>
+    
+		<ScalarVariable name="sequence" valueReference="10" causality="parameter" variability="tunable" ><Real start="0" /></ScalarVariable>
     </ModelVariables>
 
 	<ModelStructure>

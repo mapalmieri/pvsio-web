@@ -6,7 +6,9 @@ IMPORTING Linear_displacement_projection[5,1/4,0,10]
 State : TYPE = [#
 		%input		
 		x_ant: real,
-		x_succ: real,		
+		x_succ: real,
+		y_ant: real,
+		y_succ: real,		
 		%local
 		sequence: real,
 		delayMax: real,
@@ -31,6 +33,8 @@ State : TYPE = [#
 		delayMax:= 19,
 		delay:= 19,
 		x_ant:= 0,
+		y_ant:= 0,
+		y_succ:= 0,
 		x_succ:= 0
 		 
 	#)
@@ -41,8 +45,12 @@ high_level_control(s:State) : State = s
 WITH [
 				 
 				 x_d := COND
-							delay(s) = delayMax(s)-> pnext(x_ant(s),x_d(s),x_succ(s),sequence(s)),%1/3*x_d(s) + 1/3*x_ant(s) + 1/3*x_sub(s),
+							delay(s) = delayMax(s) -> pnext(x_ant(s),x_d(s),x_succ(s),sequence(s)),
 							delay(s) < delayMax(s) -> x_d(s)
+						ENDCOND,
+				y_d := COND
+							delay(s) = delayMax(s) -> pnext(y_ant(s),y_d(s),y_succ(s),sequence(s)),
+							delay(s) < delayMax(s) -> y_d(s)
 						ENDCOND,
 			   delay := COND
 							delay(s) = delayMax(s) -> 0,
