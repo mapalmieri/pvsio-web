@@ -99,6 +99,7 @@ extern "C" fmi2Status fmi2GetReal(fmi2Component c, const fmi2ValueReference vr[]
 for (size_t i = 0; i < nvr; i++) {
 		fmi2ValueReference vRef = vr[i];
 		value[i] = fmiBuffer.realBuffer[vRef];
+	//	printf("getReal\n");
 	}
 	return fmi2OK;
 }
@@ -116,6 +117,7 @@ extern "C" fmi2Status fmi2GetBoolean(fmi2Component c, const fmi2ValueReference v
 		fmi2ValueReference vRef = vr[i];
 		value[i] = fmiBuffer.booleanBuffer[vRef];
 	}
+	//printf("getBool\n");
 	return fmi2OK;
 }
 
@@ -124,6 +126,7 @@ extern "C" fmi2Status fmi2GetString(fmi2Component c, const fmi2ValueReference vr
 		fmi2ValueReference vRef = vr[i];
 		value[i] = fmiBuffer.stringBuffer[vRef];
 	}
+	//printf("getString\n");
 	return fmi2OK;
 }
 
@@ -131,7 +134,7 @@ extern "C" fmi2Status fmi2SetReal(fmi2Component c, const fmi2ValueReference vr[]
 	for (size_t i = 0; i < nvr; i++) {
 		fmi2ValueReference vRef = vr[i];
 		fmiBuffer.realBuffer[vRef] = value[i];
-	//	printf("FMI real id=%d set to: %f\n", vRef, fmiBuffer.realBuffer[vRef]);
+		//printf("FMI real id=%d set to: %f\n", vRef, fmiBuffer.realBuffer[vRef]);
 	}
 	return fmi2OK;
 }
@@ -151,17 +154,18 @@ extern "C" fmi2Status fmi2SetBoolean(fmi2Component c, const fmi2ValueReference v
     for (size_t i = 0; i < nvr; i++) {
     		fmi2ValueReference vRef = vr[i];
     		fmiBuffer.booleanBuffer[vRef] = value[i];
-    //		printf("FMI real id=%d set to: %f\n", vRef, fmiBuffer.booleanBuffer[vRef]);
+    	//	printf("FMI real id=%d set to: %f\n", vRef, fmiBuffer.booleanBuffer[vRef]);
 	}
 	return fmi2OK;
 }
 
 extern "C" fmi2Status fmi2SetString(fmi2Component c, const fmi2ValueReference vr[], size_t nvr,
 		const fmi2String value[]) {
-		for (size_t i = 0; i < nvr; i++) {
-		fmi2ValueReference vRef = vr[i];
-		fmiBuffer.stringBuffer[vRef] = value[i];
-		}
+			for (size_t i = 0; i < nvr; i++) {
+    		fmi2ValueReference vRef = vr[i];
+    		fmiBuffer.stringBuffer[vRef] = value[i];
+    	//	printf("FMI real id=%d set to: %f\n", vRef, fmiBuffer.stringBuffer[vRef]);
+	}
 	return fmi2OK;
 }
 
@@ -290,3 +294,5 @@ fmi2Status fmi2GetNominalsOfContinuousStates(fmi2Component c, fmi2Real x_nominal
 	return fmi2Error;
 }
 #endif // Model Exchange
+
+

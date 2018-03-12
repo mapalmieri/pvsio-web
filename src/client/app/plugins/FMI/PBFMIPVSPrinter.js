@@ -42,7 +42,7 @@ define(function (require, exports, module) {
         switch (t) {
             case "int" : count++;  return { printf_type: "%i", buffer_name: buffer_names.int, descriptor: "Int" };
             case "real": count++; return { printf_type: "%f", buffer_name: buffer_names.real, descriptor: "Real" };
-            case "bool": count++; return { printf_type: "%i", buffer_name: buffer_names.bool, descriptor: "Bool"};
+            case "bool": count++; return { printf_type: "%i", buffer_name: buffer_names.bool, descriptor: "Boolean"};
             case "string": count++; return { printf_type: "%s", buffer_name: buffer_names.string, descriptor: "String"};
             default: return null;
         }

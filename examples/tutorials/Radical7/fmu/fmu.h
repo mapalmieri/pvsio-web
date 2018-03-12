@@ -34,10 +34,10 @@
 #include <locale.h>
 
 
-#define BOOL_COUNT {{count}}
-#define INT_COUNT {{count}}
-#define REAL_COUNT {{count}}
-#define STRING_COUNT {{count}}
+#define BOOL_COUNT 15
+#define INT_COUNT 15
+#define REAL_COUNT 15
+#define STRING_COUNT 15
 #define FMI_COSIMULATION
 
 struct FmiBuffer {

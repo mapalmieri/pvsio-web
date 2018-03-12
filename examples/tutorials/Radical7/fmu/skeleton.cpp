@@ -118,7 +118,7 @@ void initialize(const char* location) {
 	strcpy(e,c);
 	strcat(c, "PVS6.0");
 	strcat(a,"pvsio");
-	strcat(b,"{{name}}.pvs");
+	strcat(b,"Radical7.pvs");
 	strcpy(e,c);
 	strcat(e,"/bin/relocate");
 	// these istructions remove the "file://" part of the string
@@ -180,7 +180,7 @@ void initialize(const char* location) {
 	read(StF[0], banner, sizeof(banner));		// removes the  banner
 	fd=fdopen(StF[0], "r");
 	setlocale(LC_ALL, "C");						// needed for INTO-CPS
-	sprintf(sendbuff,"init;");
+	sprintf(sendbuff,"init(0);");
 	write(FtS[1], sendbuff,strlen(sendbuff));
 	fgets(r3, sizeof(r3),fd);
 	//printf("%s\n", r3);
@@ -188,32 +188,72 @@ void initialize(const char* location) {
 	while(findVariable("<PVSio>",state) == -1){
 		ret+= fread(&state[ret],1,1,fd);
 	}
-	//printf("%s\n",state);
+//	printf("%s\n",state);
 	state[ret-8]='\0'; // removes PVSio prompt
-	//printf("%s\n",state);
+	printf("%s\n",state);
 	
 
 
-{{#each variables}}
-{{#if fmi}}{{#if output}}{{#if real}}
-    index_state=findVariable("{{name}}",state);
-	convertStringtoDouble(index_state,{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
+
+
+
+    index_state=findVariable("spo2",state);
+	convertStringtoDouble(index_state,2);
 	
-	{{#each variables}}{{#if fmi}}{{#if output}}{{#if int}}
-    index_state=findVariable("{{name}}",state);
-	//convertStringtoInt(index_state,{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
+
+    index_state=findVariable("spo2_max",state);
+	convertStringtoDouble(index_state,3);
 	
-	{{#each variables}}{{#if fmi}}{{#if output}}{{#if bool}}
-    index_state=findVariable("{{name}}",state);
-	//convertStringtoBool(index_state,{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
+
+    index_state=findVariable("spo2_min",state);
+	convertStringtoDouble(index_state,4);
 	
-	{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
-    index_state=findVariable("{{name}}",state);
-	//convertStringtoString(index_state,{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
+
+
+
+
+    index_state=findVariable("rra",state);
+	convertStringtoDouble(index_state,8);
+	
+
+    index_state=findVariable("rra_max",state);
+	convertStringtoDouble(index_state,9);
+	
+
+    index_state=findVariable("rra_min",state);  
+	convertStringtoDouble(index_state,10);
+	
+	
+
+	
+	
+	
+	
+	
+    index_state=findVariable("spo2_fail",state);
+   
+	//convertStringtoBool(index_state,7);
+	
+    index_state=findVariable("rra_fail",state);
+	//convertStringtoBool(index_state,13);
+	
+    index_state=findVariable("isOn",state);
+	//convertStringtoBool(index_state,14);
+
+	
+	
+    index_state=findVariable("spo2_label",state);
+	//convertStringtoString(index_state,5);
+	
+    index_state=findVariable("spo2_alarm",state);
+	//convertStringtoString(index_state,6);
+	
+    index_state=findVariable("rra_label",state);
+	//convertStringtoString(index_state,11);
+
+    index_state=findVariable("rra_alarm",state);
+	//convertStringtoString(index_state,12);
+	
     
     
 }
@@ -234,55 +274,18 @@ void doStep(const char* action) {
 	 * we need to change the state according to the input of the FMU
 	 *since we DO change the state we have to access all variables one by one
 	 * **/
-	 if(first == 0){
-		{{#each variables}}
-	{{#if fmi}}{{#if parameter}}{{#if real}}
-    index_state=findVariable("{{name}}",state);
-	convertDoubletoString(index_state,fmiBuffer.realBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
 	
-	{{#each variables}}{{#if fmi}}{{#if parameter}}{{#if int}}
-    index_state=findVariable("{{name}}",state);
-	//convertInttoString(index_state,fmiBuffer.intBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
 	
-	{{#each variables}}{{#if fmi}}{{#if parameter}}{{#if bool}}
-    index_state=findVariable("{{name}}",state);
-	//convertBooltoString(index_state,fmiBuffer.boolBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
 	
-	{{#each variables}}{{#if fmi}}{{#if parameter}}{{#if string}}
-    index_state=findVariable("{{name}}",state);
-	//convertStringtoString(index_state,fmiBuffer.stringBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
-		first = 1;
-	 }
-	{{#each variables}}
-	{{#if fmi}}{{#if input}}{{#if real}}
-    index_state=findVariable("{{name}}",state);
-	convertDoubletoString(index_state,fmiBuffer.realBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
 	
-	{{#each variables}}{{#if fmi}}{{#if input}}{{#if int}}
-    index_state=findVariable("{{name}}",state);
-	//convertInttoString(index_state,{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
 	
-	{{#each variables}}{{#if fmi}}{{#if input}}{{#if bool}}
-    index_state=findVariable("{{name}}",state);
-	//convertBooltoString(index_state,{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
 	
-	{{#each variables}}{{#if fmi}}{{#if input}}{{#if string}}
-    index_state=findVariable("{{name}}",state);
-	//convertStringtoString(index_state,{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	
 	sprintf(sendbuff,"%s(",action);
 	strcat(sendbuff,state);
 	strcat(sendbuff,");");
-	printf("%s\n",sendbuff);
+//	printf("%s\n",sendbuff);
 	memset(state,0,2000); // cleans state before using it
 	write(FtS[1], sendbuff,strlen(sendbuff));
 	do{
@@ -304,27 +307,72 @@ void doStep(const char* action) {
 	 * we need to change the output of the FMU according to the state
 	 * since we don't change state we can start from the first and then advance till the last
 	 * **/
-	{{#each variables}}
-	{{#if fmi}}{{#if output}}{{#if real}} 
-	convertNotation("{{name}}",{{fmi.valueReference}});
-    index_state=findVariable("{{name}}",state);
-	convertStringtoDouble(index_state,{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
 	
-	{{#each variables}}{{#if fmi}}{{#if output}}{{#if int}}
-    index_state=findVariable("{{name}}",state);
-	//convertStringtoInt(index_state,{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
 	
-	{{#each variables}}{{#if fmi}}{{#if output}}{{#if bool}}
-    index_state=findVariable("{{name}}",state);
-	//convertStringtoBool(index_state,{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
+	 
+//	convertNotation("spo2",2);
+    index_state=findVariable("spo2",state);
+	convertStringtoDouble(index_state,2);
 	
-	{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
-    index_state=findVariable("{{name}}",state);
-	//convertStringtoString(index_state,{{fmi.valueReference}});
-	{{/if}}{{/if}}{{/if}}{{/each}}
+	 
+//	convertNotation("spo2_max",3);
+    index_state=findVariable("spo2_max",state);
+	convertStringtoDouble(index_state,3);
+	
+	 
+//	convertNotation("spo2_min",4);
+    index_state=findVariable("spo2_min",state);
+	convertStringtoDouble(index_state,4);
+	
+	
+	
+	
+	 
+//	convertNotation("rra",8);
+    index_state=findVariable("rra",state);
+	convertStringtoDouble(index_state,8);
+	
+	 
+//	convertNotation("rra_max",9);
+    index_state=findVariable("rra_max",state);
+	convertStringtoDouble(index_state,9);
+	
+	 
+//	convertNotation("rra_min",10);
+    index_state=findVariable("rra_min",state);
+	convertStringtoDouble(index_state,10);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+    index_state=findVariable("spo2_fail",state);
+	//convertStringtoBool(index_state,7);
+	
+    index_state=findVariable("rra_fail",state);
+	//convertStringtoBool(index_state,13);
+	
+    index_state=findVariable("isOn",state);
+	//convertStringtoBool(index_state,14);
+	
+	
+	
+    index_state=findVariable("spo2_label",state);
+	//convertStringtoString(index_state,5);
+	
+    index_state=findVariable("spo2_alarm",state);
+	//convertStringtoString(index_state,6);
+	
+    index_state=findVariable("rra_label",state);
+	//convertStringtoString(index_state,11);
+	
+    index_state=findVariable("rra_alarm",state);
+	//convertStringtoString(index_state,12);
+	
 
 
 	
@@ -368,15 +416,15 @@ static int WebSocketCallback(struct lws* wsi, enum lws_callback_reasons reason, 
         break;
     case LWS_CALLBACK_RECEIVE:
         printf("LWS_CALLBACK_RECEIVE\n");
-        //printf("Received message: %s\n", (char*) in);
-        {{#each elements}}
-        if(findVariable("{{id}}",(char*) in) != -1){
-			doStep("{{id}}");
+        printf("Received message: %s\n", (char*) in);
+       
+        if(findVariable("btn_on",(char*) in) != -1){
+			doStep("click_btn_on");
 			memcpy(lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, state, strlen(state) );
 			lws_write(wsi,(unsigned char *)lwssendstate + LWS_SEND_BUFFER_PRE_PADDING,strlen(state),LWS_WRITE_TEXT);
 			break;
         }
-        {{/each}}
+        
         if(findVariable("tick",(char*) in) != -1){
         memcpy(lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, state, strlen(state) );
 		lws_write(wsi,(unsigned char *)lwssendstate + LWS_SEND_BUFFER_PRE_PADDING,strlen(state),LWS_WRITE_TEXT);
@@ -531,20 +579,17 @@ void convertStringtoDouble(int state_index, int buffer_index){
 	else{
 		sscanf(&state[state_index],"%[^'/']/%s %*s",r1,r2);
 		temp1=atof(r1);
-		temp2=atof(r2);
-
-		if(strlen(r1) > 7){
+		temp2=atof(r2);		
+		if(temp2 != 0){
+			fmiBuffer.realBuffer[buffer_index] =temp1/temp2;
+			
+		}
+		else {
 			fmiBuffer.realBuffer[buffer_index] =temp1;
-		}
-		else{
-			if(temp2 != 0){
-				fmiBuffer.realBuffer[buffer_index] =temp1/temp2;
-			}
-			else {
-				fmiBuffer.realBuffer[buffer_index] =temp1;
-			}
-		}
+			
+		}	
 	}
+	return;
 }
 
 void convertDoubletoString(int state_index, double value,int buffer_index){
@@ -552,7 +597,7 @@ void convertDoubletoString(int state_index, double value,int buffer_index){
 	char temp_value[20];
 	int offset;
 
-	if(buffer_index == {{last}}){
+	if(buffer_index == 4){
 		offset=strchr(&state[state_index],' ')-&state[state_index];
 		strcpy(temp,&state[state_index+offset]);
 	}
@@ -572,7 +617,7 @@ void convertNotation(const char name[], int buffer_index){
 	index_state=findVariable(name,state);  
 	sscanf(&state[index_state],"%s,%*s",r2 );
 	//fmiprintf("%s\n", r2);
-	if(buffer_index !={{last}})r2[strlen(r2)-1]='\0'; // removes comma
+	if(buffer_index !=4)r2[strlen(r2)-1]='\0'; // removes comma
 //	std::string str(r2);
 //	std::cout << str << "\n";
 	if(strcmp(r2,"0")==0)return;
