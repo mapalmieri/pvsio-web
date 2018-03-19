@@ -40,7 +40,7 @@ define(function (require, exports, module) {
 
     function get_buffer(t, count) {
         switch (t) {
-            case "int" : count++;  return { printf_type: "%i", buffer_name: buffer_names.int, descriptor: "Int" };
+            case "int" : count++;  return { printf_type: "%i", buffer_name: buffer_names.int, descriptor: "Integer" };
             case "real": count++; return { printf_type: "%f", buffer_name: buffer_names.real, descriptor: "Real" };
             case "bool": count++; return { printf_type: "%i", buffer_name: buffer_names.bool, descriptor: "Boolean"};
             case "string": count++; return { printf_type: "%s", buffer_name: buffer_names.string, descriptor: "String"};
@@ -50,7 +50,7 @@ define(function (require, exports, module) {
     }
 
 
-	PBFMIPVSPrinter.prototype.print_front = function (fmi,elements) {
+	PBFMIPVSPrinter.prototype.print_front = function (fmi,elements,graphics) {
 		var index_html = "";
 		var index_js = "";
 		  
@@ -60,13 +60,14 @@ define(function (require, exports, module) {
 		});
 		try {
                     index_html = Handlebars.compile(index_html_template, { noEscape: true })({
-                        
+                        graphics: graphics
                     });
 					console.log(index_html);
 					
                     index_js = Handlebars.compile(index_js_template, { noEscape: true })({
 						variables: fmi.state_variables.variables,
-						elements: elements
+						elements: elements,
+						graphics: graphics
                     });
                     console.log(index_js);
          } catch(fmi_gen_err) {
@@ -89,7 +90,7 @@ define(function (require, exports, module) {
      * Prints the FMU package
      * When opt.interactive is true, a dialog is shown to the user to enter/select parameters.
      */
-    PBFMIPVSPrinter.prototype.print = function (fmi,elements) {
+    PBFMIPVSPrinter.prototype.print = function (fmi,elements,graphics) {
         fmi = fmi || {};
 			var count = 1;
             var valueReference = 1;
@@ -136,6 +137,7 @@ define(function (require, exports, module) {
                         name: fmi.name,
                         functions: fmi.functions,
                         last: fmi.last,
+                        graphics: graphics,
                         elements: elements
                     });
 					console.log(skeleton_c);

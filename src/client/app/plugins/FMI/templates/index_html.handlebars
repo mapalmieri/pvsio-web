@@ -15,8 +15,23 @@
     <body class="noselect" style="background:#dedfdd;">
 
         <div id="content" class="content">
-            <img src="image.png">
-            <div id="screen">
+            <div id="image">
+                <img src="image.png" style="width:580px;"/>
+                <div style="margin:20px; margin-left:30px;">Simulation of Masimo Radical 7 PulseOximeter</div>
+            </div>	
+            
+        {{#each graphics}}
+        <div id="div_{{id}}" style="padding: 10px 28px 10px 28px; border: lightgreen; border-style: solid;">
+                
+                <input type="text"
+                       id="{{id}}"
+                       name="name"
+                       placeholder="..."
+                       size="44">
+                <input type="submit" id="submit_{{id}}" value="">
+            </div>
+        {{/each}}        
+            
         </div>
 
         <script type="application/javascript" src="lib/layout.js"></script>

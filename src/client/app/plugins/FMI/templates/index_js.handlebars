@@ -1,14 +1,30 @@
 require.config({
     baseUrl: "./",
-    paths: { d3: "./lib", text: "./lib/text" }
+       paths: {
+        d3: "./lib/d3",
+        "pvsioweb": "plugins/prototypebuilder",
+        "imagemapper": "./lib/imagemapper",
+        "text": "./lib/text",
+        "lib": "./lib",
+        "cm": "./lib/cm",
+        stateParser: './util/PVSioStateParser',
+        NCDevice: 'plugins/networkController/NCDevice'
+    }
 });
 
 require([
     "widgets/TouchscreenButton",
     "widgets/BasicDisplay",
     "widgets/ButtonActionsQueue",
+    "widgets/core/ButtonEVO",
+    "widgets/LED",
+    "widgets/TracingsDisplay",
+    "widgets/med/PatientMonitorDisplay",
     "websockets/FMIClient"
-], function (TouchscreenButton, BasicDisplay, ButtonActionsQueue, FMIClient) {
+], function (TouchscreenButton, BasicDisplay, ButtonActionsQueue,Button,
+              LED,
+              TracingsDisplay,
+              PatientMonitorDisplay, FMIClient) {
     "use strict";
     // callback function
     var PVSioStateParser = require("util/PVSioStateParser");
@@ -55,6 +71,17 @@ require([
 	},{parent:"image"});
 	system.{{name}}.render(); {{/if}}{{/each}}
     
+    
+    // utility function
+        function evaluate(str) {
+            var v = +str;
+            if (str.indexOf("/") >= 0) {
+                var args = str.split("/");
+                v = +args[0] / +args[1];
+            }
+            return (v <= 0) ? "--" : ((v < 10) ? v.toFixed(1).toString() : v.toFixed(0).toString());
+        }
+    
     function onMessageReceived(err, res) {
 		var state = {};
 		state = PVSioStateParser.parse(res);
@@ -63,6 +90,18 @@ require([
 	{{#if input}}	system.{{name}}.render(PVSioStateParser.evaluate(state.{{name}})); {{/if}}{{/each}}
     }
 
+	{{#each graphics}}
+    d3.select("#submit_{{id}}").on("click", function () {
+            var data = d3.select("#{{id}}").node().value;
+            if (data) {
+                data = (isNaN(parseFloat(data))) ? -1 : parseFloat(data);
+                stop_tick();
+                client.getWebSocket()
+                    .sendGuiAction("{{id}}(" + data + ");", onMessageReceived);
+                start_tick(250);
+            }
+        });
+	{{/each}}
     // web socket client
     var client = FMIClient.getInstance();
     client.port("8084");

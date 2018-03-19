@@ -129,7 +129,6 @@ enum ControllerEvent {
 
 
 int WebsocketServer(double,double);
-void convertInttoString(int , int, int );
 void convertNotation(const char* , int);
 void initialize(fmi2String );
 int open_websocket();
@@ -137,8 +136,14 @@ void close_websocket();
 void doStep(const char*);
 void terminate();
 int findVariable(const char*,const char *);
-void convertStringtoDouble(int , int );
-void convertDoubletoString(int , double, int );
+void convertStateToDouble(int , int );
+void convertStateToInt(int , int );
+void convertStateToBool(int , int );
+void convertStateToString(int , int );
+void convertDoubleToState(int , double, int );
+void convertIntToState(int , int, int );
+void convertBoolToState(int , bool, int );
+void convertStringToState(int , const char*, int );
 
  
 #endif // FMU_H

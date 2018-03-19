@@ -24,6 +24,7 @@ char variables[2000];
 char tempstate[2000];
 char banner[20000];
 char receivebuff[1000];
+char r[STRING_COUNT][2000];
 char r5[1000];
 char r1[1000];
 char r2[1000];
@@ -197,22 +198,22 @@ void initialize(const char* location) {
 {{#each variables}}
 {{#if fmi}}{{#if output}}{{#if real}}
     index_state=findVariable("{{name}}",state);
-	convertStringtoDouble(index_state,{{fmi.valueReference}});
+	convertStateToDouble(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if output}}{{#if int}}
     index_state=findVariable("{{name}}",state);
-	//convertStringtoInt(index_state,{{fmi.valueReference}});
+	//convertStateToInt(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if output}}{{#if bool}}
     index_state=findVariable("{{name}}",state);
-	//convertStringtoBool(index_state,{{fmi.valueReference}});
+	//convertStateToBool(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
     index_state=findVariable("{{name}}",state);
-	//convertStringtoString(index_state,{{fmi.valueReference}});
+	//convertStateToString(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
     
     
@@ -238,44 +239,44 @@ void doStep(const char* action) {
 		{{#each variables}}
 	{{#if fmi}}{{#if parameter}}{{#if real}}
     index_state=findVariable("{{name}}",state);
-	convertDoubletoString(index_state,fmiBuffer.realBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+	convertDoubleToState(index_state,fmiBuffer.realBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if parameter}}{{#if int}}
     index_state=findVariable("{{name}}",state);
-	//convertInttoString(index_state,fmiBuffer.intBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+	//convertIntToState(index_state,fmiBuffer.intBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if parameter}}{{#if bool}}
     index_state=findVariable("{{name}}",state);
-	//convertBooltoString(index_state,fmiBuffer.boolBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+	//convertBoolToState(index_state,fmiBuffer.boolBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if parameter}}{{#if string}}
     index_state=findVariable("{{name}}",state);
-	//convertStringtoString(index_state,fmiBuffer.stringBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+	//convertStringToState(index_state,fmiBuffer.stringBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 		first = 1;
 	 }
 	{{#each variables}}
 	{{#if fmi}}{{#if input}}{{#if real}}
     index_state=findVariable("{{name}}",state);
-	convertDoubletoString(index_state,fmiBuffer.realBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+	convertDoubleToState(index_state,fmiBuffer.realBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if input}}{{#if int}}
     index_state=findVariable("{{name}}",state);
-	//convertInttoString(index_state,{{fmi.valueReference}});
+	//convertIntToState(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if input}}{{#if bool}}
     index_state=findVariable("{{name}}",state);
-	//convertBooltoString(index_state,{{fmi.valueReference}});
+	//convertBoolToState(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if input}}{{#if string}}
     index_state=findVariable("{{name}}",state);
-	//convertStringtoString(index_state,{{fmi.valueReference}});
+	//convertStringToState(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	
@@ -308,22 +309,22 @@ void doStep(const char* action) {
 	{{#if fmi}}{{#if output}}{{#if real}} 
 	convertNotation("{{name}}",{{fmi.valueReference}});
     index_state=findVariable("{{name}}",state);
-	convertStringtoDouble(index_state,{{fmi.valueReference}});
+	convertStateToDouble(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if output}}{{#if int}}
     index_state=findVariable("{{name}}",state);
-	//convertStringtoInt(index_state,{{fmi.valueReference}});
+	//convertStateToInt(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if output}}{{#if bool}}
     index_state=findVariable("{{name}}",state);
-	//convertStringtoBool(index_state,{{fmi.valueReference}});
+	//convertStateToBool(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
     index_state=findVariable("{{name}}",state);
-	//convertStringtoString(index_state,{{fmi.valueReference}});
+	//convertStateToString(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 
 
@@ -369,9 +370,24 @@ static int WebSocketCallback(struct lws* wsi, enum lws_callback_reasons reason, 
     case LWS_CALLBACK_RECEIVE:
         printf("LWS_CALLBACK_RECEIVE\n");
         //printf("Received message: %s\n", (char*) in);
+        strcpy(receivebuff,(char*) in);
+        {{#each graphics}}
+        if(findVariable("{{id}}",(char*) in) != -1){
+			
+			index_state = findVariable("\"comman",receivebuff);
+
+			receivebuff[strlen((char*) in)-4]='\0'; 	
+			
+			doStep((char*) &receivebuff[index_state]);
+			
+			//memcpy(lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, state, strlen(state) );
+			//lws_write(wsi,(unsigned char *)lwssendstate + LWS_SEND_BUFFER_PRE_PADDING,strlen(state),LWS_WRITE_TEXT);
+			break;
+        }
+        {{/each}}
         {{#each elements}}
         if(findVariable("{{id}}",(char*) in) != -1){
-			doStep("{{id}}");
+			doStep("click_{{id}}");
 			memcpy(lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, state, strlen(state) );
 			lws_write(wsi,(unsigned char *)lwssendstate + LWS_SEND_BUFFER_PRE_PADDING,strlen(state),LWS_WRITE_TEXT);
 			break;
@@ -522,7 +538,7 @@ int findVariable(const char tosearch[], const char state[]){
 	return tmp_index+(strlen(tosearch))+4; // tmp_index contiene l'inizio della stringa cercata, +strlen aggiunge la lunghezza della stringa e +4 aggiunge " := " e quindi restituiamo esattamente l'indice dove si trovail valore
 }
 
-void convertStringtoDouble(int state_index, int buffer_index){
+void convertStateToDouble(int state_index, int buffer_index){
 	temp1=0;
 	temp2=0;
 	if(atof(&state[state_index]) == 0){
@@ -547,7 +563,24 @@ void convertStringtoDouble(int state_index, int buffer_index){
 	}
 }
 
-void convertDoubletoString(int state_index, double value,int buffer_index){
+void convertStateToInt(int state_index, int buffer_index){
+	fmiBuffer.intBuffer[buffer_index] = atoi(&state[state_index]);
+	
+}
+void convertStateToBool(int state_index, int buffer_index){
+	if(state[state_index] == 'T')fmiBuffer.booleanBuffer[buffer_index]=1;
+	else fmiBuffer.booleanBuffer[buffer_index]=0;
+}
+void convertStateToString(int state_index, int buffer_index){
+	sscanf(&state[state_index],"%s",r[buffer_index]);
+	r[buffer_index][strlen(r[buffer_index])-1] = '\0';
+	//printf("%s\n",r[buffer_index]);
+	fmiBuffer.stringBuffer[buffer_index]=r[buffer_index];
+	
+	
+}
+
+void convertDoubleToState(int state_index, double value,int buffer_index){
 	char temp[1000];
 	char temp_value[20];
 	int offset;
@@ -562,11 +595,79 @@ void convertDoubletoString(int state_index, double value,int buffer_index){
 	}
 	state[state_index-1]='\0';
 	sprintf(temp_value,"%f",value);
-	//printf("%s\n",temp_value);
 	strcat(state, " ");
 	strcat(state,temp_value);
 	strcat(state,temp);
 }
+
+
+void convertIntToState(int state_index, int value,int buffer_index){
+	char temp[1000];
+	char temp_value[20];
+	int offset;
+
+	//printf("------%d\n",value);
+	if(buffer_index == {{last}}){
+		offset=strchr(&state[state_index],' ')-&state[state_index];
+		strcpy(temp,&state[state_index+offset]);
+	}
+	else{
+		offset=strchr(&state[state_index],',')-&state[state_index];
+		strcpy(temp,&state[state_index+offset]);
+	}
+	state[state_index-1]='\0';
+	sprintf(temp_value,"%d",value);
+	//printf("------%s\n",temp_value);
+	strcat(state, " ");
+	strcat(state,temp_value);
+	strcat(state,temp);
+}
+
+void convertBoolToState(int state_index, bool value,int buffer_index){
+	char temp[1000];
+	char temp_value[20];
+	int offset;
+
+	//printf("------%d\n",value);
+	if(buffer_index == {{last}}){
+		offset=strchr(&state[state_index],' ')-&state[state_index];
+		strcpy(temp,&state[state_index+offset]);
+	}
+	else{
+		offset=strchr(&state[state_index],',')-&state[state_index];
+		strcpy(temp,&state[state_index+offset]);
+	}
+	state[state_index-1]='\0';
+	if(value == true)	sprintf(temp_value,"TRUE");
+	else sprintf(temp_value,"FALSE");
+	//printf("------%s\n",temp_value);
+	strcat(state, " ");
+	strcat(state,temp_value);
+	strcat(state,temp);
+}
+
+void convertStringToState(int state_index, const char* value,int buffer_index){
+	char temp[1000];
+	char temp_value[20];
+	int offset;
+
+	//printf("------%d\n",value);
+	if(buffer_index == {{last}}){
+		offset=strchr(&state[state_index],' ')-&state[state_index];
+		strcpy(temp,&state[state_index+offset]);
+	}
+	else{
+		offset=strchr(&state[state_index],',')-&state[state_index];
+		strcpy(temp,&state[state_index+offset]);
+	}
+	state[state_index-1]='\0';
+	sprintf(temp_value,"%s",value);
+	//printf("------%s\n",temp_value);
+	strcat(state, " ");
+	strcat(state,temp_value);
+	strcat(state,temp);
+}
+
 
 void convertNotation(const char name[], int buffer_index){
 	index_state=findVariable(name,state);  
