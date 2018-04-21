@@ -695,11 +695,11 @@ void convertNotation(const char name[], int buffer_index){
 	//printf("%f\n", temp2);
 	//printf("%f\n", temp1/temp2);
 	fgets(r3,sizeof(r3),fd);	
-	if ( temp1 == temp2 )  convertDoubletoString(index_state,temp1,buffer_index);
+	if ( temp1 == temp2 )  convertDoubleToState(index_state,temp1,buffer_index);
 	else{
-		if(temp1 != 0)	convertDoubletoString(index_state,temp1/temp2,buffer_index);	// sometimes this might not be sufficient, see function convertStringtoDouble
+		if(temp1 != 0)	convertDoubleToState(index_state,temp1/temp2,buffer_index);	// sometimes this might not be sufficient, see function convertStringtoDouble
 		else{
-			convertDoubletoString(index_state,temp1,buffer_index);
+			convertDoubleToState(index_state,temp1,buffer_index);
 		}
 	}	
 }

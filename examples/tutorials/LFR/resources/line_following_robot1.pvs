@@ -1,0 +1,69 @@
+line_following_robot1: THEORY
+ BEGIN
+  %-- user-defined constants
+  ACC_STEP: real = 0.1
+  BRAKE_STEP: real = 0.1
+  LSR_THRESHOLD: real = 150
+  SPEED1: real = 0.1
+  SPEED4: real = 0.4
+  SPEED5: real = 0.5
+
+  %-- user-defined datatypes
+  Color: TYPE = { BLACK, WHITE }
+  Gear: TYPE = { DRIVE, REVERSE, NEUTRAL }
+
+  %-- operating modes
+  Mode: TYPE = { AUTO, MANUAL }
+
+  %-- state attributes
+  State: TYPE = [#
+    lfLeftVal: real,
+    lfRightVal: real,
+    servoLeftVal: real,
+    servoRightVal: real
+    
+  #]
+
+  %-- init function
+  init: State = (#
+    lfLeftVal := 0,
+    lfRightVal := 0,
+    servoLeftVal := 0,
+    servoRightVal := 0
+  #)
+
+ 
+ 
+ tick(st:State): State =
+    COND
+      lfRightVal(st) < LSR_THRESHOLD AND lfLeftVal(st) < LSR_THRESHOLD 
+      -> LET 
+             st = st WITH [ servoLeftVal := SPEED4 ],
+             st = st WITH [ servoRightVal := - SPEED4 ]
+          IN st,
+      lfRightVal(st) > LSR_THRESHOLD AND lfLeftVal(st) < LSR_THRESHOLD 
+      -> LET 
+             st = st WITH [ servoLeftVal := SPEED5 ],
+             st = st WITH [ servoRightVal := - SPEED1 ]
+          IN st,
+      lfRightVal(st) < LSR_THRESHOLD AND lfLeftVal(st) > LSR_THRESHOLD 
+      -> LET 
+             st = st WITH [ servoLeftVal := SPEED1 ],
+             st = st WITH [ servoRightVal := - SPEED5 ]
+          IN st,
+     ELSE -> st
+    ENDCOND
+    
+click_accelerate(st:State): State =
+	LET
+		st = st WITH [servoLeftVal := st`servoLeftVal + ACC_STEP],
+		st = st WITH [servoRightVal := st`servoRightVal + ACC_STEP]
+		IN st
+		
+click_brake(st:State): State =
+	LET
+		st = st WITH [servoLeftVal := st`servoLeftVal - BRAKE_STEP],
+		st = st WITH [servoRightVal := st`servoRightVal - BRAKE_STEP]
+		IN st
+
+ END line_following_robot1
