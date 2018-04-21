@@ -181,7 +181,7 @@ void initialize(const char* location) {
 	read(StF[0], banner, sizeof(banner));		// removes the  banner
 	fd=fdopen(StF[0], "r");
 	setlocale(LC_ALL, "C");						// needed for INTO-CPS
-	sprintf(sendbuff,"init;");
+	sprintf(sendbuff,"init_state;");
 	write(FtS[1], sendbuff,strlen(sendbuff));
 	fgets(r3, sizeof(r3),fd);
 	//printf("%s\n", r3);
@@ -195,8 +195,8 @@ void initialize(const char* location) {
 	
 
 
-{{#each variables}}
-{{#if fmi}}{{#if output}}{{#if real}}
+	{{#each variables}}
+	{{#if fmi}}{{#if output}}{{#if real}}
     index_state=findVariable("{{name}}",state);
 	convertStateToDouble(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
@@ -215,8 +215,14 @@ void initialize(const char* location) {
     index_state=findVariable("{{name}}",state);
 	//convertStateToString(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
-    
-    
+	
+	{{#each composed_variables}}
+	{{#if fmi}}{{#if output}}{{#if real}}
+    index_state=findVariable("{{parent}}",state);
+    index_state1=findVariable("{{name}}", &state[index_state]);
+    convertNotation("{{name}}",{{fmi.valueReference}},index_state1+index_state);
+	convertStateToDouble(index_state1+index_state,{{fmi.valueReference}});
+	{{/if}}{{/if}}{{/if}}{{/each}}
 }
 
 /**
@@ -279,6 +285,12 @@ void doStep(const char* action) {
 	//convertStringToState(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
+	{{#each composed_variables}}
+	{{#if fmi}}{{#if input}}{{#if real}}
+    index_state=findVariable("{{parent}}",state);
+    index_state1=findVariable("{{name}}", &state[index_state]);
+	convertDoubleToState(index_state1+index_state,fmiBuffer.realBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	sprintf(sendbuff,"%s(",action);
 	strcat(sendbuff,state);
@@ -327,6 +339,14 @@ void doStep(const char* action) {
 	//convertStateToString(index_state,{{fmi.valueReference}});
 	{{/if}}{{/if}}{{/if}}{{/each}}
 
+
+	{{#each composed_variables}}
+	{{#if fmi}}{{#if output}}{{#if real}}
+    index_state=findVariable("{{parent}}",state);
+    index_state1=findVariable("{{name}}", &state[index_state]);
+    convertNotation("{{name}}",{{fmi.valueReference}},index_state1+index_state);
+	convertStateToDouble(index_state1+index_state,{{fmi.valueReference}});
+	{{/if}}{{/if}}{{/if}}{{/each}}
 
 	
 }
@@ -671,6 +691,40 @@ void convertStringToState(int state_index, const char* value,int buffer_index){
 
 void convertNotation(const char name[], int buffer_index){
 	index_state=findVariable(name,state);  
+	sscanf(&state[index_state],"%s,%*s",r2 );
+	//fmiprintf("%s\n", r2);
+	if(buffer_index !={{last}})r2[strlen(r2)-1]='\0'; // removes comma
+//	std::string str(r2);
+//	std::cout << str << "\n";
+	if(strcmp(r2,"0")==0)return;
+	sprintf(sendbuff,"str2real(\"%s\");\n",r2);				
+	write(FtS[1], sendbuff,strlen(sendbuff));
+	do{
+		fgets(r3, sizeof(r3),fd);
+		//printf("%s\n", r3);
+	}
+	while((strcmp(" ==>\n",r3)!=0) && (strcmp("==>\n",r3)!=0) && (strcmp("<PVSio> ==>\n",r3)!=0));
+	fgets(r3, sizeof(r3),fd);
+	//printf("%s\n", r3);
+	sscanf(r3,"%[^'/']/%s",r1,r2);
+	temp1=atof(r1);
+	temp2=atof(r2);
+	//printf("%s\n", r1);
+	//printf("%s\n", r2);
+	//printf("%f\n", temp1);
+	//printf("%f\n", temp2);
+	//printf("%f\n", temp1/temp2);
+	fgets(r3,sizeof(r3),fd);	
+	if ( temp1 == temp2 )  convertDoubleToState(index_state,temp1,buffer_index);
+	else{
+		if(temp1 != 0)	convertDoubleToState(index_state,temp1/temp2,buffer_index);	// sometimes this might not be sufficient, see function convertStringtoDouble
+		else{
+			convertDoubleToState(index_state,temp1,buffer_index);
+		}
+	}	
+}
+
+void convertNotation(const char name[], int buffer_index, int index_state){
 	sscanf(&state[index_state],"%s,%*s",r2 );
 	//fmiprintf("%s\n", r2);
 	if(buffer_index !={{last}})r2[strlen(r2)-1]='\0'; // removes comma
