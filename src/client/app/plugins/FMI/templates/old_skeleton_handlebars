@@ -20,7 +20,6 @@
 
 char sendbuff[1000];
 char state[2000];
-char tempvar[2000];
 char variables[2000];
 char tempstate[2000];
 char banner[20000];
@@ -404,35 +403,35 @@ static int WebSocketCallback(struct lws* wsi, enum lws_callback_reasons reason, 
         break;
     case LWS_CALLBACK_RECEIVE:
         printf("LWS_CALLBACK_RECEIVE\n");
-        printf("Received message: %s\n", (char*) in);
+        //printf("Received message: %s\n", (char*) in);
         strcpy(receivebuff,(char*) in);
-        
+        {{#each graphics}}
+        if(findVariable("{{id}}",(char*) in) != -1){
+			
+			index_state = findVariable("\"comman",receivebuff);
+
+			receivebuff[strlen((char*) in)-4]='\0'; 	
+			
+			doStep((char*) &receivebuff[index_state]);
+			
+			//memcpy(lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, state, strlen(state) );
+			//lws_write(wsi,(unsigned char *)lwssendstate + LWS_SEND_BUFFER_PRE_PADDING,strlen(state),LWS_WRITE_TEXT);
+			break;
+        }
+        {{/each}}
+        {{#each elements}}
+        if(findVariable("{{id}}",(char*) in) != -1){
+			doStep("click_{{id}}");
+			memcpy(lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, state, strlen(state) );
+			lws_write(wsi,(unsigned char *)lwssendstate + LWS_SEND_BUFFER_PRE_PADDING,strlen(state),LWS_WRITE_TEXT);
+			break;
+        }
+        {{/each}}
         if(findVariable("tick",(char*) in) != -1){
+        memcpy(lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, state, strlen(state) );
+		lws_write(wsi,(unsigned char *)lwssendstate + LWS_SEND_BUFFER_PRE_PADDING,strlen(state),LWS_WRITE_TEXT);
+		break;
         }
-        else{
-        doStep(receivebuff);
-        }
-        strcpy(tempstate,state);
-        memset(variables,0,2000); // we need to clean the variables before reusing them
-	    {{#each variables}}
-	    if( findVariable("{{name}}", state)== -1){
-			if ( strlen(variables) == 0) {
-				sprintf(tempvar,";(# {{name}} := %f\n",fmiBuffer.realBuffer[{{fmi.valueReference}}]); 
-				strcat(variables,tempvar);
-				}
-			else {
-				sprintf(tempvar,",{{name}} := %f\n",fmiBuffer.realBuffer[{{fmi.valueReference}}]);
-				strcat(variables,tempvar);
-				} 
-	    }
-	    //printf("%s\n",variables);
-		{{/each}}
-		strcat(variables," #)");
-		strcat(tempstate,variables);
-        memcpy(lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, tempstate, strlen(tempstate) );
-        lws_write(wsi,(unsigned char *)lwssendstate + LWS_SEND_BUFFER_PRE_PADDING,strlen(tempstate),LWS_WRITE_TEXT);
-        break;
-        
     case LWS_CALLBACK_HTTP:
         printf("LWS_CALLBACK_HTTP\n");
         break;

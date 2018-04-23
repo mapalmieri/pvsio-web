@@ -144,7 +144,13 @@ require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
     var statevariables = [
 		
 		{name:"gear", type:"string",variability: "discrete", scope:"local", value:"0"},
-		{name:"cc", type:"string",variability: "discrete", scope:"local", value:"0"}
+		{name:"cc", type:"string",variability: "discrete", scope:"local", value:"0"},
+		{name : "linear", type: "real", variability: "discrete", scope:"input", value:"0"},
+		{name : "angular", type: "real", variability: "discrete", scope:"input", value:"0"},
+		{name : "posx", type: "real", variability: "discrete", scope:"input", value:"0"},
+		{name : "posy", type: "real", variability: "discrete", scope:"input", value:"0"},
+		{name : "left_rotation", type: "real", variability: "discrete", scope:"input", value:"0"},
+		{name : "right_rotation", type: "real", variability: "discrete", scope:"input", value:"0"},
 	];
 	
 	var composedvariables = [
@@ -153,8 +159,13 @@ require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
 	{name: "right",parent:"lightSensors", type:"real", variability: "continuous", scope: "input", value: "0"},
 	{name: "left", parent:"motorSpeed", type:"real", variability: "discrete", scope: "output", value: "0"},
 	{name: "right",parent:"motorSpeed", type:"real", variability: "discrete", scope: "output", value: "0"}
+	
+	
+	
+	
 	]
-	var fmi = {name: "line_following_robot1", state_variables : {variables: statevariables}, last: 6};
+	
+	var fmi = {name: "line_following_robot1", state_variables : {variables: statevariables}, last: 12};
 	var fmi_composed = {name: "line_following_robot1", composed_variables : {variables: composedvariables}, last: 4};
 	var accelerate = { id: "accelerate", widget: "TouchscreenButton", color: "transparent",
         top: 362, left: 288, height: 30, width: 25, callback : "onMessageReceived"

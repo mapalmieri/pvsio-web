@@ -95,10 +95,9 @@ require([
             var data = d3.select("#{{id}}").node().value;
             if (data) {
                 data = (isNaN(parseFloat(data))) ? -1 : parseFloat(data);
-                stop_tick();
-                client.getWebSocket()
-                    .sendGuiAction("{{id}}(" + data + ");", onMessageReceived);
-                start_tick(250);
+                //stop_tick();
+                ButtonActionsQueue.getInstance().queueGUIAction("{{id}}(" + data + ")", onMessageReceived);
+                //start_tick(250);
             }
         });
 	{{/each}}
