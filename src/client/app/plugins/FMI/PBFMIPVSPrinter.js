@@ -92,6 +92,7 @@ define(function (require, exports, module) {
      */
     PBFMIPVSPrinter.prototype.print = function (fmi,fmi_composed,elements,graphics) {
         fmi = fmi || {};
+        fmi_composed = fmi_composed || {};
 			var count = 1;
             var valueReference = 1;
 			var skeleton_c = "";
