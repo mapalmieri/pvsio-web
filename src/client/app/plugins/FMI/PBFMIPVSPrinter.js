@@ -50,7 +50,7 @@ define(function (require, exports, module) {
     }
 
 
-	PBFMIPVSPrinter.prototype.print_front = function (fmi,fmi_composed,elements,graphics) {
+	PBFMIPVSPrinter.prototype.create_interface = function (fmi,fmi_composed,elements,graphics,port,tick) {
 		var index_html = "";
 		var index_js = "";
 		  
@@ -67,6 +67,8 @@ define(function (require, exports, module) {
                     index_js = Handlebars.compile(index_js_template, { noEscape: true })({
 						variables: fmi.state_variables.variables,
 						elements: elements,
+						port: port,
+						tick: tick,
 						graphics: graphics
                     });
                     console.log(index_js);
@@ -90,7 +92,7 @@ define(function (require, exports, module) {
      * Prints the FMU package
      * When opt.interactive is true, a dialog is shown to the user to enter/select parameters.
      */
-    PBFMIPVSPrinter.prototype.print = function (fmi,fmi_composed,elements,graphics) {
+    PBFMIPVSPrinter.prototype.create_FMU = function (fmi,fmi_composed,init,tick,port) {
         fmi = fmi || {};
         fmi_composed = fmi_composed || {};
 			var count = 1;
@@ -168,18 +170,20 @@ fmi_composed.composed_variables.variables.forEach(function (v) {
                         composed_variables: fmi_composed.composed_variables.variables,
                         name: fmi.name,
                         functions: fmi.functions,
-                        last: fmi.last,
-                        graphics: graphics,
-                        elements: elements
+                        init: init,
+                        tick: tick,
+                        port: port
                     });
 					console.log(skeleton_c);
                     fmu_h = Handlebars.compile(fmu_h_template, { noEscape: true })({
                         variables: fmi.state_variables.variables,
+                        tick: tick,
                         count: count
                     });
 					console.log(fmu_h);
                     fmu_c = Handlebars.compile(fmu_c_template, { noEscape: true })({
-                        variables: fmi.state_variables.variables
+                        variables: fmi.state_variables.variables,
+                        tick: tick
 
                     });
 					console.log(fmu_c);

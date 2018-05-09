@@ -6,7 +6,7 @@ CFLAGS=-I.
 all:
 	g++ -fPIC -Wall -c fmu.cpp
 	g++ -fPIC -Wall -c skeleton.cpp
-	g++ -shared -o {{name}}.so skeleton.o fmu.o  -lwebsockets -lssl -lcrypto
+	g++ -fPIC -shared -o {{name}}.so skeleton.o fmu.o -Wl,-rpath,. -lwebsockets -lssl -lcrypto
 	rm -rf sources
 	rm -rf binaries
 	mkdir sources
@@ -17,13 +17,14 @@ all:
 	cp fmu.cpp sources
 	cp skeleton.cpp sources
 	mv {{name}}.so binaries/linux64/
+	cp /usr/local/lib/libwebsockets.so.11 binaries/linux64/
 	zip -r {{name}}.fmu modelDescription.xml binaries/ resources/ sources/
 	rm -rf sources
 	rm -rf binaries
 
-run:
+run3:
 	./fmuCheck.linux64 -h 1E-03 {{name}}.fmu
-run1:
+run4:
 	./fmuCheck.linux64 -h 1E-04 {{name}}.fmu
 
 clean:

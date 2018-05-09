@@ -117,7 +117,7 @@ void initialize(const char* location) {
 	strcpy(c, location);
 	strcat(c,"/");
 	strcpy(e,c);
-	strcat(c, "pvs-6.0-ix86_64-Linux-allegro/pvsio");
+	strcat(c, "PVS6.0");
 	strcat(a,"pvsio");
 	strcat(b,"{{name}}.pvs");
 	strcpy(e,c);
@@ -148,7 +148,7 @@ void initialize(const char* location) {
 	else{wait(NULL);}
 	getcwd(f,sizeof(f));
 	chdir((char*)&location[5]);
-	chdir("pvs-6.0-ix86_64-Linux-allegro/");
+	chdir("PVS6.0/");
 	sleep(1);
 	system("./bin/relocate");
 
@@ -171,7 +171,7 @@ void initialize(const char* location) {
 
 		// il processo lanciato da execlp eredita
 		// i pipe dal processo che l'ha lanciato
-		execlp(cs,"pvsio",bs , NULL);
+		execlp(as,"pvsio",cs , bs, NULL);
     }
     //father
 	close(FtS[0]);	//	closes the unnecessary pipe extremity
@@ -199,7 +199,6 @@ void initialize(const char* location) {
 	{{#if fmi}}{{#if output}}{{#if real}}
     index_state=findVariable("{{name}}",state);
     if ( index_state != -1){
-		convertNotation("{{name}}",{{fmi.valueReference}});
 		convertStateToDouble(index_state,{{fmi.valueReference}});
 	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
@@ -216,9 +215,7 @@ void initialize(const char* location) {
 	
 	{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
     index_state=findVariable("{{name}}",state);
-    if (index_state != -1){
 	convertStateToString(index_state,{{fmi.valueReference}});
-	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each composed_variables}}
@@ -244,6 +241,7 @@ void initialize(const char* location) {
  */
 void doStep(const char* action) { 	
 	fflush(fd);
+	if(strcmp(action,"{{tick}}")==0) WebsocketServer(0,0); // we want to check the websocket only during the fmi2DoStep call
 	
 	/**
 	 *
@@ -307,9 +305,6 @@ void doStep(const char* action) {
 	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
-	if(strcmp(action,"{{tick}}")==0) WebsocketServer(0,0); // we want to check the websocket only during the fmi2DoStep call
-	
-	
 	sprintf(sendbuff,"%s(",action);
 	strcat(sendbuff,state);
 	strcat(sendbuff,");");
@@ -356,9 +351,7 @@ void doStep(const char* action) {
 	
 	{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
     index_state=findVariable("{{name}}",state);
-    if (index_state != -1){
 	convertStateToString(index_state,{{fmi.valueReference}});
-	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 
 
@@ -604,47 +597,27 @@ int findState(const char tosearch[], const char state[]){
 }
 
 void convertStateToDouble(int state_index, int buffer_index){
-	int offset = 0;
 	temp1=0;
 	temp2=0;
-	memset(r2,0,1000);
-	memset(r1,0,1000);
 	if(atof(&state[state_index]) == 0){
 		fmiBuffer.realBuffer[buffer_index] = 0;
 	}
 	else{
-		while(state[state_index+offset] != ',' && state[state_index+offset] != '.' && state[state_index+offset] != ' ' && state[state_index+offset] != '/' && state[state_index+offset] != 'E' && state[state_index+offset] != 'e')offset++;
-		switch(state[state_index+offset]){
-			case 'e' :
-				sscanf(&state[state_index],"%[^'E']E%s %*s",r1,r2);
-				temp1=atof(r1);
-				temp2=atof(r2);
-				temp1=temp1*pow(10,temp2);
-			break;
-			case 'E' : 
-				sscanf(&state[state_index],"%[^'E']E%s %*s",r1,r2);
-				temp1=atof(r1);
-				temp2=atof(r2);
-				temp1=temp1*pow(10,temp2);
-			break;
-			case ',' :
-			temp1=atof(&state[state_index]);
-			break;
-			case '.' :
-			temp1=atof(&state[state_index]); break;
-			case ' ' :
-			temp1=atof(&state[state_index]); break;
-			case '/' :
-			sscanf(&state[state_index],"%[^'/']/%s %*s",r1,r2);
-				temp1=atof(r1);
-				temp2=atof(r2);
-				temp1=temp1/temp2;
-				
-			break;
-				}
+		sscanf(&state[state_index],"%[^'/']/%s %*s",r1,r2);
+		temp1=atof(r1);
+		temp2=atof(r2);
+
+		if(strlen(r1) > 7){
+			fmiBuffer.realBuffer[buffer_index] =temp1;
+		}
+		else{
+			if(temp2 != 0){
+				fmiBuffer.realBuffer[buffer_index] =temp1/temp2;
+			}
+			else {
 				fmiBuffer.realBuffer[buffer_index] =temp1;
-			
-		
+			}
+		}
 	}
 }
 
