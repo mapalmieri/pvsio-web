@@ -34,7 +34,9 @@
 	<ScalarVariable name="{{name}}" valueReference="{{fmi.valueReference}}" causality="{{fmi.causality}}" variability="{{fmi.variability}}" ><{{fmi.descriptor}} {{#if input}}start="{{value}}"{{/if}}{{#if parameter}}start="{{value}}"{{/if}} /></ScalarVariable>
     {{/if}}{{/each}}{{#each composed_variables}}{{#if fmi}}
 	<ScalarVariable name="{{parent}}_{{name}}" valueReference="{{fmi.valueReference}}" causality="{{fmi.causality}}" variability="{{fmi.variability}}" ><{{fmi.descriptor}} {{#if input}}start="{{value}}"{{/if}}{{#if parameter}}start="{{value}}"{{/if}} /></ScalarVariable>
-	{{/if}}{{/each}}</ModelVariables>
+	{{/if}}{{/each}}
+	<ScalarVariable name="internal_State" valueReference="{{count}}" causality="output" variability="discrete" ><String  /></ScalarVariable>
+	</ModelVariables>
 	<ModelStructure>
 	<Outputs>{{#each variables}}{{#if fmi}}{{#if output}}
 			<Unknown index="{{fmi.valueReference}}"  dependencies=""/>
@@ -42,6 +44,7 @@
             {{#each composed_variables}}{{#if fmi}}{{#if output}}
 			<Unknown index="{{fmi.valueReference}}"  dependencies=""/>
             {{/if}}{{/if}}{{/each}}
+            <Unknown index="{{count}}"  dependencies=""/>
 	</Outputs>
 
 	</ModelStructure>

@@ -127,25 +127,48 @@ enum ControllerEvent {
 	E_Cancel 
 };
 
+void sendToPVSio(const char *);
 
+void receiveFromPVSio();
 
-int WebsocketServer(double,double);
-void convertNotation(const char* , int);
-void convertNotation(const char* , int, int);
+bool findPVSioPrompt(const char*);
+
+int WebsocketServer();
+
 void initialize(fmi2String );
+
 int open_websocket();
+
 void close_websocket();
-void doStep(const char*);
+
+void handleUserAction(const char*);
+
+void doStep();
+
 void terminate();
+
 int findVariable(const char*,const char *);
-void convertStateToDouble(int , int );
-void convertStateToInt(int , int );
-void convertStateToBool(int , int );
-void convertStateToString(int , int );
-void convertDoubleToState(int , double, int );
-void convertIntToState(int , int, int );
-void convertBoolToState(int , bool, int );
-void convertStringToState(int , const char*, int );
+
+
+void writeOutputVariableDouble(int , int );
+//void convertStateToDouble(int , int );
+void writeOutputVariableInt(int , int );
+//void convertStateToInt(int , int );
+void writeOutputVariableBool(int , int );
+//void convertStateToBool(int , int );
+void writeOutputVariableString(int , int );
+//void convertStateToString(int , int );
+
+
+
+void readInputVariableDouble(int , double, int );
+//void convertDoubleToState(int , double, int );
+void readInputVariableInt(int , int, int );
+//void convertIntToState(int , int, int );
+void readInputVariableBool(int , bool, int );
+//void convertBoolToState(int , bool, int );
+void readInputVariableString(int , const char*, int );
+//void convertStringToState(int , const char*, int );
 
  
 #endif // FMU_H

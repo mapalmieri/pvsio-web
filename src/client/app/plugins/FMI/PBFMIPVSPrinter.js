@@ -172,13 +172,14 @@ fmi_composed.composed_variables.variables.forEach(function (v) {
                         functions: fmi.functions,
                         init: init,
                         tick: tick,
+                        count: count,
                         port: port
                     });
 					console.log(skeleton_c);
                     fmu_h = Handlebars.compile(fmu_h_template, { noEscape: true })({
                         variables: fmi.state_variables.variables,
                         tick: tick,
-                        count: count
+                        count: count+1
                     });
 					console.log(fmu_h);
                     fmu_c = Handlebars.compile(fmu_c_template, { noEscape: true })({
@@ -206,6 +207,7 @@ fmi_composed.composed_variables.variables.forEach(function (v) {
                                         }
                                         return 1;
                                     }),
+                        count: count,            
                         author: (fmi.author) ? emuchart.author.name : "pvsioweb",
                         date: new Date().toString(),
                         modelName: fmi.name
