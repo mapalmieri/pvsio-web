@@ -92,9 +92,9 @@ define(function (require, exports, module) {
      * Prints the FMU package
      * When opt.interactive is true, a dialog is shown to the user to enter/select parameters.
      */
-    PBFMIPVSPrinter.prototype.create_FMU = function (fmi,fmi_composed,init,tick,port) {
+    PBFMIPVSPrinter.prototype.create_FMU = function (name,fmi) {
         fmi = fmi || {};
-        fmi_composed = fmi_composed || {};
+        
 			var count = 1;
             var valueReference = 1;
 			var skeleton_c = "";
@@ -133,7 +133,7 @@ define(function (require, exports, module) {
                         v.string = (v.type === "string");
                     }
                 });
-fmi_composed.composed_variables.variables.forEach(function (v) {
+fmi.composed_variables.variables.forEach(function (v) {
                     v.fmi = get_buffer(v.type, count);
                     if (v.fmi) {
                         v.fmi.variability = v.variability; 
@@ -167,24 +167,24 @@ fmi_composed.composed_variables.variables.forEach(function (v) {
                 try {
                     skeleton_c = Handlebars.compile(skeleton_c_template, { noEscape: true })({
                         variables: fmi.state_variables.variables,
-                        composed_variables: fmi_composed.composed_variables.variables,
-                        name: fmi.name,
+                        composed_variables: fmi.composed_variables.variables,
+                        name: name,
                         functions: fmi.functions,
-                        init: init,
-                        tick: tick,
+                        init: fmi.init,
+                        tick: fmi.tick,
                         count: count,
-                        port: port
+                        port: fmi.port
                     });
 					console.log(skeleton_c);
                     fmu_h = Handlebars.compile(fmu_h_template, { noEscape: true })({
                         variables: fmi.state_variables.variables,
-                        tick: tick,
+                        tick: fmi.tick,
                         count: count+1
                     });
 					console.log(fmu_h);
                     fmu_c = Handlebars.compile(fmu_c_template, { noEscape: true })({
                         variables: fmi.state_variables.variables,
-                        tick: tick
+                        tick: fmi.tick
 
                     });
 					console.log(fmu_c);
@@ -198,7 +198,7 @@ fmi_composed.composed_variables.variables.forEach(function (v) {
                                         }
                                         return 1;
                                     }),
-                        composed_variables: fmi_composed.composed_variables.variables.sort(function (a,b) { // variables are ordered by valueReference (ascending order)
+                        composed_variables: fmi.composed_variables.variables.sort(function (a,b) { // variables are ordered by valueReference (ascending order)
                                         if (a.fmi) {
                                             if (b.fmi && a.fmi.valueReference > b.fmi.valueReference) {
                                                 return 1;
@@ -210,7 +210,7 @@ fmi_composed.composed_variables.variables.forEach(function (v) {
                         count: count,            
                         author: (fmi.author) ? emuchart.author.name : "pvsioweb",
                         date: new Date().toString(),
-                        modelName: fmi.name
+                        modelName: name
                     });
 					console.log(modelDescription_xml);
                     Makefile = Handlebars.compile(Makefile_template, { noEscape: true })({
