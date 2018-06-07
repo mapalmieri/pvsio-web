@@ -143,8 +143,9 @@ require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
     /*fino a value sono campi obbligatori, dopo sono facoltativi*/
     var statevariables = [
 		
-		{name:"gear", type:"string",variability: "discrete", scope:"local", value:"0"},
-		{name:"cc", type:"string",variability: "discrete", scope:"local", value:"0"},
+		{name : "gear", type:"string",variability: "discrete", scope:"local", value:"0"},
+		{name : "cc", type:"string",variability: "discrete", scope:"local", value:"0"},
+		{name : "time", type: "real", variability: "discrete", scope:"output", value:"0"},
 		{name : "linear", type: "real", variability: "discrete", scope:"input", value:"0"},
 		{name : "angular", type: "real", variability: "discrete", scope:"input", value:"0"},
 		{name : "posx", type: "real", variability: "discrete", scope:"input", value:"0"},
@@ -165,14 +166,10 @@ require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
 	
 	]
 	
-	var fmi = {name: "line_following_robot1", state_variables : {variables: statevariables}, last: 12};
-	var fmi_composed = {name: "line_following_robot1", composed_variables : {variables: composedvariables}, last: 4};
-	var accelerate = { id: "accelerate", widget: "TouchscreenButton", color: "transparent",
-        top: 362, left: 288, height: 30, width: 25, callback : "onMessageReceived"
-    };
-    var brake = {id : "brake", widget: "TouchscreenButton", color: "transparent",
-		top: 412, left: 288, height: 30, width: 25, callback : "onMessageReceived"};
-    var printer = new PBFMIPVSPrinter();
-    printer.print(fmi,fmi_composed,[accelerate,brake]);
-    printer.print_front(fmi,fmi_composed,[accelerate,brake]);
+	
+    var fmi_module = new PBFMIPVSPrinter();
+    fmi_module.create_FMU("line_following_robot1",{state_variables : {variables: statevariables},composed_variables : {variables: composedvariables},init:"init_state",tick:"tick",port:"8084"});
+    
+    
+   // printer.create_interface(fmi,fmi_composed,[accelerate,brake]);
 });
