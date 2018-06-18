@@ -25,19 +25,26 @@
 #include <libwebsockets.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <vector>
+#include <sstream>
+#include <cmath>
+#include <iostream>
+#include <unistd.h>
+#include <signal.h>
+#include <locale.h>
 
 
-
-#define BOOL_COUNT 11
-#define INT_COUNT 11
-#define REAL_COUNT 11
-#define STRING_COUNT 11
+#define BOOL_COUNT 12
+#define INT_COUNT 12
+#define REAL_COUNT 12
+#define STRING_COUNT 12
 #define FMI_COSIMULATION
 
 struct FmiBuffer {
      fmi2Boolean booleanBuffer[BOOL_COUNT];
      fmi2Integer intBuffer[INT_COUNT];
      fmi2Real realBuffer[REAL_COUNT];
+     char r[STRING_COUNT][2000];
      fmi2String stringBuffer[STRING_COUNT];
 };
 
@@ -123,16 +130,22 @@ enum ControllerEvent {
 
 
 int WebsocketServer(double,double);
-void convertInttoString(int , int, int );
 void convertNotation(const char* , int);
+void convertNotation(const char* , int, int);
 void initialize(fmi2String );
 int open_websocket();
 void close_websocket();
 void doStep(const char*);
 void terminate();
 int findVariable(const char*,const char *);
-void convertStringtoDouble(int , int );
-void convertDoubletoString(int , double, int );
+void convertStateToDouble(int , int );
+void convertStateToInt(int , int );
+void convertStateToBool(int , int );
+void convertStateToString(int , int );
+void convertDoubleToState(int , double, int );
+void convertIntToState(int , int, int );
+void convertBoolToState(int , bool, int );
+void convertStringToState(int , const char*, int );
 
  
 #endif // FMU_H

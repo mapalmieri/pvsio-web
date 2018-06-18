@@ -12,7 +12,7 @@
 						numberOfEventIndicators="0">
 	<CoSimulation 	modelIdentifier="coordination"
 					needsExecutionTool="false"
-					canHandleVariableCommunicationStepSize="true"
+					canHandleVariableCommunicationStepSize="false"
 					canInterpolateInputs="false"
 					maxOutputDerivativeOrder="0"
 					canRunAsynchronuously="false"
@@ -31,27 +31,28 @@
 	</LogCategories>
 
 	<ModelVariables>
-		<ScalarVariable name="x_d" valueReference="1" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+	<ScalarVariable name="x_d" valueReference="1" causality="output" variability="discrete" ><Real  /></ScalarVariable>
     
-		<ScalarVariable name="y_d" valueReference="2" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+	<ScalarVariable name="y_d" valueReference="2" causality="output" variability="discrete" ><Real  /></ScalarVariable>
     
-		<ScalarVariable name="z_d" valueReference="3" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+	<ScalarVariable name="z_d" valueReference="3" causality="output" variability="discrete" ><Real  /></ScalarVariable>
     
-		<ScalarVariable name="x_ant" valueReference="4" causality="input" variability="discrete" ><Real start="0" /></ScalarVariable>
+	<ScalarVariable name="x_prec" valueReference="4" causality="input" variability="discrete" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="x_succ" valueReference="5" causality="input" variability="discrete" ><Real start="0" /></ScalarVariable>
+	<ScalarVariable name="x_foll" valueReference="5" causality="input" variability="discrete" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="y_ant" valueReference="6" causality="input" variability="discrete" ><Real start="0" /></ScalarVariable>
+	<ScalarVariable name="y_prec" valueReference="6" causality="input" variability="discrete" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="y_succ" valueReference="7" causality="input" variability="discrete" ><Real start="0" /></ScalarVariable>
+	<ScalarVariable name="y_foll" valueReference="7" causality="input" variability="discrete" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="delay" valueReference="8" causality="parameter" variability="tunable" ><Real start="0" /></ScalarVariable>
+	<ScalarVariable name="delay" valueReference="8" causality="parameter" variability="tunable" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="delayMax" valueReference="9" causality="parameter" variability="tunable" ><Real start="0" /></ScalarVariable>
+	<ScalarVariable name="delayMax" valueReference="9" causality="parameter" variability="tunable" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="sequence" valueReference="10" causality="parameter" variability="tunable" ><Real start="0" /></ScalarVariable>
+	<ScalarVariable name="id" valueReference="10" causality="parameter" variability="tunable" ><Real start="0" /></ScalarVariable>
+	
+	<ScalarVariable name="x_actual" valueReference="11" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
     </ModelVariables>
-
 	<ModelStructure>
 	<Outputs>
 			<Unknown index="1"  dependencies=""/>
@@ -59,6 +60,7 @@
 			<Unknown index="2"  dependencies=""/>
             
 			<Unknown index="3"  dependencies=""/>
+            
             
 	</Outputs>
 

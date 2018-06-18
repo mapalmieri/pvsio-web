@@ -1,21 +1,44 @@
+/*! \file fmu.c
+ * In this file there is the implementation of the functions required
+ * by the FMI standard.
+ * Most of them just return "fmi2OK" or "fmi2Error"
+ * the most relevant so far are:
+ * 		fmi2Instantiate
+ * 		fmi2DoStep
+ * 		fmi2FreeInstance
+ * 		fmi2GetXXX
+ * 		fmi2SetXXX
+ *
+ * This file is largely copied from the Fmu.cpp file
+ * of Overture Extension for FMI
+ * */
 #include "fmu.h"
 
+#define SSTR( x ) dynamic_cast< std::ostringstream & >( \
+        ( std::ostringstream() << std::dec << x ) ).str()
+        
 FmiBuffer fmiBuffer;
 fmi2String location;
+const fmi2CallbackFunctions *g_functions;
+std::string* name;
+
+
+
 
 extern "C" fmi2Component fmi2Instantiate(
-				fmi2String instanceName,
+				fmi2String instanceName, 
 				fmi2Type fmuType,
-				fmi2String fmuGUID,
+				fmi2String fmuGUID, 
 				fmi2String fmuResourceLocation,
 				const fmi2CallbackFunctions *functions,
 				fmi2Boolean visible,
 				fmi2Boolean loggingOn
-			) {
-			
-	location=fmuResourceLocation;
-	initialize(location);
-	return (void*) 1;
+			)
+{
+	name = new std::string (instanceName);
+	g_functions = functions;
+	initialize(fmuResourceLocation);
+	return (void*) 2;
 }
 
 extern "C" fmi2Status fmi2SetupExperiment(
@@ -97,6 +120,10 @@ extern "C" fmi2Status fmi2GetBoolean(fmi2Component c, const fmi2ValueReference v
 }
 
 extern "C" fmi2Status fmi2GetString(fmi2Component c, const fmi2ValueReference vr[], size_t nvr, fmi2String value[]) {
+	for (size_t i = 0; i < nvr; i++) {
+		fmi2ValueReference vRef = vr[i];
+		value[i] = fmiBuffer.stringBuffer[vRef];
+	}
 	return fmi2OK;
 }
 
@@ -131,6 +158,10 @@ extern "C" fmi2Status fmi2SetBoolean(fmi2Component c, const fmi2ValueReference v
 
 extern "C" fmi2Status fmi2SetString(fmi2Component c, const fmi2ValueReference vr[], size_t nvr,
 		const fmi2String value[]) {
+		for (size_t i = 0; i < nvr; i++) {
+		fmi2ValueReference vRef = vr[i];
+		fmiBuffer.stringBuffer[vRef] = value[i];
+		}
 	return fmi2OK;
 }
 
