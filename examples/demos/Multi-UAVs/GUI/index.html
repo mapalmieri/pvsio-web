@@ -6,30 +6,21 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
-        <link href="lib/bootstrap.min.css" rel="stylesheet" media="screen">
-        <link href="lib/graph.css" rel="stylesheet" type="text/css"/>
-        <link href="lib/style.css" rel="stylesheet" type="text/css"/>
-        <link href="lib/style.css" rel="stylesheet" type="text/css"/>
-        <link href="lib/960.css" rel="stylesheet" type="text/css"/>
     </head>
-    <body class="noselect" style="background:#dedfdd;">
+    <body class="noselect" style="background-color:white;">
 
         <div id="content" class="content">
-            <img src="image.png">
-            <div id="screen">
+            <img src="3d-wireframe-hologram-landscape-blue.png" style="width:100%;margin-top:200px;">
+            <div id="drones">
+                <img id="blue_drone" src="drone-blue.png" style="left:100px;top:400px;width:60px;position:absolute;z-index:1;transition-duration:250ms;">
+                <img id="yellow_drone" src="drone-yellow.png" style="left:200px;top:400px;width:60px;position:absolute;z-index:1;transition-duration:250ms;">
+                <img id="green_drone" src="drone-green.png" style="left:300px;top:400px;width:60px;position:absolute;z-index:1;transition-duration:250ms;">
+                <img id="red_drone" src="drone-red.png" style="left:600px;top:400px;width:60px;position:absolute;z-index:1;transition-duration:250ms;">
+                <img id="pink_drone" src="drone-pink.png" style="left:1100px;top:400px;width:60px;position:absolute;z-index:1;transition-duration:250ms;">
+            </div>
         </div>
 
-        <script type="application/javascript" src="lib/layout.js"></script>
-        <script type="application/javascript" src="lib/promise-0.1.1.js"></script>
-        <script type="application/javascript" src="lib/keys.js"></script>
-        <script type="text/javascript" src="lib/jquery.js"></script>
-        <script type="text/javascript" src="lib/underscore.js"></script>
         <script type="text/javascript" src="lib/d3.js"></script>
-        <script type="text/javascript" src="lib/backbone.js"></script>
-        <script type="text/javascript" src="lib/handlebars-v1.3.0.js"></script>
-        <script type="text/javascript" src="lib/bootstrap.min.js"></script>
-        <script type="text/javascript" src="lib/d3-gauge-plus.js"></script>
         <script type="text/javascript" src="lib/require.js" data-main="js/index.js"></script>
-      <!--  <script type="text/javascript" src="lib/gamepadtest.js"></script> -->
     </body>
 </html>

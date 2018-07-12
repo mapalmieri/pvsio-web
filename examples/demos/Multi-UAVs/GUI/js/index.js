@@ -4,149 +4,35 @@ require.config({
 });
 
 require([
-    "widgets/TouchscreenButton",
-    "widgets/BasicDisplay",
-    "widgets/car/Navigator",
     "widgets/ButtonActionsQueue",
     "websockets/FMIClient"
-], function (TouchscreenButton, BasicDisplay,  Navigator, ButtonActionsQueue, FMIClient) {
+], function (ButtonActionsQueue, FMIClient) {
     "use strict";
-    // callback function
+
     var PVSioStateParser = require("util/PVSioStateParser");
     var system = {};
-    	
-    	
-    	//creo 5 oggetti navigatore, uno per ogni drone, tutti uno sopra l'altro e tutti trasparenti
-    	// in modo da avere l'effetto di un navigatore solo con 5 elementi che si muovono
-	 system.navigator = new Navigator("nav-display",
-                {
-                    top: 0,
-                    left: 0,
-                    width: 900,
-                    height: 900
-                }, {
-                    // autoscale: true,
-                    
-		            maxX: 11,
-                    maxY: 11,
-                   
-         		    arrowStartName:"start-arrow",
-        		    arrowStartUrl:"url(#start-arrow)",                  
-                    arrowEndUrl: "url(#end-arrow)",
-                    lineColor: "blue",
-                    arrowColor: "blue",
-                    backgroundColor: "transparent"
-                },{
-					parent: "image"});
-    //system.navigator.reveal();
-    
-                
-    system.navigator2 = new Navigator("nav-display",
-                {
-                    top: 0,
-                    left: 0,
-                    width: 900,
-                    height: 900
-                }, {
-                    // autoscale: true,
-                    
-		            maxX: 11,
-                    maxY: 11,
-                    
-        		    arrowStartName:"start-arrow2",
-        		    arrowStartUrl:"url(#start-arrow2)",                    
-                    arrowEndName: "end-arrow2",
-        		    arrowEndUrl: "url(#end-arrow2)",
-        		    backgroundColor: "transparent",
-        		    arrowColor: "orange",
-                    lineColor: "orange"
-                },{
-					parent: "image"});
-   // system.navigator2.reveal();
-    system.navigator3 = new Navigator("nav-display",
-                {
-                    top: 0,
-                    left: 0,
-                    width: 900,
-                    height: 900
-                }, {
-                    // autoscale: true,
-                    
-		            maxX: 11,
-                    maxY: 11,
-                    
-        		    arrowStartName:"start-arrow3",
-        		    arrowStartUrl:"url(#start-arrow3)",                    
-        		    arrowEndName: "end-arrow3",
-        		    arrowEndUrl: "url(#end-arrow3)",
-        		    backgroundColor: "transparent",
-        		    arrowColor: "green",
-                    lineColor: "green"
-                },{
-					parent: "image"});
-    // system.navigator3.reveal();           
-     system.navigator4 = new Navigator("nav-display",
-                {
-                    top: 0,
-                    left: 0,
-                    width: 900,
-                    height: 900
-                }, {
-                    // autoscale: true,
-                    
-		            maxX: 11,
-                    maxY: 11,
-                   
-                    arrowStartName:"start-arrow4",
-        		    arrowStartUrl:"url(#start-arrow4)",
-        		    arrowEndName: "end-arrow4",
-        		    arrowEndUrl: "url(#end-arrow4)",
-        		    backgroundColor: "transparent",
-        		    arrowColor: "red",
-                    lineColor: "red"
-                },{
-					parent: "image"});
-     //system.navigator4.reveal();
-     system.navigator5 = new Navigator("nav-display",
-                {
-                    top: 0,
-                    left: 0,
-                    width: 900,
-                    height: 900
-                }, {
-                    // autoscale: true,
-                    
-		            maxX: 11,
-                    maxY: 11,
-                   
-        		    arrowEndName: "end-arrow5",
-        		    arrowEndUrl: "url(#end-arrow5)",
-        		    arrowStartName:"start-arrow5",
-        		    arrowStartUrl:"url(#start-arrow5)",
-        		    backgroundColor: "transparent",
-        		    arrowColor: "purple",
-                    lineColor: "purple"
-                },{
-					parent: "image"});
-    //system.navigator5.reveal();
-        
-    
+    system.blue_drone = d3.select("#blue_drone");
+    system.yellow_drone = d3.select("#yellow_drone");
+    system.green_drone = d3.select("#green_drone");
+    system.red_drone = d3.select("#red_drone");
+    system.pink_drone = d3.select("#pink_drone");
+
     function onMessageReceived(err, res) {
-		var state = {};
-		state = PVSioStateParser.parse(res);
-        // c'e' scritto y, ma la uso come z
-        // ad ogni messaggio che ricevo faccio la render di tutti i 5 navigatori con le nuove posizioni
-	
-		
-		system.navigator.render([{ x: PVSioStateParser.evaluate(state.x1) , y: PVSioStateParser.evaluate(state.z1)  }]);
-		
-		system.navigator2.render([{ x: PVSioStateParser.evaluate(state.x2) , y: PVSioStateParser.evaluate(state.z2)  }]);
-		
-		system.navigator3.render([{ x: PVSioStateParser.evaluate(state.x3) , y: PVSioStateParser.evaluate(state.z3)  }]);
-		
-		system.navigator4.render([{ x: PVSioStateParser.evaluate(state.x4) , y: PVSioStateParser.evaluate(state.z4)  }]);
-		
-		system.navigator5.render([{ x: PVSioStateParser.evaluate(state.x5) , y: PVSioStateParser.evaluate(state.z5)  }]);
+        var state = PVSioStateParser.parse(res);
+        var pos = {
+            blue_drone: { x: PVSioStateParser.evaluate(state.x1) , y: PVSioStateParser.evaluate(state.z1)  },
+            yellow_drone: { x: PVSioStateParser.evaluate(state.x2) , y: PVSioStateParser.evaluate(state.z2)  },
+            green_drone: { x: PVSioStateParser.evaluate(state.x3) , y: PVSioStateParser.evaluate(state.z3)  },
+            red_drone: { x: PVSioStateParser.evaluate(state.x4) , y: PVSioStateParser.evaluate(state.z4)  },
+            pink_drone: { x: PVSioStateParser.evaluate(state.x5) , y: PVSioStateParser.evaluate(state.z5)  }
+        };
+
+        // don't use the Navigator widget, just move the drones with the following command.
+        system.blue_drone.style("left", 100+pos.blue_drone.x*100 + "px").style("top", 400-pos.blue_drone.y*100 + "px");
+        system.red_drone.style("left", 100+pos.red_drone.x*100 + "px").style("top", 400-pos.red_drone.y*100 + "px");
+        system.yellow_drone.style("left", 100+pos.yellow_drone.x*100 + "px").style("top", 400-pos.yellow_drone.y*100 + "px");
+        system.green_drone.style("left", 100+pos.green_drone.x*100 + "px").style("top", 400-pos.green_drone.y*100 + "px");
+        system.pink_drone.style("left", 100+pos.pink_drone.x*100 + "px").style("top", 400-pos.pink_drone.y*100 + "px");
     }
 
     // web socket client
