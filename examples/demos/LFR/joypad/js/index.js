@@ -39,18 +39,12 @@ require([
 
         // Function automatically invoked by PVSio-web when the back-end sends states updates
         function onMessageReceived(err, res) {
-            //console.log(res);
-            stop_tick();
+			stop_tick;
+           // console.log(res);
             render(res);
-            start_tick(50); 			
+            start_tick(250);		
         }
-        function onTickReceived(err, res) {
-            //console.log(res);
-            
-            render(res);
-            
-        }
-
+        
         var car = {};
         // ----------------------------- DASHBOARD INTERACTION -----------------------------
         car.left = new TouchscreenButton("left", {  width: 40, height: 25, top: 390, left: 250 }, {
@@ -331,7 +325,7 @@ require([
             if (!tick) {
                 tick = setInterval(function () {
 					if(ButtonActionsQueue.getInstance().buffer.length==0)
-                    ButtonActionsQueue.getInstance().queueGUIAction("refresh", onTickReceived);
+                    ButtonActionsQueue.getInstance().queueGUIAction("refresh",onMessageReceived );
                 }, interval);
             }
         }
