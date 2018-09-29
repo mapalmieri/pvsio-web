@@ -20,6 +20,7 @@
 #include <unistd.h>
 /*#include <iostream>*/
 #include <sys/types.h>
+#include <sys/time.h>
 #include <sys/wait.h>
 #include "err.h"
 #include <libwebsockets.h>
@@ -34,6 +35,8 @@
 #include <locale.h>
 
 #define MAX_MEMORY {{max_memory}}
+
+#define MAX_TIME 10
 
 #define BOOL_COUNT {{count}}
 #define INT_COUNT {{count}}
@@ -51,9 +54,15 @@ struct FmiBuffer {
 
 extern struct FmiBuffer fmiBuffer;
 
-void sendToPVSio(const char *);
+int PipeStatus();
 
-void receiveFromPVSio();
+void start_PVSio_process(int&);
+
+void restart_PVSio();
+
+void PVSioEval(const char *);
+
+bool PVSioPrint();
 
 bool findPVSioPrompt(const char*);
 

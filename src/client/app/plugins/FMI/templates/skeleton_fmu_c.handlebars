@@ -21,13 +21,17 @@
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_t child1;
 
-char sendbuff[MAX_MEMORY];
-char state[MAX_MEMORY];
-char tempvar[MAX_MEMORY];
-char externalvariables[MAX_MEMORY];
-char extendedstate[MAX_MEMORY];
-char banner[20000];
-char receivebuff[MAX_MEMORY];
+char action[MAX_MEMORY];	//last command sent to PVSio
+char sendbuff[MAX_MEMORY]; // string sent to PVSio
+char state[MAX_MEMORY];		// PVS state
+char temp_state[MAX_MEMORY]; 	// state saved before step
+char tempvar[MAX_MEMORY];		// string used to retrieve external variables
+char externalvariables[MAX_MEMORY];	// external variables
+char extendedstate[MAX_MEMORY];		//state extended with external variables
+char banner[20000];					//string for reading the initial banner of PVSio
+char receivebuff[MAX_MEMORY];		//string received from PVSio
+
+/*battery of temp string*/
 char r5[MAX_MEMORY];
 char r1[MAX_MEMORY];
 char r2[MAX_MEMORY];
@@ -38,17 +42,44 @@ char r7[MAX_MEMORY];
 char r8[MAX_MEMORY];
 char r9[MAX_MEMORY];
 char r0[MAX_MEMORY];
-int ret;
+
+char a[100];
+char b[100];
+char c[100];
+char e[100];
+char f[200];
+
+char* as ;
+char* bs ;
+char* cs ;
+char* ds ;
+
+
+/*battery of indexes to surf the PVS state*/
 int index_state;
 int index_state1;
 int index_state2;
+
+int watchdog=0;
+
 int FtS[2]; 		// Father to Son
 int StF[2];			// Son to Father
+int FtS1[2]; 		// Father to Son
+int StF1[2];			// Son to Father
 int pid_of_son;
+int pid_of_son1;
+
 int first = 0;
 
 double temp1,temp2;
 FILE* fd;
+FILE* fd1;
+
+fd_set rfds;
+struct timeval tv;
+int retval;
+
+
 extern FmiBuffer fmiBuffer;
 extern const fmi2CallbackFunctions *g_functions;
 extern std::string* name;
@@ -99,6 +130,10 @@ char lwssendvariables[LWS_SEND_BUFFER_PRE_PADDING + LWS_SEND_BUFFER_POST_PADDING
 
 void sighandler(int sig) { force_exit = 1; }
 
+/*code for handling watchdog*/
+void watchdog_function(int sig){
+	watchdog=1;
+}
 /*
 * body of the pthread that takes messages from the HMI
 */
@@ -121,12 +156,7 @@ void initialize(const char* location) {
 /* this arrays of character are used to manipulate the strings of the 
  * PVS folders and PVS theory
  */
-    char a[100];
-	char b[100];
-	char c[100];
-	char e[100];
-	char f[200];
-	
+    
 	strcpy(a, location);
 	strcat(a,"/");
 	strcpy(b, location);
@@ -142,10 +172,10 @@ void initialize(const char* location) {
 	
 	// these istructions remove the "file://" part of the string
 	////////////////////////////////////////////////////////
-	char* as = a;
-	char* bs = b;
-	char* cs = c;
-	char* ds = e;
+	 as = a;
+	 bs = b;
+	 cs = c;
+	 ds = e;
 	ds= ds+5;
 	bs= bs+5;
 	as= as+5;
@@ -155,9 +185,9 @@ void initialize(const char* location) {
 	char *parmList1[] = {"/bin/chmod", "+x","-R", (char*)&location[5],NULL};
 
 	/* creation of the 2 pipes for communication from and to PVSio*/
-	pipe(FtS);
-    pipe(StF);
-
+	
+    
+   
 	/*first we give execution permission to the PVS folder */
     pid_of_son=fork();
     if ( pid_of_son == 0){
@@ -176,45 +206,12 @@ void initialize(const char* location) {
     usleep(10);
     chdir(f);
     /*finally we execute the PVSio process with the PVS theory*/
-    pid_of_son = fork();
-	if ( pid_of_son == 0) {
-		// son
-		close( 0 );			//
-		dup( FtS[0] );		// chiudo lo stdin
-
-		close( FtS[0] );	// e lo sostituisco con Fts[0]
-		close( FtS[1] );	//
-
-		close ( 1 );		//
-		dup( StF[1] );		// chiudo lo stdout
-
-		close( StF[1] );	// e lo sostituisco con StF[1]
-		close( StF[0] );	//
-
-		// il processo lanciato da execlp eredita
-		// i pipe dal processo che l'ha lanciato
-		execlp(cs,"pvsio",bs , NULL);
-    }
-    //father
-	close(FtS[0]);	//	closes the unnecessary pipe extremity
-	close(StF[1]);	//  closes the unnecessary pipe extremity
-
-	usleep({{delay}});	// BEWARE this value may depend on the processor... if problems try to increase
+    setlocale(LC_ALL, "C");						// needed for INTO-CPS
+	start_PVSio_process(pid_of_son);
 	
-	read(StF[0], banner, sizeof(banner));		// removes the  banner
-	fd=fdopen(StF[0], "r");
-	setlocale(LC_ALL, "C");						// needed for INTO-CPS
-	sprintf(sendbuff,"{{init}};");
-	write(FtS[1], sendbuff,strlen(sendbuff));
-	fgets(r3, sizeof(r3),fd);
-	//printf("%s\n", r3);
-	ret = fread(state,1,1,fd); 
-	while(findVariable("<PVSio>",state) == -1){
-		ret+= fread(&state[ret],1,1,fd);
-	}
-	//printf("%s\n",state);
-	state[ret-8]='\0'; // removes PVSio prompt
-	//printf("%s\n",state);
+	
+	
+	PVSioPrint();
 	
 
 
@@ -286,9 +283,7 @@ void initialize(const char* location) {
 	strcpy(fmiBuffer.r[{{count}}],state);
 	fmiBuffer.stringBuffer[{{count}}]=fmiBuffer.r[{{count}}];
 	
-	{{#each function_variables_output}}
-	strcpy(fmiBuffer.r[{{fmi.valueReference}}],"###");
-	fmiBuffer.stringBuffer[{{fmi.valueReference}}]=fmiBuffer.r[{{fmi.valueReference}}];{{/each}}
+	
 	/*we need to open the websocket server*/
 	 while(websocket_open == FALSE) {
         port = initial_port;
@@ -302,6 +297,7 @@ void initialize(const char* location) {
         }
 	}
 	/*finally we create the thread to take messages from the HMI*/
+	signal(SIGALRM, watchdog_function);
     pthread_create(&child1, NULL, &GUI_process, NULL);
 }
 
@@ -319,7 +315,7 @@ void doStep() {
 	
 	/*since we are about to access global var state we acquire lock mutex*/
 	pthread_mutex_lock(&mutex);
-	
+	watchdog=0;
 	
 	
 	 if(first == 0){
@@ -412,10 +408,21 @@ void doStep() {
 	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
-	sendToPVSio("{{tick}}");
-	receiveFromPVSio();
-	
-
+	watchdog=0;
+	strcpy(temp_state,state); 	 // save state before execution of tick
+	alarm(MAX_TIME);					 // set alarm of 10 seconds
+	PVSioEval("{{tick}}");
+	if(PVSioPrint()==true){
+		ualarm(0,0);				 // disable alarm
+		if(watchdog==1){			 // if the watchdog fired
+			strcpy(state,temp_state);// restore the state
+			restart_PVSio();		 // kill PVSio and then start it over
+		}
+	}
+	else{
+		strcpy(state,temp_state);	 // restore the state
+		
+	}
 	{{#each variables}}
 	{{#if fmi}}{{#if output}}{{#if real}} 
     index_state=findVariable("{{name}}",state);
@@ -493,29 +500,29 @@ void doStep() {
 	
     	
 
-void sendToPVSio(const char* _action){
+void PVSioEval(const char* _action){
+		strcpy(action,_action);
 		sprintf(sendbuff,"%s(",_action);
 		strcat(sendbuff,state);
 		strcat(sendbuff,");\n");
-		fmiprintf("%s\n",sendbuff);
+		//fmiprintf("%s\n",sendbuff);
 		write(FtS[1], sendbuff , strlen(sendbuff));
 }
 
-void receiveFromPVSio(){
+bool PVSioPrint(){
+	int ret = 0;
 	memset(state,0,MAX_MEMORY); // cleans state before using it
-		
-	fgets(r3, sizeof(r3),fd);
-	if(strlen(r3) != 5)fgets(r3, sizeof(r3),fd); //5 is the length of the normal answer, when something else means GC
-		
-	ret = fread(state,1,1,fd); // 
-	while(!findPVSioPrompt(state)){
-	ret+= fread(&state[ret],1,1,fd);
-	}
-	
-//	printf("%s\n", state);
+	if(PipeStatus() == 1){	
+		if(watchdog == 0)ret = fread(state,1,1,fd);
+		while(!findPVSioPrompt(state) ){
+			if(watchdog==1)break;
+			ret+= fread(&state[ret],1,1,fd);
+		}
+	//fmiprintf("state:%s",state);
 	state[ret-8]='\0'; // removes PVSio prompt
-//	printf("%s\n", state);
-	
+	return true;
+	}
+	return false;
 }
     
 bool findPVSioPrompt(const char* _state){
@@ -532,7 +539,48 @@ void terminate(){
 	close_websocket();
 }
 
+void start_PVSio_process(int& pid){
+	pipe(FtS);
+    pipe(StF);
+	 pid_of_son = fork();
+	if ( pid_of_son == 0) {
+		// son
+		close( 0 );			//
+		dup( FtS[0] );		// chiudo lo stdin
 
+		close( FtS[0] );	// e lo sostituisco con Fts[0]
+		close( FtS[1] );	//
+
+		close ( 1 );		//
+		dup( StF[1] );		// chiudo lo stdout
+
+		close( StF[1] );	// e lo sostituisco con StF[1]
+		close( StF[0] );	//
+
+		// il processo lanciato da execlp eredita
+		// i pipe dal processo che l'ha lanciato
+		execlp(cs,"pvsio",bs , NULL);
+    }
+    //father
+	close(FtS[0]);	//	closes the unnecessary pipe extremity
+	close(StF[1]);	//  closes the unnecessary pipe extremity
+
+	//usleep({{delay}});	// BEWARE this value may depend on the processor... if problems try to increase
+	
+	read(StF[0], banner, sizeof(banner));		// removes the  banner
+	fd=fdopen(StF[0], "r");
+	sprintf(sendbuff,"{{init}};");
+	write(FtS[1], sendbuff,strlen(sendbuff));
+}
+
+void restart_PVSio(){
+	/*sprintf(sendbuff,"exit;\n");
+	write(FtS[1], sendbuff,strlen(sendbuff));*/
+	fclose(fd);
+	kill(pid_of_son,SIGKILL);
+	start_PVSio_process(pid_of_son);
+	
+	}	
 
 /**
  * this is the callback function where we handle messages received from a PVSio-web user interface prototype
@@ -557,7 +605,7 @@ static int Callback(struct lws* wsi, enum lws_callback_reasons reason, void* use
     case LWS_CALLBACK_RECEIVE:
     
         strcpy(receivebuff,(char*) in);
-        
+		watchdog=0;
         /*since we are about to access global var state we acquire lock mutex*/
         pthread_mutex_lock(&mutex);
         
@@ -565,8 +613,20 @@ static int Callback(struct lws* wsi, enum lws_callback_reasons reason, void* use
 				//do nothing
 			}
 			else{
-				sendToPVSio(receivebuff);
-				receiveFromPVSio();
+				watchdog=0;
+				strcpy(temp_state,state); 	 // save state before execution of tick
+				alarm(MAX_TIME);					 // set alarm of 10 seconds
+				PVSioEval(receivebuff);
+				if(PVSioPrint() == true){
+					ualarm(0,0);				 // disable alarm
+					if(watchdog==1){			 // if the watchdog fired
+						strcpy(state,temp_state);// restore the state
+						restart_PVSio();		 // kill PVSio and then start it over
+					}
+				}
+				else{
+					strcpy(state,temp_state);	// restore the state
+				}
 			}
 			
 		retrieveExternalVariables();
@@ -668,6 +728,24 @@ void retrieveExternalVariables(){
 
 void handleUserAction() {
            lws_service(context, 0);    
+}
+
+int PipeStatus (){
+	memset(r3,0,MAX_MEMORY);
+	FD_ZERO(&rfds);
+    FD_SET(StF[0], &rfds);
+    tv.tv_sec = MAX_TIME;
+    tv.tv_usec = 0;
+    retval = select(StF[0]+1, &rfds, NULL, NULL, &tv);
+    if( retval > 0){
+		if(FD_ISSET(StF[0],&rfds) ==1){ 
+			while( findIndex("==>",r3) ==-1){
+				fgets(r3, sizeof(r3),fd);
+			}
+			return 1;
+		}
+	}
+	return 0;
 }
 
 void close_websocket() {
