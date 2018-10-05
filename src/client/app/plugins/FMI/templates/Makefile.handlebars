@@ -6,7 +6,7 @@ CFLAGS=-I.
 all:
 	g++ -fPIC -Wall -c fmu.cpp
 	g++ -fPIC -Wall -c skeleton.cpp
-	g++ -fPIC -shared -o {{name}}.so skeleton.o fmu.o -Wl,-rpath,. -lwebsockets -lssl -lcrypto
+	g++ -fPIC -shared -o {{name}}.so skeleton.o fmu.o -Wl,-rpath,. -lwebsockets -lssl -lcrypto -pthread
 	rm -rf sources
 	rm -rf binaries
 	mkdir sources

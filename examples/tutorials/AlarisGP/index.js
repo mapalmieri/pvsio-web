@@ -143,49 +143,80 @@ require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
     /*fino a value sono campi obbligatori, dopo sono facoltativi*/
     var statevariables = [
 		
-		{name:"id", type:"string",variability: "discrete", scope:"output", value:"0",top:20, width: 300, widget: "BasicDisplay"},
-		{name:"spo2", type:"real",variability: "discrete", scope:"output", value:"0",top:120, width: 300, widget: "BasicDisplay"},
-		{name:"spo2_max", type:"real",variability: "discrete", scope:"output", value:"0",top:220, width: 300, widget: "BasicDisplay"},
-		{name:"spo2_min", type:"real",variability: "discrete", scope:"output", value:"0",top:320, width: 300, widget: "BasicDisplay"},
-		{name:"spo2_label", type:"string",variability: "discrete", scope:"output", value:"0",top:420, width: 300, widget: "BasicDisplay"},
-		{name:"spo2_alarm", type:"string",variability: "discrete", scope:"output", value:"0",top:520, width: 300, widget: "BasicDisplay"},
-		{name:"spo2_fail", type:"bool",variability: "discrete", scope:"output", value:"0",top:620, width: 300, widget: "BasicDisplay"},
-		{name:"rra", type:"real",variability: "discrete", scope:"output", value:"0",top:720, width: 300, widget: "BasicDisplay"},
-		{name:"rra_max", type:"real",variability: "discrete", scope:"output", value:"0",top:820, width: 300, widget: "BasicDisplay"},
-		{name:"rra_min", type:"real",variability: "discrete", scope:"output", value:"0",top:920, width: 300, widget: "BasicDisplay"},
-		{name:"rra_label", type:"string",variability: "discrete", scope:"output", value:"0",top:1020, width: 300, widget: "BasicDisplay"},
-		{name:"rra_alarm", type:"string",variability: "discrete", scope:"output", value:"0",top:1120, width: 300, widget: "BasicDisplay"},
-		{name:"rra_fail", type:"bool",variability: "discrete", scope:"output", value:"0",top:1220, width: 300, widget: "BasicDisplay"},
-		{name:"isOn", type:"bool",variability: "discrete", scope:"output", value:"0",top:1320, width: 300, widget: "BasicDisplay"},
-		
-		
+		{name:"id", type:"string",variability: "discrete", scope:"output", value:"0"},
+		{name:"topline", type:"string",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp ", type:"string",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_drate", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_dvtbi", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_dvol", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_dtime", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_dnewrate", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_dnewvtbi", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_dnewtime", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_dbags", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"optionsmenu", type:"string",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagscursor", type:"int",variability: "discrete", scope:"output", value:"0"},
+		{name:"qcursor", type:"int",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval ", type:"string",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval0", type:"int",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval1", type:"int",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval2", type:"int",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval3", type:"int",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval4", type:"int",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval5", type:"int",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval6", type:"int",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval7", type:"int",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval8", type:"int",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval9", type:"int",variability: "discrete", scope:"output", value:"0"},
+		{name:"fndisp1", type:"string",variability: "discrete", scope:"output", value:"0"},
+		{name:"fndisp2", type:"string",variability: "discrete", scope:"output", value:"0"},
+		{name:"fndisp3", type:"string",variability: "discrete", scope:"output", value:"0"},
+		{name:"runlight", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"pauselight", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"ac_light", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"battery_light", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"entrymode", type:"string",variability: "discrete", scope:"output", value:"0"},
+		{name:"rlock", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"rdisabled", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"newvtbi", type:"real",variability: "discrete", scope:"output", value:"0"},
+		{name:"newrate", type:"real",variability: "discrete", scope:"output", value:"0"},
+		{name:"newtime", type:"real",variability: "discrete", scope:"output", value:"0"},
+		{name:"pressed", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"current_sr", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"current_sv", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"current_st", type:"bool",variability: "discrete", scope:"output", value:"0"},
+		{name:"which_press", type:"string",variability: "discrete", scope:"output", value:"0"},
+		{name:"supercmd", type:"string",variability: "discrete", scope:"input", value:"0"},		
+				
 	];
 	
-	  var functionvariablesinput = [
+	
+	var composedvariables = [
+	{name: "ac_connect", parent:"device", type:"bool", variability: "discrete", scope: "output", value: "0"},
+	{name: "battery",parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
+	{name: "elapse ", parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
+	{name: "elapsedtime",parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
+	{name: "infusing?", parent:"device", type:"bool", variability: "discrete", scope: "output", value: "0"},
+	{name: "infusionrate",parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
+	{name: "kvoflag", parent:"device", type:"bool", variability: "discrete", scope: "output", value: "0"},
+	{name: "kvorate",parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
+	{name: "powered_on?", parent:"device", type:"bool", variability: "discrete", scope: "output", value: "0"},
+	{name: "set_fitted",parent:"device", type:"bool", variability: "discrete", scope: "output", value: "0"},
+	{name: " time", parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
+	{name: "volumeinfused",parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
+	{name: "vtbi",parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
+	]
+	
+	var functionvariablesinput = [
 		]
 	
 	var functionvariablesoutput = [
-		
 		]
 	
-	var composedvariables = []
-	var fmi = {name: "Radical7", state_variables : {variables: statevariables}, last: 4};
 	
-	var fmi_composed = {name: "Radical7", composed_variables : {variables: composedvariables},last: 4}
-	var btn_on = { id: "btn_on", widget: "TouchscreenButton", color: "transparent",
-        top: 112, left: 364, callback : "onMessageReceived"
-    };
-    
-    var spo2_sensor_data = { id: "spo2_sensor_data", widget : "TouchscreenButton", color: "transparent",
-        top: 112, left: 364, callback : "onMessageReceived"
-    };
-    
-    var rra_sensor_data = { id: "rra_sensor_data", widget : "TouchscreenButton", color: "transparent",
-        top: 112, left: 364, callback : "onMessageReceived"
-    };
     
 	
     var printer = new PBFMIPVSPrinter();
-    printer.create_FMU("Radical7",{state_variables : {variables: statevariables},composed_variables : {variables: composedvariables}, function_variables_input : {variables: functionvariablesinput},function_variables_output : {variables: functionvariablesoutput},init:"init(0)",tick:"tick",port:"8086"});
-    //printer.print_front(fmi,fmi_composed,[btn_on],[rra_sensor_data, spo2_sensor_data]);
+    printer.create_FMU("AlarisGPFMI",{state_variables : {variables: statevariables},composed_variables : {variables: composedvariables}, function_variables_input : {variables: functionvariablesinput},function_variables_output : {variables: functionvariablesoutput}, init:"init(keep)", tick:"FMItick", port:"8088", max_memory:"2500", delay: "18000000"});
+    //printer.print_front(fmi,null,null);
 });

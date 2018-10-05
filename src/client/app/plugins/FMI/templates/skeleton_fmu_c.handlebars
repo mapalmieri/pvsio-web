@@ -1,7 +1,7 @@
 /*! \file skeleton.c 
  * In this file there are the implementations
  * of the fuctions declared in fmu.h
- * along with the data needed.
+ * 
  */
 #include "fmu.h"
 #include <stdio.h>
@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include <locale.h>
+#include <pthread.h>
 #include "libwebsockets.h"
 
 #define TRUE    1
@@ -17,38 +18,72 @@
 #define SUCCESS 1
 #define FAIL    0
 
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_t child1;
 
-char sendbuff[2000];
-char state[2000];
-char tempvar[2000];
-char variables[2000];
-char tempstate[2000];
-char banner[20000];
-char receivebuff[1000];
-char r5[1000];
-char r1[1000];
-char r2[1000];
-char r3[1000];
-char r4[1000];
-char r6[1000];
-char r7[1000];
-char r8[1000];
-char r9[1000];
-char r0[1000];
-int ret;
+char action[MAX_MEMORY];	//last command sent to PVSio
+char sendbuff[MAX_MEMORY]; // string sent to PVSio
+char state[MAX_MEMORY];		// PVS state
+char temp_state[MAX_MEMORY]; 	// state saved before step
+char tempvar[MAX_MEMORY];		// string used to retrieve external variables
+char externalvariables[MAX_MEMORY];	// external variables
+char extendedstate[MAX_MEMORY];		//state extended with external variables
+char banner[20000];					//string for reading the initial banner of PVSio
+char receivebuff[MAX_MEMORY];		//string received from PVSio
+
+/*battery of temp string*/
+char r5[MAX_MEMORY];
+char r1[MAX_MEMORY];
+char r2[MAX_MEMORY];
+char r3[MAX_MEMORY];
+char r4[MAX_MEMORY];
+char r6[MAX_MEMORY];
+char r7[MAX_MEMORY];
+char r8[MAX_MEMORY];
+char r9[MAX_MEMORY];
+char r0[MAX_MEMORY];
+
+char a[100];
+char b[100];
+char c[100];
+char e[100];
+char f[200];
+
+char* as ;
+char* bs ;
+char* cs ;
+char* ds ;
+
+
+/*battery of indexes to surf the PVS state*/
 int index_state;
 int index_state1;
 int index_state2;
+
+int watchdog=0;
+
 int FtS[2]; 		// Father to Son
 int StF[2];			// Son to Father
+int FtS1[2]; 		// Father to Son
+int StF1[2];			// Son to Father
 int pid_of_son;
+int pid_of_son1;
+
 int first = 0;
 
 double temp1,temp2;
 FILE* fd;
+FILE* fd1;
+
+fd_set rfds;
+struct timeval tv;
+int retval;
+
+
 extern FmiBuffer fmiBuffer;
 extern const fmi2CallbackFunctions *g_functions;
 extern std::string* name;
+
 
 
 template <class T>
@@ -93,23 +128,35 @@ int force_exit = 0;
 char lwssendstate[LWS_SEND_BUFFER_PRE_PADDING + LWS_SEND_BUFFER_POST_PADDING+2800];
 char lwssendvariables[LWS_SEND_BUFFER_PRE_PADDING + LWS_SEND_BUFFER_POST_PADDING+2800];
 
+void sighandler(int sig) { force_exit = 1; }
+
+/*code for handling watchdog*/
+void watchdog_function(int sig){
+	watchdog=1;
+}
+/*
+* body of the pthread that takes messages from the HMI
+*/
+void *GUI_process(void * arg){
+    while(1){
+		//usleep(240000);	
+		handleUserAction();
+	}
+}
+
  /**
        * function for the initialization of the model.
        * It calls the init function of the model and
        * 	sets the output
-       * @param location is the directory where the fmu has been unzipped. Might be used in future version
+       * @param location is the directory where the fmu has been unzipped.
        * 
        */
-
-
 void initialize(const char* location) {
 
-    char a[100];
-	char b[100];
-	char c[100];
-	char e[100];
-	char f[200];
-	//printf("%s\n",location);
+/* this arrays of character are used to manipulate the strings of the 
+ * PVS folders and PVS theory
+ */
+    
 	strcpy(a, location);
 	strcat(a,"/");
 	strcpy(b, location);
@@ -122,76 +169,49 @@ void initialize(const char* location) {
 	strcat(b,"{{name}}.pvs");
 	strcpy(e,c);
 	strcat(e,"/bin/relocate");
+	
 	// these istructions remove the "file://" part of the string
 	////////////////////////////////////////////////////////
-	char* as = a;
-	char* bs = b;
-	char* cs = c;
-	char* ds = e;
+	 as = a;
+	 bs = b;
+	 cs = c;
+	 ds = e;
 	ds= ds+5;
 	bs= bs+5;
 	as= as+5;
 	cs= cs+5;
-	printf("%s\n",as);
-	printf("%s\n",bs);
 	/////////////////////////////////////////////////////////
+	
 	char *parmList1[] = {"/bin/chmod", "+x","-R", (char*)&location[5],NULL};
 
-
-	pipe(FtS);
-    pipe(StF);
-
+	/* creation of the 2 pipes for communication from and to PVSio*/
+	
+    
+   
+	/*first we give execution permission to the PVS folder */
     pid_of_son=fork();
     if ( pid_of_son == 0){
 			execvp("chmod", parmList1);
 	}
 	else{wait(NULL);}
+	
+	/* then we execute the relocate bash program needed by PVSio */
 	getcwd(f,sizeof(f));
 	chdir((char*)&location[5]);
 	chdir("pvs-6.0-ix86_64-Linux-allegro/");
-	sleep(1);
+	usleep(10);
+	
 	system("./bin/relocate");
 
-    sleep(0.01);
+    usleep(10);
     chdir(f);
-    pid_of_son = fork();
-	if ( pid_of_son == 0) {
-		// son
-		close( 0 );			//
-		dup( FtS[0] );		// chiudo lo stdin
-
-		close( FtS[0] );	// e lo sostituisco con Fts[0]
-		close( FtS[1] );	//
-
-		close ( 1 );		//
-		dup( StF[1] );		// chiudo lo stdout
-
-		close( StF[1] );	// e lo sostituisco con StF[1]
-		close( StF[0] );	//
-
-		// il processo lanciato da execlp eredita
-		// i pipe dal processo che l'ha lanciato
-		execlp(cs,"pvsio",bs , NULL);
-    }
-    //father
-	close(FtS[0]);	//	closes the unnecessary pipe extremity
-	close(StF[1]);	//  closes the unnecessary pipe extremity
-
-	sleep(2);
-	read(StF[0], banner, sizeof(banner));		// removes the  banner
-	fd=fdopen(StF[0], "r");
-	setlocale(LC_ALL, "C");						// needed for INTO-CPS
-	sprintf(sendbuff,"{{init}};");
-	write(FtS[1], sendbuff,strlen(sendbuff));
-	fgets(r3, sizeof(r3),fd);
-	//printf("%s\n", r3);
-	ret = fread(state,1,1,fd); 
-	while(findVariable("<PVSio>",state) == -1){
-		ret+= fread(&state[ret],1,1,fd);
-	}
-	//printf("%s\n",state);
-	state[ret-8]='\0'; // removes PVSio prompt
-	//printf("%s\n",state);
+    /*finally we execute the PVSio process with the PVS theory*/
+    setlocale(LC_ALL, "C");						// needed for INTO-CPS
+	start_PVSio_process(pid_of_son);
+	
+	
+	
+	PVSioPrint();
 	
 
 
@@ -199,19 +219,22 @@ void initialize(const char* location) {
 	{{#if fmi}}{{#if output}}{{#if real}}
     index_state=findVariable("{{name}}",state);
     if ( index_state != -1){
-		//convertNotation("{{name}}",{{fmi.valueReference}});
 		writeOutputVariableDouble(index_state,{{fmi.valueReference}});
 	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if output}}{{#if int}}
     index_state=findVariable("{{name}}",state);
+    if ( index_state != -1){
 	writeOutputVariableInt(index_state,{{fmi.valueReference}});
+	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if output}}{{#if bool}}
     index_state=findVariable("{{name}}",state);
+    if ( index_state != -1){
 	writeOutputVariableBool(index_state,{{fmi.valueReference}});
+	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
@@ -226,18 +249,58 @@ void initialize(const char* location) {
     index_state=findVariable("{{parent}}",state);
     if ( index_state != -1){
 		index_state1=findVariable("{{name}}", &state[index_state]);
-		//convertNotation("{{name}}",{{fmi.valueReference}},index_state1+index_state);
 		writeOutputVariableDouble(index_state1+index_state,{{fmi.valueReference}});
+	}
+	{{/if}}{{/if}}{{/if}}{{/each}}
+	
+	{{#each composed_variables}}
+	{{#if fmi}}{{#if output}}{{#if bool}}
+    index_state=findVariable("{{parent}}",state);
+    if ( index_state != -1){
+		index_state1=findVariable("{{name}}", &state[index_state]);
+		writeOutputVariableBool(index_state1+index_state,{{fmi.valueReference}});
+	}
+	{{/if}}{{/if}}{{/if}}{{/each}}
+	
+	{{#each composed_variables}}
+	{{#if fmi}}{{#if output}}{{#if string}}
+    index_state=findVariable("{{parent}}",state);
+    if ( index_state != -1){
+		index_state1=findVariable("{{name}}", &state[index_state]);
+		writeOutputVariableString(index_state1+index_state,{{fmi.valueReference}});
+	}
+	{{/if}}{{/if}}{{/if}}{{/each}}
+	
+	{{#each composed_variables}}
+	{{#if fmi}}{{#if output}}{{#if int}}
+    index_state=findVariable("{{parent}}",state);
+    if ( index_state != -1){
+		index_state1=findVariable("{{name}}", &state[index_state]);
+		writeOutputVariableInt(index_state1+index_state,{{fmi.valueReference}});
 	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	strcpy(fmiBuffer.r[{{count}}],state);
 	fmiBuffer.stringBuffer[{{count}}]=fmiBuffer.r[{{count}}];
 	
-	WebsocketServer();
 	
-	sleep(1);
+	/*we need to open the websocket server*/
+	 while(websocket_open == FALSE) {
+        port = initial_port;
+        websocket_open = open_websocket();
+        if (websocket_open == FALSE) {
+            initial_port++; /* change port so that a new port
+                            can be tried at the next attempt */
+        } else {
+            printf("WEBSOCKET OPENED\n");
+            signal(SIGINT, sighandler);   /* handle user interrupts */
+        }
+	}
+	/*finally we create the thread to take messages from the HMI*/
+	signal(SIGALRM, watchdog_function);
+    pthread_create(&child1, NULL, &GUI_process, NULL);
 }
+
 
 /**
  * function that performs a step of the simulation model.
@@ -249,11 +312,12 @@ void initialize(const char* location) {
 void doStep() { 	
 	fflush(fd);
 	
-	/**
-	 *
-	 * we need to change the state according to the input of the FMU
-	 *since we DO change the state we have to access all variables one by one
-	 * **/
+	
+	/*since we are about to access global var state we acquire lock mutex*/
+	pthread_mutex_lock(&mutex);
+	watchdog=0;
+	
+	
 	 if(first == 0){
 		{{#each variables}}
 	{{#if fmi}}{{#if parameter}}{{#if real}}
@@ -289,60 +353,96 @@ void doStep() {
 	
 	{{#each variables}}{{#if fmi}}{{#if input}}{{#if int}}
     index_state=findVariable("{{name}}",state);
+    if ( index_state != -1){
 	readInputVariableInt(index_state,{{fmi.valueReference}});
+	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if input}}{{#if bool}}
     index_state=findVariable("{{name}}",state);
+    if ( index_state != -1){
 	readInputVariableBool(index_state,{{fmi.valueReference}});
+	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if input}}{{#if string}}
     index_state=findVariable("  {{name}}",state);
+    if ( index_state != -1){
 	readInputVariableString(index_state,fmiBuffer.stringBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each composed_variables}}
 	{{#if fmi}}{{#if input}}{{#if real}}
     index_state=findVariable("{{parent}}",state);
     if ( index_state != -1){
-    index_state1=findVariable("{{name}}", &state[index_state]);
-	readInputVariableDouble(index_state1+index_state,fmiBuffer.realBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+		index_state1=findVariable("{{name}}", &state[index_state]);
+		readInputVariableDouble(index_state1+index_state,fmiBuffer.realBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
 	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
+	{{#each composed_variables}}
+	{{#if fmi}}{{#if input}}{{#if bool}}
+    index_state=findVariable("{{parent}}",state);
+    if ( index_state != -1){
+		index_state1=findVariable("{{name}}", &state[index_state]);
+		readInputVariableBool(index_state1+index_state,fmiBuffer.booleanBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+	}
+	{{/if}}{{/if}}{{/if}}{{/each}}
 	
+	{{#each composed_variables}}
+	{{#if fmi}}{{#if input}}{{#if string}}
+    index_state=findVariable("{{parent}}",state);
+    if ( index_state != -1){
+		index_state1=findVariable("{{name}}", &state[index_state]);
+		readInputVariableString(index_state1+index_state,fmiBuffer.stringBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+	}
+	{{/if}}{{/if}}{{/if}}{{/each}}
 	
-	 WebsocketServer(); // we want to check the websocket only during the fmi2DoStep call
+	{{#each composed_variables}}
+	{{#if fmi}}{{#if input}}{{#if int}}
+    index_state=findVariable("{{parent}}",state);
+    if ( index_state != -1){
+		index_state1=findVariable("{{name}}", &state[index_state]);
+		readInputVariableInt(index_state1+index_state,fmiBuffer.intBuffer[{{fmi.valueReference}}],{{fmi.valueReference}});
+	}
+	{{/if}}{{/if}}{{/if}}{{/each}}
 	
-	
-	
-	sendToPVSio("{{tick}}");
-	
-	receiveFromPVSio();
-	
-
-	/**
-	 * we need to change the output of the FMU according to the state
-	 * since we don't change state we can start from the first and then advance till the last
-	 * **/
+	watchdog=0;
+	strcpy(temp_state,state); 	 // save state before execution of tick
+	alarm(MAX_TIME);					 // set alarm of 10 seconds
+	PVSioEval("{{tick}}");
+	if(PVSioPrint()==true){
+		ualarm(0,0);				 // disable alarm
+		if(watchdog==1){			 // if the watchdog fired
+			strcpy(state,temp_state);// restore the state
+			restart_PVSio();		 // kill PVSio and then start it over
+		}
+	}
+	else{
+		strcpy(state,temp_state);	 // restore the state
+		
+	}
 	{{#each variables}}
 	{{#if fmi}}{{#if output}}{{#if real}} 
     index_state=findVariable("{{name}}",state);
     if (index_state != -1){
-    //convertNotation("{{name}}",{{fmi.valueReference}});
 	writeOutputVariableDouble(index_state,{{fmi.valueReference}});
 	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if output}}{{#if int}}
     index_state=findVariable("{{name}}",state);
+    if ( index_state != -1){
 	writeOutputVariableInt(index_state,{{fmi.valueReference}});
+	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if output}}{{#if bool}}
     index_state=findVariable("{{name}}",state);
+    if ( index_state != -1){
 	writeOutputVariableBool(index_state,{{fmi.valueReference}});
+	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
 	
 	{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
@@ -358,47 +458,71 @@ void doStep() {
     index_state=findVariable("{{parent}}",state);
     if ( index_state != -1){
     index_state1=findVariable("{{name}}", &state[index_state]);
-    //convertNotation("{{name}}",{{fmi.valueReference}},index_state1+index_state);
 	writeOutputVariableDouble(index_state1+index_state,{{fmi.valueReference}});
 	}
 	{{/if}}{{/if}}{{/if}}{{/each}}
-
+	
+	{{#each composed_variables}}
+	{{#if fmi}}{{#if output}}{{#if bool}}
+    index_state=findVariable("{{parent}}",state);
+    if ( index_state != -1){
+		index_state1=findVariable("{{name}}", &state[index_state]);
+		writeOutputVariableBool(index_state1+index_state,{{fmi.valueReference}});
+	}
+	{{/if}}{{/if}}{{/if}}{{/each}}
+	
+	{{#each composed_variables}}
+	{{#if fmi}}{{#if output}}{{#if string}}
+    index_state=findVariable("{{parent}}",state);
+    if ( index_state != -1){
+		index_state1=findVariable("{{name}}", &state[index_state]);
+		writeOutputVariableString(index_state1+index_state,{{fmi.valueReference}});
+	}
+	{{/if}}{{/if}}{{/if}}{{/each}}
+	
+	{{#each composed_variables}}
+	{{#if fmi}}{{#if output}}{{#if int}}
+    index_state=findVariable("{{parent}}",state);
+    if ( index_state != -1){
+		index_state1=findVariable("{{name}}", &state[index_state]);
+		writeOutputVariableInt(index_state1+index_state,{{fmi.valueReference}});
+	}
+	{{/if}}{{/if}}{{/if}}{{/each}}
+	
 	strcpy(fmiBuffer.r[{{count}}],state);
 	fmiBuffer.stringBuffer[{{count}}]=fmiBuffer.r[{{count}}];
+	
+	
+	
+	/* end of crit section*/
+	pthread_mutex_unlock(&mutex);
 }
 	
-    
-void handleUserAction(const char* action) { 	
-	fflush(fd);	
-	
-	sendToPVSio(action);
-	receiveFromPVSio();
-}
-	
+    	
 
-void sendToPVSio(const char* _action){
+void PVSioEval(const char* _action){
+		strcpy(action,_action);
 		sprintf(sendbuff,"%s(",_action);
 		strcat(sendbuff,state);
 		strcat(sendbuff,");\n");
-		fmiprintf("%s\n",sendbuff);
+		//fmiprintf("%s\n",sendbuff);
 		write(FtS[1], sendbuff , strlen(sendbuff));
 }
 
-void receiveFromPVSio(){
-	memset(state,0,2000); // cleans state before using it
-		
-	fgets(r3, sizeof(r3),fd);
-	if(strlen(r3) != 5)fgets(r3, sizeof(r3),fd); //5 is the length of the normal answer, when something else means GC
-		
-	ret = fread(state,1,1,fd); // 
-	while(!findPVSioPrompt(state)){
-	ret+= fread(&state[ret],1,1,fd);
-	}
-	
-//	printf("%s\n", state);
+bool PVSioPrint(){
+	int ret = 0;
+	memset(state,0,MAX_MEMORY); // cleans state before using it
+	if(PipeStatus() == 1){	
+		if(watchdog == 0)ret = fread(state,1,1,fd);
+		while(!findPVSioPrompt(state) ){
+			if(watchdog==1)break;
+			ret+= fread(&state[ret],1,1,fd);
+		}
+	//fmiprintf("state:%s",state);
 	state[ret-8]='\0'; // removes PVSio prompt
-//	printf("%s\n", state);
-	
+	return true;
+	}
+	return false;
 }
     
 bool findPVSioPrompt(const char* _state){
@@ -408,21 +532,60 @@ bool findPVSioPrompt(const char* _state){
 
 
 void terminate(){ 
+	pthread_cancel(child1); 
 	sprintf(sendbuff,"exit;\n");
 	write(FtS[1], sendbuff,strlen(sendbuff));
+	//kill(child1,SIGUSR1);
 	close_websocket();
 }
 
+void start_PVSio_process(int& pid){
+	pipe(FtS);
+    pipe(StF);
+	 pid_of_son = fork();
+	if ( pid_of_son == 0) {
+		// son
+		close( 0 );			//
+		dup( FtS[0] );		// chiudo lo stdin
 
-/**
- * functions for websocket copied from the pacemaker example
- */
-void sighandler(int sig) { force_exit = 1; }
+		close( FtS[0] );	// e lo sostituisco con Fts[0]
+		close( FtS[1] );	//
+
+		close ( 1 );		//
+		dup( StF[1] );		// chiudo lo stdout
+
+		close( StF[1] );	// e lo sostituisco con StF[1]
+		close( StF[0] );	//
+
+		// il processo lanciato da execlp eredita
+		// i pipe dal processo che l'ha lanciato
+		execlp(cs,"pvsio",bs , NULL);
+    }
+    //father
+	close(FtS[0]);	//	closes the unnecessary pipe extremity
+	close(StF[1]);	//  closes the unnecessary pipe extremity
+
+	//usleep({{delay}});	// BEWARE this value may depend on the processor... if problems try to increase
+	
+	read(StF[0], banner, sizeof(banner));		// removes the  banner
+	fd=fdopen(StF[0], "r");
+	sprintf(sendbuff,"{{init}};");
+	write(FtS[1], sendbuff,strlen(sendbuff));
+}
+
+void restart_PVSio(){
+	/*sprintf(sendbuff,"exit;\n");
+	write(FtS[1], sendbuff,strlen(sendbuff));*/
+	fclose(fd);
+	kill(pid_of_son,SIGKILL);
+	start_PVSio_process(pid_of_son);
+	
+	}	
 
 /**
  * this is the callback function where we handle messages received from a PVSio-web user interface prototype
  */
-static int WebSocketCallback(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in, size_t len) {
+static int Callback(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in, size_t len) {
     /* global vars */
     callback_reason = reason;
     callback_in = in;
@@ -440,34 +603,41 @@ static int WebSocketCallback(struct lws* wsi, enum lws_callback_reasons reason, 
         printf("CLIENT DISCONNECTED!\n\n");
         break;
     case LWS_CALLBACK_RECEIVE:
-        printf("LWS_CALLBACK_RECEIVE\n");
-        printf("Received message: %s\n", (char*) in);
+    
         strcpy(receivebuff,(char*) in);
+		watchdog=0;
+        /*since we are about to access global var state we acquire lock mutex*/
+        pthread_mutex_lock(&mutex);
         
-        if(strcmp("refresh",receivebuff) == 0){
-        }
-        else{
-        handleUserAction(receivebuff);
-        }
-        strcpy(tempstate,state);
-        memset(variables,0,2000); // we need to clean the variables before reusing them
-	    {{#each variables}}
-	    if( findVariable("{{name}}", state)== -1){
-			if ( strlen(variables) == 0) {
-				sprintf(tempvar,";(# {{name}} := %f\n",fmiBuffer.realBuffer[{{fmi.valueReference}}]); 
-				strcat(variables,tempvar);
+			if(strcmp("refresh",receivebuff) == 0){
+				//do nothing
+			}
+			else{
+				watchdog=0;
+				strcpy(temp_state,state); 	 // save state before execution of tick
+				alarm(MAX_TIME);					 // set alarm of 10 seconds
+				PVSioEval(receivebuff);
+				if(PVSioPrint() == true){
+					ualarm(0,0);				 // disable alarm
+					if(watchdog==1){			 // if the watchdog fired
+						strcpy(state,temp_state);// restore the state
+						restart_PVSio();		 // kill PVSio and then start it over
+					}
 				}
-			else {
-				sprintf(tempvar,",{{name}} := %f\n",fmiBuffer.realBuffer[{{fmi.valueReference}}]);
-				strcat(variables,tempvar);
-				} 
-	    }
-	    //printf("%s\n",variables);
-		{{/each}}
-		strcat(variables," #)");
-		strcat(tempstate,variables);
-        memcpy(lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, tempstate, strlen(tempstate) );
-        lws_write(wsi,(unsigned char *)lwssendstate + LWS_SEND_BUFFER_PRE_PADDING,strlen(tempstate),LWS_WRITE_TEXT);
+				else{
+					strcpy(state,temp_state);	// restore the state
+				}
+			}
+			
+		retrieveExternalVariables();
+		strcpy(extendedstate,state);
+		strcat(extendedstate,externalvariables);
+		
+		/*end of crit section*/
+		pthread_mutex_unlock(&mutex);
+		
+        memcpy(lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, extendedstate, strlen(extendedstate) );
+        lws_write(wsi,(unsigned char *)lwssendstate + LWS_SEND_BUFFER_PRE_PADDING,strlen(extendedstate),LWS_WRITE_TEXT);
         break;
         
     case LWS_CALLBACK_HTTP:
@@ -503,7 +673,7 @@ static int WebSocketCallback(struct lws* wsi, enum lws_callback_reasons reason, 
 static struct lws_protocols protocols[] = {
     {
         "FMI",              /* name */
-        WebSocketCallback,  /* callback */
+        Callback,  /* callback */
         0,                  /* per_session_data_size */
         0,                  /* max frame size / rx buffer */
     },
@@ -541,38 +711,41 @@ int open_websocket() {
     return TRUE;
 }
 
-int WebsocketServer() {
-    //printf("BLOCK STARTED\n");
+void retrieveExternalVariables(){
+	 memset(externalvariables,0,MAX_MEMORY); // we need to clean the variables before reusing them
+	    {{#each variables}}if( findVariable("{{name}}", state)== -1){
+			if ( strlen(externalvariables) == 0) {
+				sprintf(tempvar,";(# {{name}} := %f\n",fmiBuffer.realBuffer[{{fmi.valueReference}}]); 
+				strcat(externalvariables,tempvar);
+				}
+			else {
+				sprintf(tempvar,",{{name}} := %f\n",fmiBuffer.realBuffer[{{fmi.valueReference}}]);
+				strcat(externalvariables,tempvar);
+				} 
+	    }{{/each}}
+		strcat(externalvariables," #)");
+}
 
-    
-    /* Open Websocket */
-    if (websocket_open == FALSE) {
-        port = initial_port;
-        websocket_open = open_websocket();
-        if (websocket_open == FALSE) {
-            initial_port++; /* change port so that a new port
-                            can be tried at the next attempt */
-        } else {
-            printf("WEBSOCKET OPENED\n");
-            signal(SIGINT, sighandler);   /* handle user interrupts */
-        }
-        printf("RETURNING PORT %i\n", port);
-        return port;
-    } else {
-        int repeat = TRUE;
-       
-            if (!force_exit) {
-                /* wait for incoming msg, up to 100 ms */
-                lws_service(context, 0);
-                repeat = FALSE;
-            } else {
-                close_websocket();
-                repeat = FALSE;
-            }
+void handleUserAction() {
+           lws_service(context, 0);    
+}
 
-       // printf("BLOCK END\n");
-        return port;
-    }
+int PipeStatus (){
+	memset(r3,0,MAX_MEMORY);
+	FD_ZERO(&rfds);
+    FD_SET(StF[0], &rfds);
+    tv.tv_sec = MAX_TIME;
+    tv.tv_usec = 0;
+    retval = select(StF[0]+1, &rfds, NULL, NULL, &tv);
+    if( retval > 0){
+		if(FD_ISSET(StF[0],&rfds) ==1){ 
+			while( findIndex("==>",r3) ==-1){
+				fgets(r3, sizeof(r3),fd);
+			}
+			return 1;
+		}
+	}
+	return 0;
 }
 
 void close_websocket() {
@@ -607,7 +780,7 @@ int findVariable(const char tosearch[], const char state[]){
 	return tmp_index+2; // tmp_index contiene l'inizio del valore, ora dovrebbe andare bene anche per findState
 }
 
-int findState(const char tosearch[], const char state[]){
+int findIndex(const char tosearch[], const char state[]){
 	int tmp_index=0;
 	int success=0;
 	while(success != 1){
@@ -627,14 +800,14 @@ int findState(const char tosearch[], const char state[]){
 		else return -1;
 	}
 	if(tmp_index == -1)return -1; // not found
-	return tmp_index+(strlen(tosearch))+9; // tmp_index contiene l'inizio della stringa cercata, +strlen aggiunge la lunghezza della stringa e +9 per gli stati sono 9
+	return tmp_index+(strlen(tosearch)); // tmp_index contiene l'inizio della stringa cercata, +strlen aggiunge la lunghezza della stringa e +4 aggiunge " := " e quindi restituiamo esattamente l'indice dove si trovail valore
 }
 void writeOutputVariableDouble(int state_index, int buffer_index){
 	int offset = 0;
 	temp1=0;
 	temp2=0;
-	memset(r2,0,1000);
-	memset(r1,0,1000);
+	memset(r2,0,MAX_MEMORY);
+	memset(r1,0,MAX_MEMORY);
 	if(atof(&state[state_index]) == 0){
 		fmiBuffer.realBuffer[buffer_index] = 0;
 	}
@@ -682,21 +855,24 @@ void writeOutputVariableBool(int state_index, int buffer_index){
 	if(state[state_index] == 'T')fmiBuffer.booleanBuffer[buffer_index]=1;
 	else fmiBuffer.booleanBuffer[buffer_index]=0;
 }
+
 void writeOutputVariableString(int state_index, int buffer_index){
 	int sret;
-	char temp[2000];
+	char temp[MAX_MEMORY];
 	char* token;
 	strcpy(temp,state);
 	sscanf(&temp[state_index],"%s",fmiBuffer.r[buffer_index]);
+	
+	//printf("%s\n",fmiBuffer.r[buffer_index]);
 	
 	if(fmiBuffer.r[buffer_index][strlen(fmiBuffer.r[buffer_index])-1] == ','){
 		fmiBuffer.r[buffer_index][strlen(fmiBuffer.r[buffer_index])-1] = '\0';
 	
 		fmiBuffer.stringBuffer[buffer_index]=fmiBuffer.r[buffer_index];
 	}
-	else{
+	else if(fmiBuffer.r[buffer_index][strlen(fmiBuffer.r[buffer_index])-1] == ':'){//list a list should never be the last variable to appear in state
 		token=strtok(&temp[state_index+strlen(fmiBuffer.r[buffer_index])],"\n");
-		while( findVariable("#),",fmiBuffer.r[buffer_index]) == -1  ) {
+		while( findIndex(":),",fmiBuffer.r[buffer_index]) == -1  ) {
 			strcat(fmiBuffer.r[buffer_index],token);
 			token = strtok(NULL, "\n");
 			token=&token[10];
@@ -707,12 +883,17 @@ void writeOutputVariableString(int state_index, int buffer_index){
 	fmiBuffer.stringBuffer[buffer_index]=fmiBuffer.r[buffer_index];
 	
 	}
+	else { 
+		fmiBuffer.stringBuffer[buffer_index]=fmiBuffer.r[buffer_index];
+		}
+	
+	//printf("%s\n",fmiBuffer.r[buffer_index]);
 	
 }
 
 void convertStateToList(int state_index, int buffer_index){
 	int sret;
-	char temp[2000];
+	char temp[MAX_MEMORY];
 	char* token;
 	strcpy(temp,state);
 	sscanf(&temp[state_index],"%s",fmiBuffer.r[buffer_index]);
@@ -724,7 +905,7 @@ void convertStateToList(int state_index, int buffer_index){
 	}
 	else{
 		token=strtok(&temp[state_index+strlen(fmiBuffer.r[buffer_index])],"\n");
-		while( findVariable(":),",fmiBuffer.r[buffer_index]) == -1  ) {
+		while( findIndex(":),",fmiBuffer.r[buffer_index]) == -1  ) {
 			strcat(fmiBuffer.r[buffer_index],token);
 			token = strtok(NULL, "\n");
 			token=&token[10];
@@ -740,13 +921,12 @@ void convertStateToList(int state_index, int buffer_index){
 
 
 void readInputVariableDouble(int state_index, double value,int buffer_index){
-char temp[2000];
+char temp[MAX_MEMORY];
 	char temp_value[20];
-	int offset;
+	int offset=0;
 
-	offset=0;
 	while(state[state_index+offset] != ' ' && state[state_index+offset] != ',') offset++;
-//	printf("offset:%d\n",offset);
+
 	strcpy(temp,&state[state_index+offset]);
 	state[state_index-1]='\0';
 	sprintf(temp_value,"%g",value);
@@ -758,11 +938,12 @@ char temp[2000];
 
 
 void readInputVariableInt(int state_index, int value,int buffer_index){
-	char temp[2000];
+	char temp[MAX_MEMORY];
 	char temp_value[20];
-	int offset;
+	int offset=0;
 
-	offset=strchr(&state[state_index],' ')-&state[state_index];
+	while(state[state_index+offset] != ' ' && state[state_index+offset] != ',') offset++;
+	
 	strcpy(temp,&state[state_index+offset]);
 	state[state_index-1]='\0';
 	sprintf(temp_value,"%d",value);
@@ -773,11 +954,13 @@ void readInputVariableInt(int state_index, int value,int buffer_index){
 }
 
 void readInputVariableBool(int state_index, bool value,int buffer_index){
-	char temp[2000];
+	char temp[MAX_MEMORY];
 	char temp_value[20];
-	int offset;
+	int offset=0;
 	
-	offset=strchr(&state[state_index],' ')-&state[state_index];
+	while(state[state_index+offset] != ' ' && state[state_index+offset] != ',') offset++;
+	
+	
 	strcpy(temp,&state[state_index+offset]);
 	state[state_index-1]='\0';
 	if(value == true)	sprintf(temp_value,"TRUE");
@@ -790,35 +973,22 @@ void readInputVariableBool(int state_index, bool value,int buffer_index){
 }
 
 void readInputVariableString(int state_index, const char* value,int buffer_index){
-		char temp[2000];
-	char temp_value[2000];
-	int offset;
+	char temp[MAX_MEMORY];
+	char temp_value[MAX_MEMORY];
+	int offset=0;
+	
 	if(value){
-		printf("value:%s\n",value);
-		
-		offset = findVariable("#)",(char*) &state[state_index]);
-		printf("strlen(state)=%d\n",strlen(state));
-		printf("state_index+offset=%d\n",state_index+offset);
-		if(strlen(state) == state_index+offset-3){		//sono nel caso in cui #) e' quello finale quindi ho solo una stringa normale
-			sscanf(&state[state_index],"%[^',']s,%*s",temp_value);
-			printf("temp_value:%s\n",temp_value);
-			offset=strlen(temp_value);
-			strcpy(temp,(char*) &state[state_index+offset]);
-		
-		
-			state[state_index]='\0';
-			strcat(state,value);
-			//strcat(state,",\n");
-			strcat(state,temp);
+		if(state[state_index]=='(' && state[state_index+1]=='#'){ // if in the state the variable begins with "(#" then it is a state and the offset is where "#)" is
+			offset = findIndex("#)",(char*) &state[state_index]);
 		}
-		else{
-			strcpy(temp,(char*) &state[state_index+offset]);
-		
-		
-			state[state_index]='\0';
-			strcat(state,value);
-			strcat(state,",\n");
-			strcat(state,temp);
+		else{													  // else in the state it's a string that terminates with ","	
+			while(state[state_index+offset] != ' ' && state[state_index+offset] != ',') offset++;
 		}
+			
+		strcpy(temp,(char*) &state[state_index+offset]);
+		state[state_index]='\0';
+		strcat(state,value);
+		//strcat(state,",\n");
+		strcat(state,temp);
 	}
 }

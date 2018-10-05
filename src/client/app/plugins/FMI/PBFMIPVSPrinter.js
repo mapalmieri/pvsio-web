@@ -95,6 +95,7 @@ define(function (require, exports, module) {
     PBFMIPVSPrinter.prototype.create_FMU = function (name,fmi) {
         fmi = fmi || {};
         
+        
 			var count = 1;
             var valueReference = 1;
 			var skeleton_c = "";
@@ -103,7 +104,7 @@ define(function (require, exports, module) {
             var modelDescription_xml = "";
             var Makefile = "";
  
- fmi.state_variables.variables.forEach(function (v) {
+		fmi.state_variables.variables.forEach(function (v) {
                     v.fmi = get_buffer(v.type, count);
                     if (v.fmi) {
                         v.fmi.variability = v.variability; 
@@ -133,7 +134,69 @@ define(function (require, exports, module) {
                         v.string = (v.type === "string");
                     }
                 });
-fmi.composed_variables.variables.forEach(function (v) {
+		fmi.composed_variables.variables.forEach(function (v) {
+                    v.fmi = get_buffer(v.type, count);
+                    if (v.fmi) {
+                        v.fmi.variability = v.variability; 
+                        v.fmi.causality = (v.scope && typeof v.scope === "string") ? v.scope.toLowerCase() : null;
+                        v.fmi.initial = v.initial;
+                        v.fmi.value = v.value;
+                        v.fmi.valueReference = valueReference;
+                        valueReference++;
+                        count++;
+                        // causality options
+                        v.output = (v.scope && v.scope.toLowerCase() === "output");
+                        v.input = (v.scope && v.scope.toLowerCase() === "input");
+                        v.local = (v.scope && v.scope.toLowerCase() === "local");
+                        v.parameter = (v.scope && v.scope.toLowerCase() === "parameter");
+                        v.independet = (v.scope && v.scope.toLowerCase() === "independent");
+                        v.calculatedparameter = (v.scope && v.scope.toLowerCase() === "calculatedparameter");
+                        // variability options
+                        v.constant = (v.variability && v.variability.toLowerCase() === "constant");
+                        v.fixed = (v.variability && v.variability.toLowerCase() === "fixed");
+                        v.tunable = (v.variability && v.variability.toLowerCase() === "tunable");
+                        v.discrete = (v.variability && v.variability.toLowerCase() === "discrete");
+                        v.continuous = (v.variability && v.variability.toLowerCase() === "continious");
+                        //type options
+                        v.real = (v.type === "real");
+                        v.int = (v.type === "int");
+                        v.bool = (v.type === "bool");
+                        v.string = (v.type === "string");
+                    }
+                });
+                
+		fmi.function_variables_input.variables.forEach(function (v) {
+                    v.fmi = get_buffer(v.type, count);
+                    if (v.fmi) {
+                        v.fmi.variability = v.variability; 
+                        v.fmi.causality = (v.scope && typeof v.scope === "string") ? v.scope.toLowerCase() : null;
+                        v.fmi.initial = v.initial;
+                        v.fmi.value = v.value;
+                        v.fmi.valueReference = valueReference;
+                        valueReference++;
+                        count++;
+                        // causality options
+                        v.output = (v.scope && v.scope.toLowerCase() === "output");
+                        v.input = (v.scope && v.scope.toLowerCase() === "input");
+                        v.local = (v.scope && v.scope.toLowerCase() === "local");
+                        v.parameter = (v.scope && v.scope.toLowerCase() === "parameter");
+                        v.independet = (v.scope && v.scope.toLowerCase() === "independent");
+                        v.calculatedparameter = (v.scope && v.scope.toLowerCase() === "calculatedparameter");
+                        // variability options
+                        v.constant = (v.variability && v.variability.toLowerCase() === "constant");
+                        v.fixed = (v.variability && v.variability.toLowerCase() === "fixed");
+                        v.tunable = (v.variability && v.variability.toLowerCase() === "tunable");
+                        v.discrete = (v.variability && v.variability.toLowerCase() === "discrete");
+                        v.continuous = (v.variability && v.variability.toLowerCase() === "continious");
+                        //type options
+                        v.real = (v.type === "real");
+                        v.int = (v.type === "int");
+                        v.bool = (v.type === "bool");
+                        v.string = (v.type === "string");
+                    }
+                });
+                
+		fmi.function_variables_output.variables.forEach(function (v) {
                     v.fmi = get_buffer(v.type, count);
                     if (v.fmi) {
                         v.fmi.variability = v.variability; 
@@ -168,26 +231,33 @@ fmi.composed_variables.variables.forEach(function (v) {
                     skeleton_c = Handlebars.compile(skeleton_c_template, { noEscape: true })({
                         variables: fmi.state_variables.variables,
                         composed_variables: fmi.composed_variables.variables,
+                        function_variables_output: fmi.function_variables_output.variables,
+                        function_variables_input: fmi.function_variables_input.variables,
                         name: name,
                         functions: fmi.functions,
                         init: fmi.init,
                         tick: fmi.tick,
                         count: count,
-                        port: fmi.port
+                        delay: (fmi.delay)? fmi.delay : "400000",
+                        port: (fmi.port)? fmi.port: "8084"
                     });
 					console.log(skeleton_c);
+					
                     fmu_h = Handlebars.compile(fmu_h_template, { noEscape: true })({
                         variables: fmi.state_variables.variables,
                         tick: fmi.tick,
+                        max_memory: (fmi.max_memory)? fmi.max_memory : "2000",
                         count: count+1
                     });
 					console.log(fmu_h);
+					
                     fmu_c = Handlebars.compile(fmu_c_template, { noEscape: true })({
                         variables: fmi.state_variables.variables,
                         tick: fmi.tick
 
                     });
 					console.log(fmu_c);
+					
                     modelDescription_xml = Handlebars.compile(modelDescription_xml_template, { noEscape: true })({
                         variables: fmi.state_variables.variables.sort(function (a,b) { // variables are ordered by valueReference (ascending order)
                                         if (a.fmi) {
@@ -207,14 +277,33 @@ fmi.composed_variables.variables.forEach(function (v) {
                                         }
                                         return 1;
                                     }),
+						function_variables_output: fmi.function_variables_output.variables.sort(function (a,b) { // variables are ordered by valueReference (ascending order)
+                                        if (a.fmi) {
+                                            if (b.fmi && a.fmi.valueReference > b.fmi.valueReference) {
+                                                return 1;
+                                            }
+                                            return -1;
+                                        }
+                                        return 1;
+                                    }),
+						function_variables_input: fmi.function_variables_input.variables.sort(function (a,b) { // variables are ordered by valueReference (ascending order)
+                                        if (a.fmi) {
+                                            if (b.fmi && a.fmi.valueReference > b.fmi.valueReference) {
+                                                return 1;
+                                            }
+                                            return -1;
+                                        }
+                                        return 1;
+                                    }),
                         count: count,            
                         author: (fmi.author) ? emuchart.author.name : "pvsioweb",
                         date: new Date().toString(),
                         modelName: name
                     });
 					console.log(modelDescription_xml);
+					
                     Makefile = Handlebars.compile(Makefile_template, { noEscape: true })({
-                        name: fmi.name
+                        name: name
                     });
                     console.log(Makefile);
                 } catch(fmi_gen_err) {
