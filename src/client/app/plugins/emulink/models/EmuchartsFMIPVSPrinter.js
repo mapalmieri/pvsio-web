@@ -13,6 +13,7 @@ define(function (require, exports, module) {
     var GenericPrinter = require("plugins/emulink/models/EmuchartsGenericPrinter");
     var MisraCPrinter = require("plugins/emulink/models/EmuchartsMisraCPrinter2");
     var projectManager = require("project/ProjectManager").getInstance();
+    var fmuGUID_h = require("text!plugins/emulink/models/fmi-pvs/templates/FmuGUID.h");
     var skeleton_c_template = require("text!plugins/emulink/models/fmi-pvs/templates/skeleton_c.handlebars");
     var fmu_h_template = require("text!plugins/emulink/models/fmi-pvs/templates/fmu_h.handlebars");
     var fmu_c_template = require("text!plugins/emulink/models/fmi-pvs/templates/fmu_c.handlebars");
@@ -164,6 +165,7 @@ define(function (require, exports, module) {
             //-- write data to disk
             var overWrite = {overWrite: true};
             projectManager.project().addFile(fmu_folder + "skeleton.c", skeleton_c, overWrite);
+            projectManager.project().addFile(fmu_folder + "FmuGUID.h", fmuGUID_h, overWrite);
             projectManager.project().addFile(fmu_folder + "fmu.h", fmu_h, overWrite);
             projectManager.project().addFile(fmu_folder + "fmu.c", fmu_c, overWrite);
             projectManager.project().addFile(fmu_folder + "modelDescription.xml", modelDescription_xml, overWrite);
