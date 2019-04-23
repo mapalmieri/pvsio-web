@@ -3,7 +3,7 @@
   "file_type": "emdl",
   "version": "2.0",
   "description": "emucharts model",
-  "chart_name": "line_following_robot"
+  "chart_name": "LFRController"
  },
  "chart": {
   "states": [
@@ -25,7 +25,7 @@
   "transitions": [
    {
     "id": "T1",
-    "name": "tick\n[ lfRightVal < LSR_THRESHOLD AND lfLeftVal < LSR_THRESHOLD ]\n{ servoLeftVal := forwardSpeed;\n  servoRightVal := -forwardSpeed; }",
+    "name": "tick\n[ lfRightVal <= LSR_THRESHOLD AND lfLeftVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardSpeed;\n  servoRightVal := -forwardSpeed; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -61,7 +61,7 @@
    },
    {
     "id": "T2",
-    "name": "tick\n[ lfRightVal < LSR_THRESHOLD AND lfLeftVal > LSR_THRESHOLD ]\n{ servoLeftVal := backwardRotate; \n  servoRightVal := -forwardRotate; }",
+    "name": "tick\n[ lfRightVal <= LSR_THRESHOLD AND lfLeftVal > LSR_THRESHOLD ]\n{ servoLeftVal := backwardRotate; \n  servoRightVal := -forwardRotate; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -97,7 +97,7 @@
    },
    {
     "id": "T3",
-    "name": "tick\n[ lfRightVal > LSR_THRESHOLD AND lfLeftVal < LSR_THRESHOLD ]\n{ servoLeftVal := forwardRotate;\n  servoRightVal := -backwardRotate; }",
+    "name": "tick\n[ lfRightVal > LSR_THRESHOLD AND lfLeftVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardRotate;\n  servoRightVal := -backwardRotate; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -130,6 +130,42 @@
      "x": 451.0138854980469,
      "y": 43.76735305786133
     }
+   },
+   {
+    "id": "T4",
+    "name": "tick\n[ lfRightVal > LSR_THRESHOLD AND lfLeftVal > LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 318.0138854980469,
+     "y": 262.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 318.0138854980469,
+     "y": 262.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 427,
+     "y": -12
+    }
    }
   ],
   "initial_transitions": [
@@ -153,30 +189,6 @@
    }
   ],
   "variables": [
-   {
-    "id": "VAR_backwardRotate:real(Local)",
-    "name": "backwardRotate",
-    "type": "real",
-    "repr": "float64_t",
-    "value": "0.1",
-    "scope": "Local"
-   },
-   {
-    "id": "VAR_forwardRotate:real(Local)",
-    "name": "forwardRotate",
-    "type": "real",
-    "repr": "float64_t",
-    "value": "0.5",
-    "scope": "Local"
-   },
-   {
-    "id": "VAR_forwardSpeed:real(Local)",
-    "name": "forwardSpeed",
-    "type": "real",
-    "repr": "float64_t",
-    "value": "0.4",
-    "scope": "Local"
-   },
    {
     "id": "VAR_lfLeftVal:real(Input)",
     "name": "lfLeftVal",
@@ -208,16 +220,41 @@
     "repr": "float64_t",
     "value": "0",
     "scope": "Output"
-   }
-  ],
-  "constants": [
+   },
    {
-    "id": "CONST_LSR_THRESHOLD:real",
+    "id": "VAR_LSR_THRESHOLD:real(Local)",
     "name": "LSR_THRESHOLD",
     "type": "real",
-    "value": "150"
+    "repr": "float64_t",
+    "value": "400",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_backwardRotate:real(Local)",
+    "name": "backwardRotate",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "1",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_forwardRotate:real(Local)",
+    "name": "forwardRotate",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "5",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_forwardSpeed:real(Local)",
+    "name": "forwardSpeed",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "4",
+    "scope": "Local"
    }
   ],
+  "constants": [],
   "datatypes": [],
   "pmr": {},
   "isPIM": false

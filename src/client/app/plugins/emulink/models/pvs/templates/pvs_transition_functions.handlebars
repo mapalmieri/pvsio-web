@@ -14,9 +14,9 @@
 %                won't be able to check coverage of conditions.
 %
 {{/if}}{{#if comment}}  %-- {{comment}}{{/if}}
-{{#each functions}}  per_{{name}}(st: State): bool = {{#each cases}}({{cond}}){{#unless @last}}
-    OR {{/unless}}{{/each}}
-  {{name}}(st: (per_{{name}})): State =
+{{#each functions}} % per_{{name}}(st: State): bool = {{#each cases}}({{cond}}){{#unless @last}}
+    %OR {{/unless}}{{/each}}
+  {{name}}(st: State): State =
     COND{{#each cases}}
      {{cond}}
       -> LET st = {{../../leave}}({{from}})(st){{#if actions}},{{#each actions}}{{#if local_binding}}

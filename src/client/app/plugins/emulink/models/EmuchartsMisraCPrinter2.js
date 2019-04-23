@@ -355,7 +355,7 @@ define(function (require, exports, module) {
                         }) : "";
             var header = Handlebars.compile(header_template, { noEscape: true })({
                 model_name: emuchart.name,
-                includes: emuchart.importings.concat(pvsioweb_utils_filename + ".h").concat("misraC_basic_types.h"),
+                includes: emuchart.importings.concat("misraC_basic_types.h"),
                 datatypes: datatypes_declaration,
                 modes: modes_declaration,
                 variables: variables_declaration,
@@ -427,8 +427,8 @@ define(function (require, exports, module) {
 
             projectManager.project().addFile(folder + "/misraC_basic_types.h", basic_types, overWrite);
 
-            projectManager.project().addFile(folder + "/" + pvsioweb_utils_filename + ".h", pvsioweb_utils_header, overWrite);
-            projectManager.project().addFile(folder + "/" + pvsioweb_utils_filename + ".c", pvsioweb_utils_body, overWrite);
+            //projectManager.project().addFile(folder + "/" + pvsioweb_utils_filename + ".h", pvsioweb_utils_header, overWrite);
+            //projectManager.project().addFile(folder + "/" + pvsioweb_utils_filename + ".c", pvsioweb_utils_body, overWrite);
 
             projectManager.project().addFile(folder + "/Makefile", makefile, overWrite);
             projectManager.project().addFile(folder + "/main.c", main, overWrite);

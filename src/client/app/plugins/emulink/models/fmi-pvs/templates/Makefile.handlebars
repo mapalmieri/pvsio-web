@@ -7,7 +7,7 @@ all:
 	gcc -fPIC -Wall -c fmu.c
 	gcc -fPIC -Wall -c skeleton.c
 	gcc -fPIC -Wall -c misraC/{{name}}.c
-	gcc -shared -o {{name}}.so skeleton.o fmu.o {{name}}.o -lwebsockets -lssl -lcrypto
+	gcc -shared -o {{name}}.so skeleton.o fmu.o {{name}}.o 
 	rm -rf sources
 	rm -rf binaries
 	mkdir sources

@@ -154,7 +154,7 @@ define(function (require, exports, module) {
                             functions: model.triggers.functions,
                             enter: predefined_functions.enter,
                             leave: predefined_functions.leave,
-                            full_coverage: true
+                            full_coverage: false
                         }) : "";
             var enter_leave_functions = Handlebars.compile(leave_enter_function_template, { noEscape: true })({
                             comment: "enter/leave functions",
