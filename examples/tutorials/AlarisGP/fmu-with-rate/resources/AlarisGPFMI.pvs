@@ -1,0 +1,150 @@
+AlarisGPFMI :THEORY
+ BEGIN
+ IMPORTING AlarisGP
+ 
+ 
+	PumpCommand: TYPE = { keep, pause }
+ 
+	 FMIstate: TYPE = [#
+		AlarisGP: state,
+		outputrate: real,
+		supercmd: PumpCommand
+		#]
+	 
+	init(i:PumpCommand): FMIstate = (#
+	AlarisGP := (#
+		id := "AlarisGP",
+		device := device_init,
+		topline := dispblank,
+		middisp := LAMBDA (x: upto(9)): FALSE,
+		optionsmenu := LAMBDA(x: qcurse):
+		   COND
+			 x=0 -> ratelock,
+			 x=1 -> dosingsumm,
+		     x=2 -> infusionsetup,
+			 x=3 -> setvtbiovertime,
+			 x=4 -> adjalarm,
+			 x=5 -> disableratelock,
+			 x=6 -> pumpdetails
+			ENDCOND,
+		bagscursor := midbag,
+		qcursor := dlock,
+		bagsval := LAMBDA (x: upto(9)):
+	   COND x = 0 -> 0,
+			x = 1 -> 50,
+			x = 2 -> 100,
+			x = 3 -> 200,
+			x = 4 -> 250,
+			x = 5 -> 500,
+			x = 6 -> 1000,
+			x = 7 -> 1500,
+			x = 8 -> 2000,
+			x = 9 -> 3000
+			 ENDCOND,
+		fndisp1 := fnull,
+		fndisp2 := fnull,
+		fndisp3 := fnull,
+		runlight := FALSE,
+		pauselight := FALSE,
+		ac_light := FALSE,
+		battery_light := FALSE,
+		entrymode := nullmode,
+		rlock := false,
+		rdisabled := false,
+		newvtbi := 0,
+		newrate := 0,
+		newtime := 0,
+		which_press := nob,
+		current_sv := 1, %small_step,
+		current_sr := 1, %small_step,
+		current_st := 1, %small_step,
+		pressed := 5 %maxpress
+	#),
+	outputrate := 0,
+	supercmd := i
+	
+	#)
+		
+	FMItick(st:FMIstate): FMIstate =
+	COND
+	supercmd(st) = keep -> st WITH [ AlarisGP := alaris_tick(AlarisGP(st)), outputrate := COND topline((AlarisGP(st))) = infusing AND vtbi(device(AlarisGP(st))) >= 0  ->infusionrate(device(AlarisGP(st)))/3.6, ELSE -> 0 ENDCOND],
+	ELSE -> st WITH [AlarisGP := alaris_tick(click_btn_pause(AlarisGP(st))), outputrate := 0]
+	ENDCOND
+	
+  click_FMI_btn_on(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := click_btn_on(AlarisGP(st)) ]
+
+  press_FMI_btn_fup(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := press_btn_fup(AlarisGP(st)) ]
+
+  release_FMI_btn_fup(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := release_btn_fup(AlarisGP(st)) ]
+
+  click_FMI_btn_fup(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := click_btn_fup(AlarisGP(st)) ]
+
+  press_FMI_btn_sup(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := press_btn_sup(AlarisGP(st)) ]
+
+  release_FMI_btn_sup(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := release_btn_sup(AlarisGP(st)) ]
+
+  click_FMI_btn_sup(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := click_btn_sup(AlarisGP(st)) ]
+
+  press_FMI_btn_fdown(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := press_btn_fdown(AlarisGP(st)) ]
+
+  release_FMI_btn_fdown(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := release_btn_fdown(AlarisGP(st)) ]
+
+ click_FMI_btn_fdown(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := click_btn_fdown(AlarisGP(st)) ]
+
+  press_FMI_btn_sdown(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := press_btn_sdown(AlarisGP(st)) ]
+
+  release_FMI_btn_sdown(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := release_btn_sdown(AlarisGP(st)) ]
+
+  click_FMI_btn_sdown(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := click_btn_sdown(AlarisGP(st)) ]
+
+  click_FMI_btn_run(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := click_btn_run(AlarisGP(st)) ]
+
+  click_FMI_btn_pause(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := click_btn_pause(AlarisGP(st)) ]
+
+  click_FMI_btn_query(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := click_btn_query(AlarisGP(st)) ]
+
+  click_FMI_btn_key1(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := click_btn_key1(AlarisGP(st)) ]
+
+  click_FMI_btn_key2(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := click_btn_key2(AlarisGP(st)) ]
+
+  click_FMI_btn_key3(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := click_btn_key3(AlarisGP(st)) ]
+
+  
+  FMI_insert_infusion_set(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := insert_infusion_set(AlarisGP(st)) ]
+
+  FMI_remove_infusion_set(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := remove_infusion_set(AlarisGP(st)) ]
+
+  FMI_plug_mains(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := plug_mains(AlarisGP(st)) ]
+
+  FMI_unplug_mains(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := unplug_mains(AlarisGP(st)) ]
+
+  FMI_set_battery_level(x: real)(st: FMIstate): FMIstate =
+    st WITH [ AlarisGP := set_battery_level(x)(AlarisGP(st)) ]
+	
+		
+ 
+ END AlarisGPFMI
+

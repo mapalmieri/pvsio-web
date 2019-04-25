@@ -22,6 +22,34 @@ fmi2String location;
 const fmi2CallbackFunctions *g_functions;
 std::string* name;
 
+extern int watchdog;
+
+template <class T>
+static void log(const fmi2CallbackFunctions *functions, fmi2ComponentEnvironment componentEnvironment,
+		fmi2String instanceName, fmi2Status status, fmi2String category, fmi2String message,T arg)
+{
+	if (functions != NULL && functions->logger != NULL)
+	{
+		functions->logger(componentEnvironment, instanceName, status, category, message,arg);
+	}
+}
+
+template <class T>
+static void fmiprintf(fmi2String message,T arg)
+{
+	if (g_functions != NULL)
+	{
+		log(g_functions, (void*) 2, name->c_str(), fmi2OK, "logAll",message, arg);
+	}
+}
+static void fmiprintf(fmi2String message)
+{
+	if (g_functions != NULL)
+	{
+		log(g_functions, (void*) 2, name->c_str(), fmi2OK, "logAll",message, NULL);
+	}
+}
+
 
 
 
@@ -62,6 +90,7 @@ extern "C" fmi2Status fmi2ExitInitializationMode(fmi2Component c) {
 }
 
 extern "C" fmi2Status fmi2Terminate(fmi2Component c) {
+	printf("calledTerminate\n");
 	return fmi2OK;
 }
 
@@ -70,6 +99,7 @@ extern "C" fmi2Status fmi2Reset(fmi2Component c) {
 }
 
 extern "C" void fmi2FreeInstance(fmi2Component c) {
+	printf("calledFreeInstance\n");
 	terminate();
 }
 
@@ -160,7 +190,8 @@ extern "C" fmi2Status fmi2SetString(fmi2Component c, const fmi2ValueReference vr
 		const fmi2String value[]) {
 		for (size_t i = 0; i < nvr; i++) {
 		fmi2ValueReference vRef = vr[i];
-		fmiBuffer.stringBuffer[vRef] = value[i];
+		strcpy(fmiBuffer.r[vRef],value[i]);
+		fmiBuffer.stringBuffer[vRef]=fmiBuffer.r[vRef];
 		}
 	return fmi2OK;
 }
@@ -213,8 +244,9 @@ extern "C" fmi2Status fmi2CancelStep(fmi2Component c) {
 
 extern "C" fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicationPoint, fmi2Real communicationStepSize,
 		fmi2Boolean noSetFMUStatePriorToCurrentPoint) {
-	doStep("tick");
-	return fmi2OK;
+	doStep();
+	if(watchdog==0)return fmi2OK;
+	else return fmi2Error;
 }
 
 extern "C" fmi2Status fmi2GetStatus(fmi2Component c, const fmi2StatusKind s, fmi2Status *value) {

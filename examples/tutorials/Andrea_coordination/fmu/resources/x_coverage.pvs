@@ -1,0 +1,41 @@
+
+x_coverage: THEORY
+BEGIN
+IMPORTING initial
+
+% pnext in linear_disp_projection.pvs
+fmi_x_cvg(a,b,c: real, i: {i:nat | i<N}): real =
+    IF (i = 0)
+    THEN 0
+    ELSE
+        IF (i = N - 1)
+        THEN max 
+        ELSE eps*a + (1 - 2*eps)*b + eps*c
+        ENDIF
+    ENDIF
+
+fmi_tick(s: simstate) : simstate =
+    LET xp = if (s`st`id > 0) then s`st`prec
+             else 0 endif,
+        x = s`st`self,
+        xf = if (s`st`id < N - 1) then s`st`foll
+             else max endif
+    IN
+    COND
+    s`timesteps >= eps/stepsize ->
+        s WITH [`st`self := fmi_x_cvg(xp, x, xf, s`st`id),
+                `timesteps := 0],
+    s`timesteps < eps/stepsize ->
+        s WITH [`timesteps := s`timesteps + 1]
+    ENDCOND
+
+fmi_kth_step(k: nat): RECURSIVE simstate = 
+    IF (k = 0) THEN
+        initial
+    ELSE
+        fmi_tick(fmi_kth_step(k - 1))
+    ENDIF
+    MEASURE k
+
+END x_coverage
+

@@ -1,0 +1,32 @@
+LFR_delay: THEORY
+ BEGIN
+ 
+ 
+ MotorSpeed: TYPE = [#
+    left: real,
+    right: real
+  #]
+  
+  
+  %-- state attributes
+  State: TYPE = [#
+    motorSpeedIn: MotorSpeed,
+    motorSpeedOut: MotorSpeed
+    
+    
+  #]
+
+  %-- init function
+  init_state: State = (#
+    motorSpeedIn := (# left := 0.4, right := 0.4 #),
+    motorSpeedOut := (# left := 0, right := 0 #)
+  #)
+
+ 
+ 
+ tick(st:State): State =
+    st WITH [motorSpeedOut := motorSpeedIn(st)]
+    
+ 
+
+ END LFR_delay

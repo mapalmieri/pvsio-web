@@ -137,29 +137,32 @@ require.config({
     paths: { d3: "../lib/d3", text: "../lib/text" }
 });
 
-require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
+require([ 	"plugins/FMI/PBFMIPVSPrinter"
+			
+			 
+], function (PBFMIPVSPrinter) {
     "use strict";
     
     /*fino a value sono campi obbligatori, dopo sono facoltativi*/
     var statevariables = [
 		
-		{name : "gear", type:"string",variability: "discrete", scope:"local", value:"0"},
-		{name : "cc", type:"string",variability: "discrete", scope:"local", value:"0"},
-		{name : "time", type: "real", variability: "discrete", scope:"output", value:"0"},
-		{name : "linear", type: "real", variability: "discrete", scope:"input", value:"0"},
-		{name : "angular", type: "real", variability: "discrete", scope:"input", value:"0"},
-		{name : "posx", type: "real", variability: "discrete", scope:"input", value:"0"},
-		{name : "posy", type: "real", variability: "discrete", scope:"input", value:"0"},
-		{name : "left_rotation", type: "real", variability: "discrete", scope:"input", value:"0"},
-		{name : "right_rotation", type: "real", variability: "discrete", scope:"input", value:"0"},
+		{name : "gear", type:"String",variability: "discrete", scope:"local", value:"0"},
+		{name : "cc", type:"String",variability: "discrete", scope:"local", value:"0"},
+		{name : "time", type: "Real", variability: "discrete", scope:"output", value:"0"},
+		{name : "linear", type: "Real", variability: "discrete", scope:"input", value:"0"},
+		{name : "angular", type: "Real", variability: "discrete", scope:"input", value:"0"},
+		{name : "posx", type: "Real", variability: "discrete", scope:"input", value:"0"},
+		{name : "posy", type: "Real", variability: "discrete", scope:"input", value:"0"},
+		{name : "left_rotation", type: "Real", variability: "discrete", scope:"input", value:"0"},
+		{name : "right_rotation", type: "Real", variability: "discrete", scope:"input", value:"0"},
 	];
 	
 	var composedvariables = [
 	
-	{name: "left", parent:"lightSensors", type:"real", variability: "continuous", scope: "input", value: "0"},
-	{name: "right",parent:"lightSensors", type:"real", variability: "continuous", scope: "input", value: "0"},
-	{name: "left", parent:"motorSpeed", type:"real", variability: "discrete", scope: "output", value: "0"},
-	{name: "right",parent:"motorSpeed", type:"real", variability: "discrete", scope: "output", value: "0"}
+	{name: "left", parent:"lightSensors", type:"Real", variability: "discrete", scope: "input", value: "0"},
+	{name: "right",parent:"lightSensors", type:"Real", variability: "discrete", scope: "input", value: "0"},
+	{name: "left", parent:"motorSpeed", type:"Real", variability: "discrete", scope: "output", value: "0"},
+	{name: "right",parent:"motorSpeed", type:"Real", variability: "discrete", scope: "output", value: "0"}
 	
 	
 	
@@ -167,8 +170,15 @@ require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
 	]
 	
 	
+	
+	var FMU = new Fmu;
+	
+	
     var fmi_module = new PBFMIPVSPrinter();
+    FMU.populateFromModelDescription(fmi_module.MD()); 
     fmi_module.create_FMU("line_following_robot1",{state_variables : {variables: statevariables},composed_variables : {variables: composedvariables},init:"init_state",tick:"tick",port:"8084"});
+  //  fmi_module.import_FMU("lfr",{state_variables : {variables:FMU.scalarVariables}});
+  //  fmi_module.import_FMU_as_emuchart("lfr",{state_variables : {variables:FMU.scalarVariables}});
     
     
    // printer.create_interface(fmi,fmi_composed,[accelerate,brake]);

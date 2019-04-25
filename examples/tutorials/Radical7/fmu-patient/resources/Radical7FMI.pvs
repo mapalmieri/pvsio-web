@@ -1,0 +1,31 @@
+Radical7FMI: THEORY
+ BEGIN
+ IMPORTING Radical7
+ 
+		FMIstate: TYPE = [#
+			Radical7: state,
+			Spo2_output: real,
+			hr_output:real
+		#]
+
+		FMIinit: FMIstate = (#
+		Radical7:= init(0),
+		Spo2_output:=100,
+		hr_output:=80
+		
+		#)
+
+		FMItick(st:FMIstate): FMIstate =
+		LET st1 = tick(st`Radical7) IN
+		st WITH [Radical7:=st1,Spo2_output:=st1`spo2,hr_output:=st1`HR]
+		
+		click_FMIbtn_on(st:FMIstate): FMIstate =
+		st WITH [Radical7 := click_btn_on(st`Radical7)]
+		
+		FMI_spo2_sensor_data(x: real)(st: FMIstate): FMIstate =
+		st WITH [ Spo2_output := x ]
+
+		FMI_HR_sensor_data(x: real)(st: FMIstate): FMIstate =
+		st WITH [ hr_output := x ]
+END Radical7FMI
+

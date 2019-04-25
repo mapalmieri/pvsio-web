@@ -1,0 +1,22 @@
+
+coverage_state[N: posnat]: THEORY
+BEGIN
+
+drone_id: TYPE = below(N)
+
+location: TYPE = real
+
+state: TYPE+ = [#
+                prec: location,
+                self: location,
+                foll: location,
+                id: drone_id
+              #]
+
+%-- definition of system state
+simstate: TYPE = [#
+                    timesteps: real,
+                    st: state
+                  #]
+
+END coverage_state

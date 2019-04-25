@@ -50,9 +50,9 @@
 	<ScalarVariable name="delayMax" valueReference="9" causality="parameter" variability="tunable" ><Real start="0" /></ScalarVariable>
     
 	<ScalarVariable name="id" valueReference="10" causality="parameter" variability="tunable" ><Real start="0" /></ScalarVariable>
-	
-	<ScalarVariable name="x_actual" valueReference="11" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
-    </ModelVariables>
+    
+	<ScalarVariable name="internal_State" valueReference="11" causality="output" variability="discrete" ><String  /></ScalarVariable>
+	</ModelVariables>
 	<ModelStructure>
 	<Outputs>
 			<Unknown index="1"  dependencies=""/>
@@ -62,6 +62,8 @@
 			<Unknown index="3"  dependencies=""/>
             
             
+            
+            <Unknown index="11"  dependencies=""/>
 	</Outputs>
 
 	</ModelStructure>

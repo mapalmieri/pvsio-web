@@ -142,20 +142,24 @@ require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
     
     /*fino a value sono campi obbligatori, dopo sono facoltativi*/
     var statevariables = [
-		{name:"x_d", type: "real", variability: "discrete", scope:"output", value: "0", top:20, widget: "BasicDisplay"},
-		{name:"y_d", type:"real",variability: "discrete", scope:"output", value:"0",top:120, widget: "BasicDisplay"},
-		{name:"z_d", type:"real",variability: "discrete", scope:"output", value:"0",top:220, widget: "BasicDisplay"},
-		{name:"x_ant", type:"real",variability: "discrete", scope:"input", value:"0",top:320, widget: "BasicDisplay"},
-		{name:"x_succ", type:"real",variability: "discrete", scope:"input", value:"0",top:420, widget: "BasicDisplay"},
-		{name:"y_ant", type:"real",variability: "discrete", scope:"input", value:"0",top:520, widget: "BasicDisplay"},
-		{name:"y_succ", type:"real",variability: "discrete", scope:"input", value:"0",top:620, widget: "BasicDisplay"},
-		{name:"delay", type:"real",variability: "tunable", scope:"parameter", value:"0", widget: "BasicDisplay"},
-		{name:"delayMax", type:"real",variability: "tunable", scope:"parameter", value:"0", widget: "BasicDisplay"},
-		{name:"sequence", type:"real",variability: "tunable", scope:"parameter", value:"0", widget: "BasicDisplay"}
+		{name:"x_d", type: "Real", variability: "discrete", scope:"output", value: "0", top:20, widget: "BasicDisplay"},
+		{name:"y_d", type:"Real",variability: "discrete", scope:"output", value:"0",top:120, widget: "BasicDisplay"},
+		{name:"z_d", type:"Real",variability: "discrete", scope:"output", value:"0",top:220, widget: "BasicDisplay"},
+		{name:"x_prec", type:"Real",variability: "discrete", scope:"input", value:"0",top:320, widget: "BasicDisplay"},
+		{name:"x_foll", type:"Real",variability: "discrete", scope:"input", value:"0",top:420, widget: "BasicDisplay"},
+		{name:"y_prec", type:"Real",variability: "discrete", scope:"input", value:"0",top:520, widget: "BasicDisplay"},
+		{name:"y_foll", type:"Real",variability: "discrete", scope:"input", value:"0",top:620, widget: "BasicDisplay"},
+		{name:"delay", type:"Real",variability: "tunable", scope:"parameter", value:"0", widget: "BasicDisplay"},
+		{name:"delayMax", type:"Real",variability: "tunable", scope:"parameter", value:"0", widget: "BasicDisplay"},
+		{name:"id", type:"Real",variability: "tunable", scope:"parameter", value:"0", widget: "BasicDisplay"}
 	];
-	var fmi = {name: "coordination", state_variables : {variables: statevariables}, last: 3};
+	
+	var composedvariables = [
+		
+	];
 	
     var printer = new PBFMIPVSPrinter();
-    printer.print(fmi,[]);
-    printer.print_front(fmi,[]);
+    printer.create_FMU("coordination",{state_variables : {variables: statevariables},composed_variables : {variables: composedvariables},init:"init",tick:"tick",port:"8084"});
+
+    //printer.print_front(fmi,[]);
 });

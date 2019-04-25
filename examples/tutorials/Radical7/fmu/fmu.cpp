@@ -24,6 +24,34 @@ std::string* name;
 
 
 
+template <class T>
+static void log(const fmi2CallbackFunctions *functions, fmi2ComponentEnvironment componentEnvironment,
+		fmi2String instanceName, fmi2Status status, fmi2String category, fmi2String message,T arg)
+{
+	if (functions != NULL && functions->logger != NULL)
+	{
+		functions->logger(componentEnvironment, instanceName, status, category, message,arg);
+	}
+}
+
+template <class T>
+static void fmiprintf(fmi2String message,T arg)
+{
+	if (g_functions != NULL)
+	{
+		log(g_functions, (void*) 2, name->c_str(), fmi2OK, "logAll",message, arg);
+	}
+}
+static void fmiprintf(fmi2String message)
+{
+	if (g_functions != NULL)
+	{
+		log(g_functions, (void*) 2, name->c_str(), fmi2OK, "logAll",message, NULL);
+	}
+}
+
+
+
 
 extern "C" fmi2Component fmi2Instantiate(
 				fmi2String instanceName, 
@@ -49,7 +77,7 @@ extern "C" fmi2Status fmi2SetupExperiment(
 				fmi2Boolean stopTimeDefined,
 				fmi2Real stopTime) {
 				
-	
+	createSocket();
 	return fmi2OK;
 }
 
@@ -99,7 +127,6 @@ extern "C" fmi2Status fmi2GetReal(fmi2Component c, const fmi2ValueReference vr[]
 for (size_t i = 0; i < nvr; i++) {
 		fmi2ValueReference vRef = vr[i];
 		value[i] = fmiBuffer.realBuffer[vRef];
-	//	printf("getReal\n");
 	}
 	return fmi2OK;
 }
@@ -117,7 +144,6 @@ extern "C" fmi2Status fmi2GetBoolean(fmi2Component c, const fmi2ValueReference v
 		fmi2ValueReference vRef = vr[i];
 		value[i] = fmiBuffer.booleanBuffer[vRef];
 	}
-	//printf("getBool\n");
 	return fmi2OK;
 }
 
@@ -126,7 +152,6 @@ extern "C" fmi2Status fmi2GetString(fmi2Component c, const fmi2ValueReference vr
 		fmi2ValueReference vRef = vr[i];
 		value[i] = fmiBuffer.stringBuffer[vRef];
 	}
-	//printf("getString\n");
 	return fmi2OK;
 }
 
@@ -134,7 +159,7 @@ extern "C" fmi2Status fmi2SetReal(fmi2Component c, const fmi2ValueReference vr[]
 	for (size_t i = 0; i < nvr; i++) {
 		fmi2ValueReference vRef = vr[i];
 		fmiBuffer.realBuffer[vRef] = value[i];
-		//printf("FMI real id=%d set to: %f\n", vRef, fmiBuffer.realBuffer[vRef]);
+	//	printf("FMI real id=%d set to: %f\n", vRef, fmiBuffer.realBuffer[vRef]);
 	}
 	return fmi2OK;
 }
@@ -154,18 +179,18 @@ extern "C" fmi2Status fmi2SetBoolean(fmi2Component c, const fmi2ValueReference v
     for (size_t i = 0; i < nvr; i++) {
     		fmi2ValueReference vRef = vr[i];
     		fmiBuffer.booleanBuffer[vRef] = value[i];
-    	//	printf("FMI real id=%d set to: %f\n", vRef, fmiBuffer.booleanBuffer[vRef]);
+    //		printf("FMI real id=%d set to: %f\n", vRef, fmiBuffer.booleanBuffer[vRef]);
 	}
 	return fmi2OK;
 }
 
 extern "C" fmi2Status fmi2SetString(fmi2Component c, const fmi2ValueReference vr[], size_t nvr,
 		const fmi2String value[]) {
-			for (size_t i = 0; i < nvr; i++) {
-    		fmi2ValueReference vRef = vr[i];
-    		fmiBuffer.stringBuffer[vRef] = value[i];
-    	//	printf("FMI real id=%d set to: %f\n", vRef, fmiBuffer.stringBuffer[vRef]);
-	}
+		for (size_t i = 0; i < nvr; i++) {
+		fmi2ValueReference vRef = vr[i];
+		strcpy(fmiBuffer.r[vRef],value[i]);
+		fmiBuffer.stringBuffer[vRef]=fmiBuffer.r[vRef];
+		}
 	return fmi2OK;
 }
 
@@ -217,7 +242,7 @@ extern "C" fmi2Status fmi2CancelStep(fmi2Component c) {
 
 extern "C" fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicationPoint, fmi2Real communicationStepSize,
 		fmi2Boolean noSetFMUStatePriorToCurrentPoint) {
-	doStep("tick");
+	doStep();
 	return fmi2OK;
 }
 
@@ -294,5 +319,3 @@ fmi2Status fmi2GetNominalsOfContinuousStates(fmi2Component c, fmi2Real x_nominal
 	return fmi2Error;
 }
 #endif // Model Exchange
-
-

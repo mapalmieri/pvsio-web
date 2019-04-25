@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<fmiModelDescription 	fmiVersion="2.0"
+						modelName="AlarisGPFMI"
+						guid="{abb4bff1-d423-4e02-90d9-011f519869ff}"
+						description=""
+						author="pvsioweb"
+						version="Version 1"
+						copyright=""
+						license="PVS License"
+						generationTool="PVSio-web"
+						variableNamingConvention="flat"
+						numberOfEventIndicators="0">
+	<CoSimulation 	modelIdentifier="AlarisGPFMI"
+					needsExecutionTool="false"
+					canHandleVariableCommunicationStepSize="false"
+					canInterpolateInputs="false"
+					maxOutputDerivativeOrder="0"
+					canRunAsynchronuously="false"
+					canBeInstantiatedOnlyOncePerProcess="false"
+					canNotUseMemoryManagementFunctions="true"
+					canGetAndSetFMUstate="false"
+					canSerializeFMUstate="false"
+					providesDirectionalDerivative="false">
+		</CoSimulation>
+	<LogCategories>
+		<Category name="logAll" />
+		<Category name="logError" />
+		<Category name="logFmiCall" />
+		<Category name="Protocol" />
+		<Category name="Error" />
+	</LogCategories>
+
+	<ModelVariables>
+	<ScalarVariable name="id" valueReference="1" causality="output" variability="discrete" ><String  /></ScalarVariable>
+    
+	<ScalarVariable name="topline" valueReference="2" causality="output" variability="discrete" ><String  /></ScalarVariable>
+    
+	<ScalarVariable name="middisp " valueReference="3" causality="output" variability="discrete" ><String  /></ScalarVariable>
+    
+	<ScalarVariable name="middisp_drate" valueReference="4" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="middisp_dvtbi" valueReference="5" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="middisp_dvol" valueReference="6" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="middisp_dtime" valueReference="7" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="middisp_dnewrate" valueReference="8" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="middisp_dnewvtbi" valueReference="9" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="middisp_dnewtime" valueReference="10" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="middisp_dbags" valueReference="11" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="optionsmenu" valueReference="12" causality="output" variability="discrete" ><String  /></ScalarVariable>
+    
+	<ScalarVariable name="bagscursor" valueReference="13" causality="output" variability="discrete" ><Integer  /></ScalarVariable>
+    
+	<ScalarVariable name="qcursor" valueReference="14" causality="output" variability="discrete" ><Integer  /></ScalarVariable>
+    
+	<ScalarVariable name="bagsval " valueReference="15" causality="output" variability="discrete" ><String  /></ScalarVariable>
+    
+	<ScalarVariable name="bagsval0" valueReference="16" causality="output" variability="discrete" ><Integer  /></ScalarVariable>
+    
+	<ScalarVariable name="bagsval1" valueReference="17" causality="output" variability="discrete" ><Integer  /></ScalarVariable>
+    
+	<ScalarVariable name="bagsval2" valueReference="18" causality="output" variability="discrete" ><Integer  /></ScalarVariable>
+    
+	<ScalarVariable name="bagsval3" valueReference="19" causality="output" variability="discrete" ><Integer  /></ScalarVariable>
+    
+	<ScalarVariable name="bagsval4" valueReference="20" causality="output" variability="discrete" ><Integer  /></ScalarVariable>
+    
+	<ScalarVariable name="bagsval5" valueReference="21" causality="output" variability="discrete" ><Integer  /></ScalarVariable>
+    
+	<ScalarVariable name="bagsval6" valueReference="22" causality="output" variability="discrete" ><Integer  /></ScalarVariable>
+    
+	<ScalarVariable name="bagsval7" valueReference="23" causality="output" variability="discrete" ><Integer  /></ScalarVariable>
+    
+	<ScalarVariable name="bagsval8" valueReference="24" causality="output" variability="discrete" ><Integer  /></ScalarVariable>
+    
+	<ScalarVariable name="bagsval9" valueReference="25" causality="output" variability="discrete" ><Integer  /></ScalarVariable>
+    
+	<ScalarVariable name="fndisp1" valueReference="26" causality="output" variability="discrete" ><String  /></ScalarVariable>
+    
+	<ScalarVariable name="fndisp2" valueReference="27" causality="output" variability="discrete" ><String  /></ScalarVariable>
+    
+	<ScalarVariable name="fndisp3" valueReference="28" causality="output" variability="discrete" ><String  /></ScalarVariable>
+    
+	<ScalarVariable name="runlight" valueReference="29" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="pauselight" valueReference="30" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="ac_light" valueReference="31" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="battery_light" valueReference="32" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="entrymode" valueReference="33" causality="output" variability="discrete" ><String  /></ScalarVariable>
+    
+	<ScalarVariable name="rlock" valueReference="34" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="rdisabled" valueReference="35" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="newvtbi" valueReference="36" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+    
+	<ScalarVariable name="newrate" valueReference="37" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+    
+	<ScalarVariable name="newtime" valueReference="38" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+    
+	<ScalarVariable name="pressed" valueReference="39" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="current_sr" valueReference="40" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="current_sv" valueReference="41" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="current_st" valueReference="42" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+    
+	<ScalarVariable name="which_press" valueReference="43" causality="output" variability="discrete" ><String  /></ScalarVariable>
+    
+	<ScalarVariable name="supercmd" valueReference="44" causality="input" variability="discrete" ><String start="0" /></ScalarVariable>
+    
+	<ScalarVariable name="outputrate" valueReference="45" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+    
+	<ScalarVariable name="device_ac_connect" valueReference="46" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+	
+	<ScalarVariable name="device_battery" valueReference="47" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+	
+	<ScalarVariable name="device_elapse " valueReference="48" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+	
+	<ScalarVariable name="device_elapsedtime" valueReference="49" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+	
+	<ScalarVariable name="device_infusing?" valueReference="50" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+	
+	<ScalarVariable name="device_infusionrate" valueReference="51" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+	
+	<ScalarVariable name="device_kvoflag" valueReference="52" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+	
+	<ScalarVariable name="device_kvorate" valueReference="53" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+	
+	<ScalarVariable name="device_powered_on?" valueReference="54" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+	
+	<ScalarVariable name="device_set_fitted" valueReference="55" causality="output" variability="discrete" ><Boolean  /></ScalarVariable>
+	
+	<ScalarVariable name="device_ time" valueReference="56" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+	
+	<ScalarVariable name="device_volumeinfused" valueReference="57" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+	
+	<ScalarVariable name="device_vtbi" valueReference="58" causality="output" variability="discrete" ><Real  /></ScalarVariable>
+	
+	<ScalarVariable name="internal_State" valueReference="59" causality="output" variability="discrete" ><String  /></ScalarVariable>
+	</ModelVariables>
+	<ModelStructure>
+	<Outputs>
+			<Unknown index="1"  dependencies=""/>
+            
+			<Unknown index="2"  dependencies=""/>
+            
+			<Unknown index="3"  dependencies=""/>
+            
+			<Unknown index="4"  dependencies=""/>
+            
+			<Unknown index="5"  dependencies=""/>
+            
+			<Unknown index="6"  dependencies=""/>
+            
+			<Unknown index="7"  dependencies=""/>
+            
+			<Unknown index="8"  dependencies=""/>
+            
+			<Unknown index="9"  dependencies=""/>
+            
+			<Unknown index="10"  dependencies=""/>
+            
+			<Unknown index="11"  dependencies=""/>
+            
+			<Unknown index="12"  dependencies=""/>
+            
+			<Unknown index="13"  dependencies=""/>
+            
+			<Unknown index="14"  dependencies=""/>
+            
+			<Unknown index="15"  dependencies=""/>
+            
+			<Unknown index="16"  dependencies=""/>
+            
+			<Unknown index="17"  dependencies=""/>
+            
+			<Unknown index="18"  dependencies=""/>
+            
+			<Unknown index="19"  dependencies=""/>
+            
+			<Unknown index="20"  dependencies=""/>
+            
+			<Unknown index="21"  dependencies=""/>
+            
+			<Unknown index="22"  dependencies=""/>
+            
+			<Unknown index="23"  dependencies=""/>
+            
+			<Unknown index="24"  dependencies=""/>
+            
+			<Unknown index="25"  dependencies=""/>
+            
+			<Unknown index="26"  dependencies=""/>
+            
+			<Unknown index="27"  dependencies=""/>
+            
+			<Unknown index="28"  dependencies=""/>
+            
+			<Unknown index="29"  dependencies=""/>
+            
+			<Unknown index="30"  dependencies=""/>
+            
+			<Unknown index="31"  dependencies=""/>
+            
+			<Unknown index="32"  dependencies=""/>
+            
+			<Unknown index="33"  dependencies=""/>
+            
+			<Unknown index="34"  dependencies=""/>
+            
+			<Unknown index="35"  dependencies=""/>
+            
+			<Unknown index="36"  dependencies=""/>
+            
+			<Unknown index="37"  dependencies=""/>
+            
+			<Unknown index="38"  dependencies=""/>
+            
+			<Unknown index="39"  dependencies=""/>
+            
+			<Unknown index="40"  dependencies=""/>
+            
+			<Unknown index="41"  dependencies=""/>
+            
+			<Unknown index="42"  dependencies=""/>
+            
+			<Unknown index="43"  dependencies=""/>
+            
+			<Unknown index="45"  dependencies=""/>
+            
+            
+			<Unknown index="46"  dependencies=""/>
+            
+			<Unknown index="47"  dependencies=""/>
+            
+			<Unknown index="48"  dependencies=""/>
+            
+			<Unknown index="49"  dependencies=""/>
+            
+			<Unknown index="50"  dependencies=""/>
+            
+			<Unknown index="51"  dependencies=""/>
+            
+			<Unknown index="52"  dependencies=""/>
+            
+			<Unknown index="53"  dependencies=""/>
+            
+			<Unknown index="54"  dependencies=""/>
+            
+			<Unknown index="55"  dependencies=""/>
+            
+			<Unknown index="56"  dependencies=""/>
+            
+			<Unknown index="57"  dependencies=""/>
+            
+			<Unknown index="58"  dependencies=""/>
+            
+            
+            <Unknown index="59"  dependencies=""/>
+	</Outputs>
+
+	</ModelStructure>
+</fmiModelDescription>

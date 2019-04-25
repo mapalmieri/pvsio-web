@@ -1,0 +1,24 @@
+initial: THEORY
+BEGIN
+
+N: nat = 5
+eps: real = 1/4
+stepsize: real = 0.05
+max: real = 10
+
+IMPORTING coverage_state[N]
+
+x_init: location = 3
+
+d: state =
+      (#
+        prec := 2,
+        self := x_init,
+	foll := 4,
+        id := 3
+      #)
+
+initial: simstate = (# timesteps := 0,
+                       st := d #)
+
+END initial

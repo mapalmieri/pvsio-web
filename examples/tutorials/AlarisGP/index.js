@@ -137,86 +137,82 @@ require.config({
     paths: { d3: "../lib/d3", text: "../lib/text" }
 });
 
-require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
+require([ "plugins/FMI/PBFMIPVSPrinter"], function (PBFMIPVSPrinter) {
     "use strict";
     
     /*fino a value sono campi obbligatori, dopo sono facoltativi*/
     var statevariables = [
 		
-		{name:"id", type:"string",variability: "discrete", scope:"output", value:"0"},
-		{name:"topline", type:"string",variability: "discrete", scope:"output", value:"0"},
-		{name:"middisp ", type:"string",variability: "discrete", scope:"output", value:"0"},
-		{name:"middisp_drate", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"middisp_dvtbi", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"middisp_dvol", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"middisp_dtime", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"middisp_dnewrate", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"middisp_dnewvtbi", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"middisp_dnewtime", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"middisp_dbags", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"optionsmenu", type:"string",variability: "discrete", scope:"output", value:"0"},
-		{name:"bagscursor", type:"int",variability: "discrete", scope:"output", value:"0"},
-		{name:"qcursor", type:"int",variability: "discrete", scope:"output", value:"0"},
-		{name:"bagsval ", type:"string",variability: "discrete", scope:"output", value:"0"},
-		{name:"bagsval0", type:"int",variability: "discrete", scope:"output", value:"0"},
-		{name:"bagsval1", type:"int",variability: "discrete", scope:"output", value:"0"},
-		{name:"bagsval2", type:"int",variability: "discrete", scope:"output", value:"0"},
-		{name:"bagsval3", type:"int",variability: "discrete", scope:"output", value:"0"},
-		{name:"bagsval4", type:"int",variability: "discrete", scope:"output", value:"0"},
-		{name:"bagsval5", type:"int",variability: "discrete", scope:"output", value:"0"},
-		{name:"bagsval6", type:"int",variability: "discrete", scope:"output", value:"0"},
-		{name:"bagsval7", type:"int",variability: "discrete", scope:"output", value:"0"},
-		{name:"bagsval8", type:"int",variability: "discrete", scope:"output", value:"0"},
-		{name:"bagsval9", type:"int",variability: "discrete", scope:"output", value:"0"},
-		{name:"fndisp1", type:"string",variability: "discrete", scope:"output", value:"0"},
-		{name:"fndisp2", type:"string",variability: "discrete", scope:"output", value:"0"},
-		{name:"fndisp3", type:"string",variability: "discrete", scope:"output", value:"0"},
-		{name:"runlight", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"pauselight", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"ac_light", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"battery_light", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"entrymode", type:"string",variability: "discrete", scope:"output", value:"0"},
-		{name:"rlock", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"rdisabled", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"newvtbi", type:"real",variability: "discrete", scope:"output", value:"0"},
-		{name:"newrate", type:"real",variability: "discrete", scope:"output", value:"0"},
-		{name:"newtime", type:"real",variability: "discrete", scope:"output", value:"0"},
-		{name:"pressed", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"current_sr", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"current_sv", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"current_st", type:"bool",variability: "discrete", scope:"output", value:"0"},
-		{name:"which_press", type:"string",variability: "discrete", scope:"output", value:"0"},
-		{name:"supercmd", type:"string",variability: "discrete", scope:"input", value:"0"},		
+		{name:"id", type:"String",variability: "discrete", scope:"output", value:"0"},
+		{name:"topline", type:"String",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp ", type:"String",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_drate", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_dvtbi", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_dvol", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_dtime", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_dnewrate", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_dnewvtbi", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_dnewtime", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"middisp_dbags", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"optionsmenu", type:"String",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagscursor", type:"Integer",variability: "discrete", scope:"output", value:"0"},
+		{name:"qcursor", type:"Integer",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval ", type:"String",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval0", type:"Integer",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval1", type:"Integer",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval2", type:"Integer",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval3", type:"Integer",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval4", type:"Integer",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval5", type:"Integer",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval6", type:"Integer",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval7", type:"Integer",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval8", type:"Integer",variability: "discrete", scope:"output", value:"0"},
+		{name:"bagsval9", type:"Integer",variability: "discrete", scope:"output", value:"0"},
+		{name:"fndisp1", type:"String",variability: "discrete", scope:"output", value:"0"},
+		{name:"fndisp2", type:"String",variability: "discrete", scope:"output", value:"0"},
+		{name:"fndisp3", type:"String",variability: "discrete", scope:"output", value:"0"},
+		{name:"runlight", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"pauselight", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"ac_light", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"battery_light", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"entrymode", type:"String",variability: "discrete", scope:"output", value:"0"},
+		{name:"rlock", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"rdisabled", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"newvtbi", type:"Real",variability: "discrete", scope:"output", value:"0"},
+		{name:"newrate", type:"Real",variability: "discrete", scope:"output", value:"0"},
+		{name:"newtime", type:"Real",variability: "discrete", scope:"output", value:"0"},
+		{name:"pressed", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"current_sr", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"current_sv", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"current_st", type:"Boolean",variability: "discrete", scope:"output", value:"0"},
+		{name:"which_press", type:"String",variability: "discrete", scope:"output", value:"0"},
+		{name:"supercmd", type:"String",variability: "discrete", scope:"input", value:"0"},
+		{name:"outputrate", type:"Real",variability: "discrete", scope:"output", value:"0"},		
 				
 	];
 	
 	
 	var composedvariables = [
-	{name: "ac_connect", parent:"device", type:"bool", variability: "discrete", scope: "output", value: "0"},
-	{name: "battery",parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
-	{name: "elapse ", parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
-	{name: "elapsedtime",parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
-	{name: "infusing?", parent:"device", type:"bool", variability: "discrete", scope: "output", value: "0"},
-	{name: "infusionrate",parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
-	{name: "kvoflag", parent:"device", type:"bool", variability: "discrete", scope: "output", value: "0"},
-	{name: "kvorate",parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
-	{name: "powered_on?", parent:"device", type:"bool", variability: "discrete", scope: "output", value: "0"},
-	{name: "set_fitted",parent:"device", type:"bool", variability: "discrete", scope: "output", value: "0"},
-	{name: " time", parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
-	{name: "volumeinfused",parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
-	{name: "vtbi",parent:"device", type:"real", variability: "discrete", scope: "output", value: "0"},
+	{name: "ac_connect", parent:"device", type:"Boolean", variability: "discrete", scope: "output", value: "0"},
+	{name: "battery",parent:"device", type:"Real", variability: "discrete", scope: "output", value: "0"},
+	{name: "elapse ", parent:"device", type:"Real", variability: "discrete", scope: "output", value: "0"},
+	{name: "elapsedtime",parent:"device", type:"Real", variability: "discrete", scope: "output", value: "0"},
+	{name: "infusing?", parent:"device", type:"Boolean", variability: "discrete", scope: "output", value: "0"},
+	{name: "infusionrate",parent:"device", type:"Real", variability: "discrete", scope: "output", value: "0"},
+	{name: "kvoflag", parent:"device", type:"Boolean", variability: "discrete", scope: "output", value: "0"},
+	{name: "kvorate",parent:"device", type:"Real", variability: "discrete", scope: "output", value: "0"},
+	{name: "powered_on?", parent:"device", type:"Boolean", variability: "discrete", scope: "output", value: "0"},
+	{name: "set_fitted",parent:"device", type:"Boolean", variability: "discrete", scope: "output", value: "0"},
+	{name: " time", parent:"device", type:"Real", variability: "discrete", scope: "output", value: "0"},
+	{name: "volumeinfused",parent:"device", type:"Real", variability: "discrete", scope: "output", value: "0"},
+	{name: "vtbi",parent:"device", type:"Real", variability: "discrete", scope: "output", value: "0"},
 	]
 	
-	var functionvariablesinput = [
-		]
-	
-	var functionvariablesoutput = [
-		]
 	
 	
     
 	
     var printer = new PBFMIPVSPrinter();
-    printer.create_FMU("AlarisGPFMI",{state_variables : {variables: statevariables},composed_variables : {variables: composedvariables}, function_variables_input : {variables: functionvariablesinput},function_variables_output : {variables: functionvariablesoutput}, init:"init(keep)", tick:"FMItick", port:"8088", max_memory:"2500", delay: "18000000"});
+    printer.create_FMU("AlarisGPFMI",{state_variables : {variables: statevariables},composed_variables : {variables: composedvariables}, init:"init(keep)", tick:"FMItick", port:"8088", max_memory:"2500", delay: "18000000"});
     //printer.print_front(fmi,null,null);
 });

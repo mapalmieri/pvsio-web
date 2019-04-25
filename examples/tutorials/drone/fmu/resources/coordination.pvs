@@ -47,7 +47,7 @@ coordination(s:State) : State = s
 WITH [
 				 
 				 x_d := COND
-							delay(s) = delayMax(s) -> pnext(x_prec(s),x_actual(s),x_foll(s),id(s)),%1/3*(x_prec(s)+x_actual(s)+x_foll(s)),
+							delay(s) = delayMax(s) -> pnext(x_prec(s),x_d(s),x_foll(s),id(s)),%1/3*(x_prec(s)+x_actual(s)+x_foll(s)),
 							delay(s) < delayMax(s) -> x_d(s)
 						ENDCOND,
 				%y_d := COND

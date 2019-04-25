@@ -143,47 +143,42 @@ require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
     /*fino a value sono campi obbligatori, dopo sono facoltativi*/
     var statevariables = [
 		
-		{name:"mode", type:"string",variability: "discrete", scope:"output", value:"0",top:20, left: 500, width: 300, widget: "BasicDisplay"},
-		{name:"monitor_connected", type:"bool",variability: "discrete", scope:"output", value:"0",top:20, left: 500, width: 300, widget: "BasicDisplay"},
-		{name:"pumpcmd", type:"string",variability: "discrete", scope:"output", value:"0",top:20, left: 500, width: 300, widget: "BasicDisplay"},
-		{name:"supervisor_connected", type:"bool",variability: "discrete", scope:"output", value:"0",top:20, left: 500, width: 300, widget: "BasicDisplay"},
+		{name:"mode", type:"String",variability: "discrete", scope:"output", value:"0",top:20, left: 500, width: 300, widget: "BasicDisplay"},
+		{name:"monitor_connected", type:"Boolean",variability: "discrete", scope:"output", value:"0",top:20, left: 500, width: 300, widget: "BasicDisplay"},
+		{name:"pumpcmd", type:"String",variability: "discrete", scope:"output", value:"0",top:20, left: 500, width: 300, widget: "BasicDisplay"},
+		{name:"supervisor_connected", type:"Boolean",variability: "discrete", scope:"output", value:"0",top:20, left: 500, width: 300, widget: "BasicDisplay"},
 		
 		
 		
 		
 	];
 	var composedvariables = [
-		{name:"id", parent:"monitor", type:"string",variability: "discrete", scope:"input", value:"0",top:20, width: 300, widget: "BasicDisplay"},
-		{name:"spo2", parent:"monitor", type:"real",variability: "discrete", scope:"input", value:"0",top:120, width: 300, widget: "BasicDisplay"},
-		{name:"spo2_max", parent:"monitor",type:"real",variability: "discrete", scope:"input", value:"0",top:220, width: 300, widget: "BasicDisplay"},
-		{name:"spo2_min", parent:"monitor",type:"real",variability: "discrete", scope:"input", value:"0",top:320, width: 300, widget: "BasicDisplay"},
-		{name:"spo2_label", parent:"monitor", type:"string",variability: "discrete", scope:"input", value:"0",top:420, width: 300, widget: "BasicDisplay"},
-		{name:"spo2_alarm", parent:"monitor", type:"string",variability: "discrete", scope:"input", value:"0",top:520, width: 300, widget: "BasicDisplay"},
-		{name:"spo2_fail", parent:"monitor", type:"bool",variability: "discrete", scope:"input", value:"0",top:620, width: 300, widget: "BasicDisplay"},
-		{name:"rra", parent:"monitor", type:"real",variability: "discrete", scope:"input", value:"0",top:720, width: 300, widget: "BasicDisplay"},
-		{name:"rra_max", parent:"monitor", type:"real",variability: "discrete", scope:"input", value:"0",top:820, width: 300, widget: "BasicDisplay"},
-		{name:"rra_min", parent:"monitor", type:"real",variability: "discrete", scope:"input", value:"0",top:920, width: 300, widget: "BasicDisplay"},
-		{name:"rra_label", parent:"monitor", type:"string",variability: "discrete", scope:"input", value:"0",top:1020, width: 300, widget: "BasicDisplay"},
-		{name:"rra_alarm", parent:"monitor", type:"string",variability: "discrete", scope:"input", value:"0",top:1120, width: 300, widget: "BasicDisplay"},
-		{name:"rra_fail", parent:"monitor", type:"bool",variability: "discrete", scope:"input", value:"0",top:1220, width: 300, widget: "BasicDisplay"},
-		{name:"isOn", parent:"monitor", type:"bool",variability: "discrete", scope:"input", value:"0",top:1320, width: 300, widget: "BasicDisplay"},
-		{name:"id", parent:"pump", type:"string", variability: "discrete", scope:"input", value:"0"},
-		{name:"topline", parent:"pump", type:"string", variability: "discrete", scope:"input", value:"0"},
-		{name:"isOn", parent:"pump", type:"bool", variability: "discrete", scope:"input", value:"0"},
-		{name:"rate", parent:"pump", type:"real", variability: "discrete", scope:"input", value:"0"},
-		{name:"volume", parent:"pump", type:"real", variability: "discrete", scope:"input", value:"0"},
-		{name:"vtbi", parent:"pump", type:"real", variability: "discrete", scope:"input", value:"0"},
-		{name:"time", parent:"pump", type:"real", variability: "discrete", scope:"input", value:"0"},
+		{name:"id", parent:"monitor", type:"String",variability: "discrete", scope:"input", value:"0",top:20, width: 300, widget: "BasicDisplay"},
+		{name:"spo2", parent:"monitor", type:"Real",variability: "discrete", scope:"input", value:"0",top:120, width: 300, widget: "BasicDisplay"},
+		{name:"spo2_max", parent:"monitor",type:"Real",variability: "discrete", scope:"input", value:"0",top:220, width: 300, widget: "BasicDisplay"},
+		{name:"spo2_min", parent:"monitor",type:"Real",variability: "discrete", scope:"input", value:"0",top:320, width: 300, widget: "BasicDisplay"},
+		{name:"spo2_label", parent:"monitor", type:"String",variability: "discrete", scope:"input", value:"0",top:420, width: 300, widget: "BasicDisplay"},
+		{name:"spo2_alarm", parent:"monitor", type:"String",variability: "discrete", scope:"input", value:"0",top:520, width: 300, widget: "BasicDisplay"},
+		{name:"spo2_fail", parent:"monitor", type:"Boolean",variability: "discrete", scope:"input", value:"0",top:620, width: 300, widget: "BasicDisplay"},
+		{name:"HR ", parent:"monitor", type:"Real",variability: "discrete", scope:"input", value:"0",top:720, width: 300, widget: "BasicDisplay"},
+		{name:"HR_max", parent:"monitor", type:"Real",variability: "discrete", scope:"input", value:"0",top:820, width: 300, widget: "BasicDisplay"},
+		{name:"HR_min", parent:"monitor", type:"Real",variability: "discrete", scope:"input", value:"0",top:920, width: 300, widget: "BasicDisplay"},
+		{name:"HR_label", parent:"monitor", type:"String",variability: "discrete", scope:"input", value:"0",top:1020, width: 300, widget: "BasicDisplay"},
+		{name:"HR_alarm", parent:"monitor", type:"String",variability: "discrete", scope:"input", value:"0",top:1120, width: 300, widget: "BasicDisplay"},
+		{name:"HR_fail", parent:"monitor", type:"Boolean",variability: "discrete", scope:"input", value:"0",top:1220, width: 300, widget: "BasicDisplay"},
+		{name:"isOn", parent:"monitor", type:"Boolean",variability: "discrete", scope:"input", value:"0",top:1320, width: 300, widget: "BasicDisplay"},
+		{name:"id", parent:"pump", type:"String", variability: "discrete", scope:"input", value:"0"},
+		{name:"topline", parent:"pump", type:"String", variability: "discrete", scope:"input", value:"0"},
+		{name:"isOn", parent:"pump", type:"Boolean", variability: "discrete", scope:"input", value:"0"},
+		{name:"rate", parent:"pump", type:"Real", variability: "discrete", scope:"input", value:"0"},
+		{name:"volume", parent:"pump", type:"Real", variability: "discrete", scope:"input", value:"0"},
+		{name:"vtbi", parent:"pump", type:"Real", variability: "discrete", scope:"input", value:"0"},
+		{name:"time", parent:"pump", type:"Real", variability: "discrete", scope:"input", value:"0"},
 	]
     
-    var functionvariablesinput = [
-		]
-	
-	var functionvariablesoutput = [
-			
-		]
+    
 	
     var printer = new PBFMIPVSPrinter();
-    printer.create_FMU("Supervisor",{state_variables : {variables: statevariables},composed_variables : {variables: composedvariables}, function_variables_input : {variables: functionvariablesinput},function_variables_output : {variables: functionvariablesoutput},init:"init(0)",tick:"tick",port:"8084"});
+    printer.create_FMU("Supervisor",{state_variables : {variables: statevariables},composed_variables : {variables: composedvariables},init:"init(0)",tick:"tick",port:"8084"});
     //printer.print_front(fmi,fmi_composed,null,null);
 });
