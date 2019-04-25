@@ -14,22 +14,59 @@
  * */
 #include "fmu.h"
 
+#define SSTR( x ) dynamic_cast< std::ostringstream & >( \
+        ( std::ostringstream() << std::dec << x ) ).str()
+        
 FmiBuffer fmiBuffer;
 fmi2String location;
+const fmi2CallbackFunctions *g_functions;
+std::string* name;
+
+extern int watchdog;
+
+template <class T>
+static void log(const fmi2CallbackFunctions *functions, fmi2ComponentEnvironment componentEnvironment,
+		fmi2String instanceName, fmi2Status status, fmi2String category, fmi2String message,T arg)
+{
+	if (functions != NULL && functions->logger != NULL)
+	{
+		functions->logger(componentEnvironment, instanceName, status, category, message,arg);
+	}
+}
+
+template <class T>
+static void fmiprintf(fmi2String message,T arg)
+{
+	if (g_functions != NULL)
+	{
+		log(g_functions, (void*) 2, name->c_str(), fmi2OK, "logAll",message, arg);
+	}
+}
+static void fmiprintf(fmi2String message)
+{
+	if (g_functions != NULL)
+	{
+		log(g_functions, (void*) 2, name->c_str(), fmi2OK, "logAll",message, NULL);
+	}
+}
+
+
+
 
 extern "C" fmi2Component fmi2Instantiate(
-				fmi2String instanceName,
+				fmi2String instanceName, 
 				fmi2Type fmuType,
-				fmi2String fmuGUID,
+				fmi2String fmuGUID, 
 				fmi2String fmuResourceLocation,
 				const fmi2CallbackFunctions *functions,
 				fmi2Boolean visible,
 				fmi2Boolean loggingOn
-			) {
-			
-	location=fmuResourceLocation;
-	initialize(location);
-	return (void*) 1;
+			)
+{
+	name = new std::string (instanceName);
+	g_functions = functions;
+	initialize(fmuResourceLocation);
+	return (void*) 2;
 }
 
 extern "C" fmi2Status fmi2SetupExperiment(
@@ -40,7 +77,7 @@ extern "C" fmi2Status fmi2SetupExperiment(
 				fmi2Boolean stopTimeDefined,
 				fmi2Real stopTime) {
 				
-	
+	createSocket();
 	return fmi2OK;
 }
 
@@ -53,6 +90,7 @@ extern "C" fmi2Status fmi2ExitInitializationMode(fmi2Component c) {
 }
 
 extern "C" fmi2Status fmi2Terminate(fmi2Component c) {
+	printf("Terminate\n");
 	return fmi2OK;
 }
 
@@ -61,6 +99,7 @@ extern "C" fmi2Status fmi2Reset(fmi2Component c) {
 }
 
 extern "C" void fmi2FreeInstance(fmi2Component c) {
+	printf("FreeInstance\n");
 	terminate();
 }
 
@@ -111,6 +150,10 @@ extern "C" fmi2Status fmi2GetBoolean(fmi2Component c, const fmi2ValueReference v
 }
 
 extern "C" fmi2Status fmi2GetString(fmi2Component c, const fmi2ValueReference vr[], size_t nvr, fmi2String value[]) {
+	for (size_t i = 0; i < nvr; i++) {
+		fmi2ValueReference vRef = vr[i];
+		value[i] = fmiBuffer.stringBuffer[vRef];
+	}
 	return fmi2OK;
 }
 
@@ -145,6 +188,11 @@ extern "C" fmi2Status fmi2SetBoolean(fmi2Component c, const fmi2ValueReference v
 
 extern "C" fmi2Status fmi2SetString(fmi2Component c, const fmi2ValueReference vr[], size_t nvr,
 		const fmi2String value[]) {
+		for (size_t i = 0; i < nvr; i++) {
+		fmi2ValueReference vRef = vr[i];
+		strcpy(fmiBuffer.r[vRef],value[i]);
+		fmiBuffer.stringBuffer[vRef]=fmiBuffer.r[vRef];
+		}
 	return fmi2OK;
 }
 
@@ -196,8 +244,9 @@ extern "C" fmi2Status fmi2CancelStep(fmi2Component c) {
 
 extern "C" fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicationPoint, fmi2Real communicationStepSize,
 		fmi2Boolean noSetFMUStatePriorToCurrentPoint) {
-	doStep("tick");
-	return fmi2OK;
+	doStep();
+	if(watchdog==0)return fmi2OK;
+	else return fmi2Error;
 }
 
 extern "C" fmi2Status fmi2GetStatus(fmi2Component c, const fmi2StatusKind s, fmi2Status *value) {

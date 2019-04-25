@@ -142,21 +142,25 @@ require([ "plugins/FMI/PBFMIPVSPrinter" ], function (PBFMIPVSPrinter) {
     
     /*fino a value sono campi obbligatori, dopo sono facoltativi*/
     var statevariables = [
-		{name:"x1", type:"real",variability: "continuous", scope:"input", value:"0",top:20, width: 300, widget: "BasicDisplay"},
-		{name:"z1", type:"real",variability: "continuous", scope:"input", value:"0",top:20, width: 300, left: 500, widget: "BasicDisplay"},
-		{name:"x2", type:"real",variability: "continuous", scope:"input", value:"0",top:120, width: 300, widget: "BasicDisplay"},
-		{name:"z2", type:"real",variability: "continuous", scope:"input", value:"0",top:120, width: 300, left: 500, widget: "BasicDisplay"},
-		{name:"x3", type:"real",variability: "continuous", scope:"input", value:"0",top:220, width: 300, widget: "BasicDisplay"},
-		{name:"z3", type:"real",variability: "continuous", scope:"input", value:"0",top:220, width: 300, left: 500, widget: "BasicDisplay"},
-		{name:"x4", type:"real",variability: "continuous", scope:"input", value:"0",top:320, width: 300, widget: "BasicDisplay"},
-		{name:"z4", type:"real",variability: "continuous", scope:"input", value:"0",top:320, width: 300, left: 500, widget: "BasicDisplay"},
-		{name:"x5", type:"real",variability: "continuous", scope:"input", value:"0",top:420, width: 300, widget: "BasicDisplay"},
-		{name:"z5", type:"real",variability: "continuous", scope:"input", value:"0",top:420, width: 300, left: 500, widget: "BasicDisplay"},
+		{name:"x1", type:"Real",variability: "continuous", scope:"input", value:"0",top:20, width: 300, widget: "BasicDisplay"},
+		{name:"z1", type:"Real",variability: "continuous", scope:"input", value:"0",top:20, width: 300, left: 500, widget: "BasicDisplay"},
+		{name:"x2", type:"Real",variability: "continuous", scope:"input", value:"0",top:120, width: 300, widget: "BasicDisplay"},
+		{name:"z2", type:"Real",variability: "continuous", scope:"input", value:"0",top:120, width: 300, left: 500, widget: "BasicDisplay"},
+		{name:"x3", type:"Real",variability: "continuous", scope:"input", value:"0",top:220, width: 300, widget: "BasicDisplay"},
+		{name:"z3", type:"Real",variability: "continuous", scope:"input", value:"0",top:220, width: 300, left: 500, widget: "BasicDisplay"},
+		{name:"x4", type:"Real",variability: "continuous", scope:"input", value:"0",top:320, width: 300, widget: "BasicDisplay"},
+		{name:"z4", type:"Real",variability: "continuous", scope:"input", value:"0",top:320, width: 300, left: 500, widget: "BasicDisplay"},
+		{name:"x5", type:"Real",variability: "continuous", scope:"input", value:"0",top:420, width: 300, widget: "BasicDisplay"},
+		{name:"z5", type:"Real",variability: "continuous", scope:"input", value:"0",top:420, width: 300, left: 500, widget: "BasicDisplay"},
 		
 	];
-	var fmi = {name: "VisualDrones", state_variables : {variables: statevariables}, last: 10};
+	
+	var composedvariables = [
+		
+	];
 	
     var printer = new PBFMIPVSPrinter();
-    printer.print(fmi,[]);
-    printer.print_front(fmi,[]);
+    printer.create_FMU("VisualDrones",{state_variables : {variables: statevariables},composed_variables : {variables: composedvariables},init:"init",tick:"tick",port:"8084"});
+
+    //printer.print_front(fmi,[]);
 });
