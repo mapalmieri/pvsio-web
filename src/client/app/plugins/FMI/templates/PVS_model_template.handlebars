@@ -1,0 +1,39 @@
+{{modelName}}: THEORY
+ BEGIN
+
+  
+
+  state: TYPE = [#
+    {{#each variables}}%variability: {{variability}}, causality:{{causality}}
+    {{#if real}}{{name}} : real,{{/if}}{{#if bool}}{{name}} : boolean,{{/if}}{{#if int}}{{name}} : integer,{{/if}}{{#if string}}{{name}} : string,{{/if}}
+    
+    {{/each}}Time : real 
+  #]
+
+  init: state = (#
+    {{#each variables}}{{#if real}}{{name}} := {{start}},{{/if}}{{#if bool}}{{name}} := {{start}},{{/if}}{{#if int}}{{name}} := {{start}},{{/if}}{{#if string}}{{name}} := "{{start}}",{{/if}}
+    {{/each}}Time := 0.0
+  #)
+
+  
+
+  tick(st: state): state = st WITH [
+ 
+  
+  {{#each variables}}{{#if output}}% {{name}} :=  insert your specification here,
+  {{/if}}{{/each}}
+  Time := Time(st)+1 % modifiy this assignment if needed]
+    
+    
+    
+  
+  kth_step(K:nat):RECURSIVE state= 
+   IF (K=0) THEN
+    init
+   ELSE
+    tick(kth_step(K-1))
+   ENDIF
+  MEASURE K
+
+ END {{modelName}}
+
