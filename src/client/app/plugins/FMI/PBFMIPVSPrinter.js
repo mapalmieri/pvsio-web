@@ -30,7 +30,7 @@ define(function (require, exports, module) {
     var fmi2TypesPlatform_h = require("text!plugins/FMI/lib/fmi2TypesPlatform.h");
 	var index_html_template = require("text!plugins/FMI/templates/index_html.handlebars"); 
 	var index_js_template = require("text!plugins/FMI/templates/index_js.handlebars");
-	var md = require("text!../../../modelDescription.xml")
+	var md = require("text!modelDescription.xml")
 	
     /**
      * Constructor
