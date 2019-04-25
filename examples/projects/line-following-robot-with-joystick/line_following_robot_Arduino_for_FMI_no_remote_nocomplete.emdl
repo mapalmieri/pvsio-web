@@ -1,0 +1,286 @@
+{
+ "descriptor": {
+  "file_type": "emdl",
+  "version": "2.0",
+  "description": "emucharts model",
+  "chart_name": "line_following_robot_Arduino_for_FMI_no_remote_nocomplete"
+ },
+ "chart": {
+  "states": [
+   {
+    "id": "X1",
+    "name": "Auto",
+    "color": "#1f77b4",
+    "width": 36,
+    "height": 36,
+    "x": 189.00721740722656,
+    "y": 170.2836456298828,
+    "enter": "",
+    "exit": "",
+    "pmr": [],
+    "widgets": [],
+    "components": []
+   }
+  ],
+  "transitions": [
+   {
+    "id": "T1",
+    "name": "tick\n[ lfRightVal <= LSR_THRESHOLD AND lfLeftVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardSpeed;\n  servoRightVal := forwardSpeed;\n  out1 := 1.0;\n  out2 := 0.0;\n  out3 := 1.0;\n  out4 := 0.0;}",
+    "source": {
+     "id": "X1",
+     "name": "Auto",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 189.00721740722656,
+     "y": 170.2836456298828,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "Auto",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 189.00721740722656,
+     "y": 170.2836456298828,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 47.0072135925293,
+     "y": 371.20672607421875
+    }
+   },
+   {
+    "id": "T2",
+    "name": "tick\n[ lfRightVal <= LSR_THRESHOLD AND lfLeftVal > LSR_THRESHOLD ]\n{ servoLeftVal := forwardRotate;\n  servoRightVal := backwardRotate;\n  out1 := 0.0;\n  out2 := 1.0;\n  out3 := 1.0;\n  out4 := 0.0;}",
+    "source": {
+     "id": "X1",
+     "name": "Auto",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 189.00721740722656,
+     "y": 170.2836456298828,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "Auto",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 189.00721740722656,
+     "y": 170.2836456298828,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 68.00720977783203,
+     "y": 322.20672607421875
+    }
+   },
+   {
+    "id": "T3",
+    "name": "tick\n[ lfRightVal > LSR_THRESHOLD AND lfLeftVal <= LSR_THRESHOLD ]\n{ servoLeftVal := backwardRotate; \n  servoRightVal := forwardRotate;\n  out1 := 1.0;\n  out2 := 0.0;\n  out3 := 0.0;\n  out4 := 1.0;}",
+    "source": {
+     "id": "X1",
+     "name": "Auto",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 189.00721740722656,
+     "y": 170.2836456298828,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "Auto",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 189.00721740722656,
+     "y": 170.2836456298828,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 93.00720977783203,
+     "y": 299.2836608886719
+    }
+   }
+  ],
+  "initial_transitions": [
+   {
+    "id": "IT1",
+    "name": "",
+    "target": {
+     "id": "X1",
+     "name": "Auto",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 189.00721740722656,
+     "y": 170.2836456298828,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    }
+   }
+  ],
+  "variables": [
+   {
+    "id": "VAR_backwardRotate:real(Local)",
+    "name": "backwardRotate",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "1.0",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_forwardRotate:real(Local)",
+    "name": "forwardRotate",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "5.0",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_forwardSpeed:real(Local)",
+    "name": "forwardSpeed",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "4.0",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_lfLeftVal:real(Input)",
+    "name": "lfLeftVal",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_lfRightVal:real(Input)",
+    "name": "lfRightVal",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_servoRightVal:real(Output)",
+    "name": "servoRightVal",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_servoLeftVal:real(Output)",
+    "name": "servoLeftVal",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_out1:real(Output)",
+    "name": "out1",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_out2:real(Output)",
+    "name": "out2",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_out3:real(Output)",
+    "name": "out3",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_out4:real(Output)",
+    "name": "out4",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_LSR_THRESHOLD:real(Local)",
+    "name": "LSR_THRESHOLD",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "400",
+    "scope": "Local"
+   }
+  ],
+  "constants": [
+   {
+    "id": "CONST_IDLE:Speed",
+    "name": "IDLE",
+    "type": "Speed",
+    "value": "0"
+   },
+   {
+    "id": "CONST_MAX_SPEED:Speed",
+    "name": "MAX_SPEED",
+    "type": "Speed",
+    "value": "255"
+   }
+  ],
+  "datatypes": [
+   {
+    "id": "DATATYPE_LightSensorReading",
+    "name": "LightSensorReading",
+    "constructors": [
+     "x: nonneg_real | x <= 255"
+    ]
+   },
+   {
+    "id": "DATATYPE_Speed",
+    "name": "Speed",
+    "constructors": [
+     "x: real | x >= 0 AND x <= 255"
+    ]
+   }
+  ],
+  "pmr": {},
+  "isPIM": false
+ }
+}

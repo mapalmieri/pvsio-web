@@ -1,0 +1,200 @@
+-- ---------------------------------------------------------------
+--  Model : emucharts_line-following-robot-with-joystick_VDM
+--  Author: ..author name..
+--          ..affiliation..
+--          ..contact..
+-- ---------------------------------------------------------------
+
+module emucharts_line-following-robot-with-joystick_VDM
+exports all
+
+definitions
+
+values
+  -- constants
+  LSR_THRESHOLD: real = 400.0;
+
+
+types
+  -- machine states
+  MachineState = <Auto> | <Manual>;
+
+  -- emuchart state
+  state EmuchartState of 
+    current_state: MachineState 
+    previous_state: MachineState 
+    backwardRotate: real 
+    forwardRotate: real 
+    forwardSpeed: real 
+    lfLeftVal: real 
+    lfRightVal: real 
+    out1: real 
+    out2: real 
+    out3: real 
+    out4: real 
+    servoLeftVal: real 
+    servoRightVal: real
+  
+  -- initial state
+  init s == s = mk_EmuchartState(    
+    <Auto>, --current_state
+    undefined, --previous_state
+    1.0, --backwardRotate
+    5.0, --forwardRotate
+    4.0, --forwardSpeed
+    0.0, --lfLeftVal
+    0.0, --lfRightVal
+    0.0, --out1
+    0.0, --out2
+    0.0, --out3
+    0.0, --out4
+    0.0, --servoLeftVal
+    0.0  --servoRightVal
+  ) end
+
+functions
+  -- utility functions
+  enter_into: MachineState * EmuchartState -> EmuchartState
+  enter_into(ms, s) == mu(s, current_state |-> ms );
+  leave_state: MachineState * EmuchartState -> EmuchartState
+  leave_state(ms, s) == mu(s, previous_state |-> ms );
+
+  -- transition functions
+  per_accellerate: EmuchartState -> bool
+  per_accellerate(s) == ((s.current_state = <Manual>) and (true)) or ((s.current_state = <Auto>) and (true));
+  accellerate: EmuchartState -> EmuchartState
+  accellerate(s) ==
+    if (s.current_state = <Manual>) and (true)
+    then let new_s = leave_state(<Manual>, s) in let
+             new_s = mu(new_s, servoLeftVal |-> s.servoLeftVal + 0.1 ) in let
+             new_s = mu(new_s, servoRightVal |-> s.servoRightVal + 0.1 )
+          in enter_into(<Manual>, new_s)
+    elseif (s.current_state = <Auto>) and (true)
+    then let new_s = leave_state(<Auto>, s) in let
+             new_s = mu(new_s, servoLeftVal |-> s.servoLeftVal + 0.1 ) in let
+             new_s = mu(new_s, servoRightVal |-> s.servoRightVal + 0.1 )
+          in enter_into(<Manual>, new_s)
+    else undefined
+  pre per_accellerate(s);
+
+  per_autopilot: EmuchartState -> bool
+  per_autopilot(s) == ((s.current_state = <Manual>) and (true));
+  autopilot: EmuchartState -> EmuchartState
+  autopilot(s) ==
+    if (s.current_state = <Manual>) and (true)
+    then let new_s = leave_state(<Manual>, s) in let
+             new_s = mu(new_s, servoLeftVal |-> s.servoLeftVal ) in let
+             new_s = mu(new_s, servoRightVal |-> s.servoRightVal )
+          in enter_into(<Auto>, new_s)
+    else undefined
+  pre per_autopilot(s);
+
+  per_brake: EmuchartState -> bool
+  per_brake(s) == ((s.current_state = <Manual>) and (true)) or ((s.current_state = <Auto>) and (true));
+  brake: EmuchartState -> EmuchartState
+  brake(s) ==
+    if (s.current_state = <Manual>) and (true)
+    then let new_s = leave_state(<Manual>, s) in let
+             new_s = mu(new_s, servoLeftVal |-> s.servoLeftVal - 0.1 ) in let
+             new_s = mu(new_s, servoRightVal |-> s.servoRightVal - 0.1 )
+          in enter_into(<Manual>, new_s)
+    elseif (s.current_state = <Auto>) and (true)
+    then let new_s = leave_state(<Auto>, s) in let
+             new_s = mu(new_s, servoLeftVal |-> s.servoLeftVal - 0.1 ) in let
+             new_s = mu(new_s, servoRightVal |-> s.servoRightVal - 0.1 )
+          in enter_into(<Manual>, new_s)
+    else undefined
+  pre per_brake(s);
+
+  per_tick: EmuchartState -> bool
+  per_tick(s) == ((s.current_state = <Auto>) and (s.lfRightVal < LSR_THRESHOLD AND s.lfLeftVal < LSR_THRESHOLD)) or ((s.current_state = <Auto>) and (s.lfRightVal < LSR_THRESHOLD AND s.lfLeftVal > LSR_THRESHOLD)) or ((s.current_state = <Auto>) and (s.lfRightVal > LSR_THRESHOLD AND s.lfLeftVal < LSR_THRESHOLD)) or ((s.current_state = <Manual>) and (true));
+  tick: EmuchartState -> EmuchartState
+  tick(s) ==
+    if (s.current_state = <Auto>) and (s.lfRightVal < LSR_THRESHOLD AND s.lfLeftVal < LSR_THRESHOLD)
+    then let new_s = leave_state(<Auto>, s) in let
+             new_s = mu(new_s, servoLeftVal |-> s.forwardSpeed ) in let
+             new_s = mu(new_s, servoRightVal |-> - s.forwardSpeed )
+          in enter_into(<Auto>, new_s)
+    elseif (s.current_state = <Auto>) and (s.lfRightVal < LSR_THRESHOLD AND s.lfLeftVal > LSR_THRESHOLD)
+    then let new_s = leave_state(<Auto>, s) in let
+             new_s = mu(new_s, servoLeftVal |-> s.backwardRotate ) in let
+             new_s = mu(new_s, servoRightVal |-> - s.forwardRotate )
+          in enter_into(<Auto>, new_s)
+    elseif (s.current_state = <Auto>) and (s.lfRightVal > LSR_THRESHOLD AND s.lfLeftVal < LSR_THRESHOLD)
+    then let new_s = leave_state(<Auto>, s) in let
+             new_s = mu(new_s, servoLeftVal |-> s.forwardRotate ) in let
+             new_s = mu(new_s, servoRightVal |-> - s.backwardRotate )
+          in enter_into(<Auto>, new_s)
+    elseif (s.current_state = <Manual>) and (true)
+    then let new_s = leave_state(<Manual>, s) in let
+             new_s = mu(new_s, servoLeftVal |-> s.servoLeftVal ) in let
+             new_s = mu(new_s, servoRightVal |-> s.servoRightVal )
+          in enter_into(<Manual>, new_s)
+    else undefined
+  pre per_tick(s);
+
+  per_turnLeft: EmuchartState -> bool
+  per_turnLeft(s) == ((s.current_state = <Auto>) and (true)) or ((s.current_state = <Manual>) and (true));
+  turnLeft: EmuchartState -> EmuchartState
+  turnLeft(s) ==
+    if (s.current_state = <Auto>) and (true)
+    then let new_s = leave_state(<Auto>, s) in let
+             new_s = mu(new_s, servoLeftVal |-> s.servoLeftVal - 0.05 ) in let
+             new_s = mu(new_s, servoRightVal |-> s.servoRightVal + 0.05 )
+          in enter_into(<Manual>, new_s)
+    elseif (s.current_state = <Manual>) and (true)
+    then let new_s = leave_state(<Manual>, s) in let
+             new_s = mu(new_s, servoLeftVal |-> s.servoLeftVal - 0.05 ) in let
+             new_s = mu(new_s, servoRightVal |-> s.servoRightVal + 0.05 )
+          in enter_into(<Manual>, new_s)
+    else undefined
+  pre per_turnLeft(s);
+
+  per_turnRight: EmuchartState -> bool
+  per_turnRight(s) == ((s.current_state = <Auto>) and (true)) or ((s.current_state = <Manual>) and (true));
+  turnRight: EmuchartState -> EmuchartState
+  turnRight(s) ==
+    if (s.current_state = <Auto>) and (true)
+    then let new_s = leave_state(<Auto>, s) in let
+             new_s = mu(new_s, servoLeftVal |-> s.servoLeftVal + 0.05 ) in let
+             new_s = mu(new_s, servoRightVal |-> s.servoRightVal - 0.05 )
+          in enter_into(<Manual>, new_s)
+    elseif (s.current_state = <Manual>) and (true)
+    then let new_s = leave_state(<Manual>, s) in let
+             new_s = mu(new_s, servoLeftVal |-> s.servoLeftVal + 0.05 ) in let
+             new_s = mu(new_s, servoRightVal |-> s.servoRightVal - 0.05 )
+          in enter_into(<Manual>, new_s)
+    else undefined
+  pre per_turnRight(s);
+
+operations
+  transition_accellerate: () ==> ()
+  transition_accellerate() == EmuchartState := accellerate(EmuchartState)
+  pre pre_accellerate(EmuchartState);
+
+  transition_autopilot: () ==> ()
+  transition_autopilot() == EmuchartState := autopilot(EmuchartState)
+  pre pre_autopilot(EmuchartState);
+
+  transition_brake: () ==> ()
+  transition_brake() == EmuchartState := brake(EmuchartState)
+  pre pre_brake(EmuchartState);
+
+  transition_tick: () ==> ()
+  transition_tick() == EmuchartState := tick(EmuchartState)
+  pre pre_tick(EmuchartState);
+
+  transition_turnLeft: () ==> ()
+  transition_turnLeft() == EmuchartState := turnLeft(EmuchartState)
+  pre pre_turnLeft(EmuchartState);
+
+  transition_turnRight: () ==> ()
+  transition_turnRight() == EmuchartState := turnRight(EmuchartState)
+  pre pre_turnRight(EmuchartState);
+
+end emucharts_line-following-robot-with-joystick_VDM
+
+-- ---------------------------------------------------------------
+--  VDM model generated using PVSio-web VDMPrinter ver 0.2
+--  Tool freely available at http://www.pvsioweb.org
+-- ---------------------------------------------------------------

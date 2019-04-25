@@ -1,0 +1,4 @@
+{
+ "prototypeImage": "joypad.png",
+ "mainPVSFile": "pvs/line_following_robot_with_joystick.pvs"
+}
