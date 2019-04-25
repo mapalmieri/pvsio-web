@@ -1,0 +1,25 @@
+line_following_robot_arduino: THEORY
+ BEGIN IMPORTING line_following_robot_Arduino_for_FMI
+
+  %-- APIS
+
+  press_accelerate(st: State): State = accellerate(st)
+  release_accelerate(st: State): State = st
+  click_accelerate(st: State): State = accellerate(st)
+
+  press_brake(st: State): State = brake(st)
+  release_brake(st: State): State = st
+  click_brake(st: State): State = brake(st)
+
+  press_right(st: State): State = turnRight(st)
+  release_right(st: State): State = st
+  click_right(st: State): State = turnRight(st)
+
+  press_left(st: State): State = turnLeft(st)
+  release_left(st: State): State = st
+  click_left(st: State): State = turnLeft(st)
+
+
+  click_autopilot(st: (per_autopilot)): State = autopilot(st)
+
+END line_following_robot_arduino
