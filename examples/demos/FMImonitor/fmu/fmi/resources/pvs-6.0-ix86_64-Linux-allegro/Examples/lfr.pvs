@@ -1,0 +1,61 @@
+lfr: THEORY
+ BEGIN
+
+  
+
+  state: TYPE = [#
+    %variability: discrete, causality:local
+    gear : string,
+    %variability: discrete, causality:local
+    cc : string,
+    %variability: discrete, causality:output
+    time : boolean,
+    %variability: discrete, causality:input
+    linear : integer,
+    %variability: discrete, causality:input
+    angular : real,
+    %variability: discrete, causality:input
+    posx : real,
+    %variability: discrete, causality:input
+    posy : real,
+    %variability: discrete, causality:input
+    left_rotation : real,
+    %variability: discrete, causality:input
+    right_rotation : real,
+    Time : real 
+  #]
+
+  init: state = (#
+    gear := "DRIVE",
+    cc := "Auto",
+    time := TRUE,
+    linear := 0,
+    angular := 0,
+    posx := 0,
+    posy := 0,
+    left_rotation := 0,
+    right_rotation := 0,
+    Time := 0.0
+  #)
+
+  
+
+  tick(st: state): state = st WITH [
+  %insert your specification here and modify the assignment to Time
+  
+  % time := something,
+  
+  Time := Time(st)+1 ]
+    
+    
+    
+  
+  kth_step(K:nat):RECURSIVE state= 
+   IF (K=0) THEN
+    init
+   ELSE
+    tick(kth_step(K-1))
+   ENDIF
+  MEASURE K
+
+ END lfr

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+       <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="lib/graph.css" rel="stylesheet" type="text/css"/>
+        <link href="lib/style.css" rel="stylesheet" type="text/css"/>
+        <link href="lib/960.css" rel="stylesheet" type="text/css"/>
+        <style>
+            img {
+                -webkit-user-select: none;
+            }
+            area {
+                cursor:pointer;
+            }
+            div#content {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .dbg textarea {
+                background: transparent;
+                border: none;
+                resize: none;
+            }
+        </style>
+    </head>
+     <body class="noselect" style="background:#dedfdd;">
+        <div id="content" class="content" >
+        </div>
+        
+        
+        <div id="controls" class="controls" >
+            <div id="infusion_set" style="padding: 10px 28px 10px 28px; border: steelblue; border-style: solid;">
+                <input type="button" id="btn_insert_infusionset" value="Insert infusion set" style="margin-right: 20px">
+                <span>Infusion set</span>
+                <span id="infusionset_status" value="not_inserted">NOT inserted</span>
+                <input type="button" id="btn_remove_infusionset" value="Remove infusion set" style="margin-left: 20px">
+            </div>
+            <div id="mains" style="padding: 10px 28px 10px 28px; border: lightgreen; border-style: solid;">
+                <input type="button" id="btn_plug_mains" value="Plug into Mains" style="margin-right: 20px; margin-left:10px;">
+                <span>Pump</span>
+                <span id="mains_status" value="not_inserted">connected to MAINS</span>
+                <input type="button" id="btn_unplug_mains" value="Run on Battery" style="margin-left: 20px">
+            </div>
+            <div id="battery" style="padding: 10px 28px 10px 28px; border: grey; border-style: solid;">
+                <input type="submit" id="set_battery_level" value="Set New Battery Level" style="margin-left: 10px">
+                <input type="text"
+                       id="battery_level"
+                       name="battery_level"
+                       placeholder="Enter new battery level..."
+                       size="34">
+            </div>            
+        </div>
+        
+      
+
+        <script type="application/javascript" src="lib/layout.js"></script>
+        <script type="application/javascript" src="lib/promise-0.1.1.js"></script>
+        <script type="application/javascript" src="lib/keys.js"></script>
+        <script type="text/javascript" src="lib/jquery.js"></script>
+        <script type="text/javascript" src="lib/underscore.js"></script>
+        <script type="text/javascript" src="lib/d3.js"></script>
+        <script type="text/javascript" src="lib/backbone.js"></script>
+        <script type="text/javascript" src="lib/handlebars-v1.3.0.js"></script>
+        <script type="text/javascript" src="lib/bootstrap.min.js"></script>
+        <script type="text/javascript" src="lib/d3-gauge-plus.js"></script>
+        <script type="text/javascript" src="lib/require.js" data-main="js/index.js"></script>
+      <!--  <script type="text/javascript" src="lib/gamepadtest.js"></script> -->
+    </body>
+</html>

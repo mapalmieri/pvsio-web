@@ -1,0 +1,61 @@
+(line_following_robot_Arduino_for_FMI
+ (accellerate_TCC1 0
+  (accellerate_TCC1-1 nil 3751175386 ("" (tcc))
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (Mode type-decl nil line_following_robot_Arduino_for_FMI nil)
+    (State type-eq-decl nil line_following_robot_Arduino_for_FMI nil)
+    (per_accellerate const-decl "bool"
+     line_following_robot_Arduino_for_FMI nil))
+   nil))
+ (brake_TCC1 0
+  (brake_TCC1-1 nil 3751175386 ("" (tcc))
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (Mode type-decl nil line_following_robot_Arduino_for_FMI nil)
+    (State type-eq-decl nil line_following_robot_Arduino_for_FMI nil)
+    (per_brake const-decl "bool" line_following_robot_Arduino_for_FMI
+     nil))
+   nil))
+ (tick_TCC1 0
+  (tick_TCC1-1 nil 3751175386 ("" (tcc))
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (Mode type-decl nil line_following_robot_Arduino_for_FMI nil)
+    (State type-eq-decl nil line_following_robot_Arduino_for_FMI nil)
+    (per_tick const-decl "bool" line_following_robot_Arduino_for_FMI
+     nil)
+    (real_le_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil))
+   nil))
+ (turnLeft_TCC1 0
+  (turnLeft_TCC1-1 nil 3751175386 ("" (tcc))
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (Mode type-decl nil line_following_robot_Arduino_for_FMI nil)
+    (State type-eq-decl nil line_following_robot_Arduino_for_FMI nil)
+    (per_turnLeft const-decl "bool"
+     line_following_robot_Arduino_for_FMI nil))
+   nil))
+ (turnRight_TCC1 0
+  (turnRight_TCC1-1 nil 3751175386 ("" (tcc))
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (Mode type-decl nil line_following_robot_Arduino_for_FMI nil)
+    (State type-eq-decl nil line_following_robot_Arduino_for_FMI nil)
+    (per_turnRight const-decl "bool"
+     line_following_robot_Arduino_for_FMI nil))
+   nil)))
+

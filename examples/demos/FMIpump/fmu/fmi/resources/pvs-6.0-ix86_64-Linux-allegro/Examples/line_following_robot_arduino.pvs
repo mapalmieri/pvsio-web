@@ -1,0 +1,40 @@
+line_following_robot_arduino: THEORY
+ BEGIN IMPORTING line_following_robot_Arduino_for_FMI
+
+  %-- APIS
+
+  press_accelerate(st: State): State = accellerate(st)
+  release_accelerate(st: State): State = st
+  click_accelerate(st: State): State = accellerate(st)
+
+  press_brake(st: State): State = brake(st)
+  release_brake(st: State): State = st
+  click_brake(st: State): State = brake(st)
+
+  press_right(st: State): State = turnRight(st)
+  release_right(st: State): State = st
+  click_right(st: State): State = turnRight(st)
+
+  press_left(st: State): State = turnLeft(st)
+  release_left(st: State): State = st
+  click_left(st: State): State = turnLeft(st)
+
+
+  click_autopilot(st: (per_autopilot)): State = autopilot(st)
+  
+  
+  kth_step(K:nat):RECURSIVE State= 
+   IF (K=0) THEN
+    init
+   ELSE
+    tick(kth_step(K-1))
+   ENDIF
+  MEASURE K
+
+  no_shortcircuits : THEOREM
+  FORALL (K:nat): NOT( ( out1(kth_step(K)) = 1 AND out2(kth_step(K)) = 1) OR ( out3(kth_step(K)) = 1 AND out4(kth_step(K)) = 1))
+
+  always_auto : THEOREM
+  FORALL (K:nat): mode(kth_step(K)) = Auto
+
+END line_following_robot_arduino
