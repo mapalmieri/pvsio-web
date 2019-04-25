@@ -54,6 +54,8 @@ struct FmiBuffer {
 
 extern struct FmiBuffer fmiBuffer;
 
+void createSocket();
+
 int PipeStatus();
 
 void start_PVSio_process(int&);
@@ -87,24 +89,24 @@ int findIndex(const char*,const char *);
 void retrieveExternalVariables();
 
 void writeOutputVariableDouble(int , int );
-//void convertStateToDouble(int , int );
+
 void writeOutputVariableInt(int , int );
-//void convertStateToInt(int , int );
+
 void writeOutputVariableBool(int , int );
-//void convertStateToBool(int , int );
+
 void writeOutputVariableString(int , int );
-//void convertStateToString(int , int );
+
 
 
 
 void readInputVariableDouble(int , double, int );
-//void convertDoubleToState(int , double, int );
+
 void readInputVariableInt(int , int, int );
-//void convertIntToState(int , int, int );
+
 void readInputVariableBool(int , bool, int );
-//void convertBoolToState(int , bool, int );
+
 void readInputVariableString(int , const char*, int );
-//void convertStringToState(int , const char*, int );
+
 
  
 #endif // FMU_H

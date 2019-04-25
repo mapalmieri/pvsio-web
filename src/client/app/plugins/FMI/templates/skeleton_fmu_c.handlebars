@@ -20,6 +20,7 @@
 
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_t child1;
+pthread_t watchdog_child;
 
 char action[MAX_MEMORY];	//last command sent to PVSio
 char sendbuff[MAX_MEMORY]; // string sent to PVSio
@@ -131,9 +132,16 @@ char lwssendvariables[LWS_SEND_BUFFER_PRE_PADDING + LWS_SEND_BUFFER_POST_PADDING
 void sighandler(int sig) { force_exit = 1; }
 
 /*code for handling watchdog*/
-void watchdog_function(int sig){
+void* watchdog_function(void *arg){
+	clock_t start;
+	pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS,NULL);
+	start = clock();
+	while((clock()-start)/CLOCKS_PER_SEC < MAX_TIME){/*do nothing*/}
+	printf("Monitor pet the dog\n ");
 	watchdog=1;
+	fmiprintf("Monitor pet the dog\n ");
 }
+
 /*
 * body of the pthread that takes messages from the HMI
 */
@@ -284,21 +292,7 @@ void initialize(const char* location) {
 	fmiBuffer.stringBuffer[{{count}}]=fmiBuffer.r[{{count}}];
 	
 	
-	/*we need to open the websocket server*/
-	 while(websocket_open == FALSE) {
-        port = initial_port;
-        websocket_open = open_websocket();
-        if (websocket_open == FALSE) {
-            initial_port++; /* change port so that a new port
-                            can be tried at the next attempt */
-        } else {
-            printf("WEBSOCKET OPENED\n");
-            signal(SIGINT, sighandler);   /* handle user interrupts */
-        }
-	}
-	/*finally we create the thread to take messages from the HMI*/
-	signal(SIGALRM, watchdog_function);
-    pthread_create(&child1, NULL, &GUI_process, NULL);
+
 }
 
 
@@ -410,10 +404,10 @@ void doStep() {
 	
 	watchdog=0;
 	strcpy(temp_state,state); 	 // save state before execution of tick
-	alarm(MAX_TIME);					 // set alarm of 10 seconds
+	pthread_create(&watchdog_child, NULL, &watchdog_function, NULL);					 // set alarm of 10 seconds
 	PVSioEval("{{tick}}");
 	if(PVSioPrint()==true){
-		ualarm(0,0);				 // disable alarm
+		pthread_cancel(watchdog_child);					 // disable alarm
 		if(watchdog==1){			 // if the watchdog fired
 			strcpy(state,temp_state);// restore the state
 			restart_PVSio();		 // kill PVSio and then start it over
@@ -421,8 +415,11 @@ void doStep() {
 	}
 	else{
 		strcpy(state,temp_state);	 // restore the state
-		
+		if(watchdog==1){			 // if the watchdog fired
+			restart_PVSio();		 // kill PVSio and then start it over
+		}
 	}
+	pthread_cancel(watchdog_child);	
 	{{#each variables}}
 	{{#if fmi}}{{#if output}}{{#if real}} 
     index_state=findVariable("{{name}}",state);
@@ -533,6 +530,7 @@ bool findPVSioPrompt(const char* _state){
 
 void terminate(){ 
 	pthread_cancel(child1); 
+	usleep(100);
 	sprintf(sendbuff,"exit;\n");
 	write(FtS[1], sendbuff,strlen(sendbuff));
 	//kill(child1,SIGUSR1);
@@ -615,10 +613,10 @@ static int Callback(struct lws* wsi, enum lws_callback_reasons reason, void* use
 			else{
 				watchdog=0;
 				strcpy(temp_state,state); 	 // save state before execution of tick
-				alarm(MAX_TIME);					 // set alarm of 10 seconds
+				pthread_create(&watchdog_child, NULL, &watchdog_function, NULL);				 // set alarm of 10 seconds
 				PVSioEval(receivebuff);
 				if(PVSioPrint() == true){
-					ualarm(0,0);				 // disable alarm
+					pthread_cancel(watchdog_child);					 // disable alarm
 					if(watchdog==1){			 // if the watchdog fired
 						strcpy(state,temp_state);// restore the state
 						restart_PVSio();		 // kill PVSio and then start it over
@@ -626,9 +624,13 @@ static int Callback(struct lws* wsi, enum lws_callback_reasons reason, void* use
 				}
 				else{
 					strcpy(state,temp_state);	// restore the state
+					if(watchdog==1){			 // if the watchdog fired
+						restart_PVSio();		 // kill PVSio and then start it over
+					}
 				}
 			}
-			
+		pthread_cancel(watchdog_child);	
+		
 		retrieveExternalVariables();
 		strcpy(extendedstate,state);
 		strcat(extendedstate,externalvariables);
@@ -752,6 +754,24 @@ void close_websocket() {
     lws_context_destroy(context);
     websocket_open = FALSE;
     printf("close_websocket\n");
+}
+
+void createSocket(){
+	 
+	 /*we need to open the websocket server*/
+	 while(websocket_open == FALSE) {
+        port = initial_port;
+        websocket_open = open_websocket();
+        if (websocket_open == FALSE) {
+            initial_port++; /* change port so that a new port
+                            can be tried at the next attempt */
+        } else {
+            printf("WEBSOCKET OPENED\n");
+            signal(SIGINT, sighandler);   /* handle user interrupts */
+        }
+	}
+	/*finally we create the thread to take messages from the HMI*/
+    pthread_create(&child1, NULL, &GUI_process, NULL);
 }
 
 int findVariable(const char tosearch[], const char state[]){

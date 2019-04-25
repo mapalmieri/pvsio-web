@@ -17,7 +17,6 @@ all:
 	cp fmu.cpp sources
 	cp skeleton.cpp sources
 	mv {{name}}.so binaries/linux64/
-	cp /usr/local/lib/libwebsockets.so.11 binaries/linux64/
 	zip -r {{name}}.fmu modelDescription.xml binaries/ resources/ sources/
 	rm -rf sources
 	rm -rf binaries
