@@ -21,6 +21,13 @@
 					canGetAndSetFMUstate="false"
 					canSerializeFMUstate="false"
 					providesDirectionalDerivative="false">
+					
+			<SourceFiles>
+				<File name="fmu.c" />
+				<File name="skeleton.c" />
+				<File name="misraC/{{modelName}}.c" />
+			</SourceFiles>
+			
 		</CoSimulation>
 	<LogCategories>
 		<Category name="logAll" />
