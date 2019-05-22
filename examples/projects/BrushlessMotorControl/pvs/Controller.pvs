@@ -1,0 +1,100 @@
+Controller: THEORY
+ BEGIN IMPORTING pvsioweb_utils
+  %-- operating modes
+  Mode: TYPE = { X1 }
+
+  %-- state attributes
+  State: TYPE = [#
+    mode: Mode,
+    previous_mode: Mode,
+    a1: real,
+    a2: real,
+    a3: real,
+    a4: real,
+    b: real,
+    Id: real,
+    Id_des: real,
+    Iq: real,
+    J: real,
+    k: real,
+    k11: real,
+    k12: real,
+    k21: real,
+    k22: real,
+    L: real,
+    Omega: real,
+    p: real,
+    R: real,
+    T1: real,
+    T2: real,
+    T3: real,
+    T4: real,
+    Theta: real,
+    Theta_des: real,
+    Ud_control: real,
+    Uq_control: real,
+    v1: real,
+    v2: real,
+    x1: real,
+    x2: real,
+    x3: real,
+    x4: real,
+    y1: real,
+    y1_des: real,
+    y2: real,
+    y2_des: real,
+    z: real
+  #]
+
+  %-- init function
+  init: State = (#
+    previous_mode := X1, 
+    mode := X1, 
+    a1 := 0.01, 
+    a2 := 0.01, 
+    a3 := 0.01, 
+    b := 0.01, 
+    Id := 0.0, 
+    Id_des := 0.0, 
+    Iq := 0.0, 
+    J := 0.01, 
+    k := 0.5, 
+    k11 := -1000.0, 
+    k12 := 0.0, 
+    k21 := 0.0, 
+    k22 := -100000.0, 
+    L := 0.05, 
+    Omega := 0.0, 
+    p := 3.0, 
+    R := 3.3, 
+    T1 := 4.0, 
+    T2 := 2.0, 
+    T3 := 1.0, 
+    T4 := 0.5, 
+    Theta := 0.0, 
+    Theta_des := 0.0, 
+    z := 10.0
+  #)
+
+  %-- leave/enter functions
+  enter(m: Mode)(st: State): State = st WITH [ mode := m ]
+  leave(m: Mode)(st: State): State = st WITH [ previous_mode := m ]
+
+  %-- triggers
+ % per_tick(st: State): bool = (mode(st) = X1 AND ( true ))
+  tick(st: State): State =
+    COND
+     mode(st) = X1 AND ( true )
+      -> LET st = leave(X1)(st),
+             st = st WITH [ x1 := Id(st) ],
+             st = st WITH [ x2 := Iq(st) ],
+             st = st WITH [ x3 := Theta(st) ],
+             st = st WITH [ x4 := Omega(st) ],
+             st = st WITH [ y1 := x1(st) ],
+             st = st WITH [ y2 := x3(st) ],
+             st = st WITH [ y1_des := Id_des(st) ],
+             st = st WITH [ y2_des := Theta_des(st) ]
+          IN enter(X1)(st)
+    ENDCOND
+
+ END Controller

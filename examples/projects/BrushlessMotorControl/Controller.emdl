@@ -1,0 +1,434 @@
+{
+ "descriptor": {
+  "file_type": "emdl",
+  "version": "2.0",
+  "description": "emucharts model",
+  "chart_name": "Controller"
+ },
+ "chart": {
+  "states": [
+   {
+    "id": "X1",
+    "name": "X1",
+    "color": "#1f77b4",
+    "width": 36,
+    "height": 36,
+    "x": 552,
+    "y": 232,
+    "enter": "",
+    "exit": "",
+    "pmr": [],
+    "widgets": [],
+    "components": []
+   }
+  ],
+  "transitions": [
+   {
+    "id": "T1",
+    "name": "tick\n[true]\n{ x1 := Id;\n  x2 := Iq;\n  x3 := Theta;\n  x4 := Omega;\n  y1 := x1;\n  y2 := x3;\n  y1_des := Id_des;\n  y2_des := Theta_des;\n  error_theta := Theta-Theta_des;\n  error_xd := Id - Id_des; \n  }",
+    "source": {
+     "id": "X1",
+     "name": "X1",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 552,
+     "y": 232,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "X1",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 552,
+     "y": 232,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 682,
+     "y": 351
+    }
+   }
+  ],
+  "initial_transitions": [
+   {
+    "id": "IT1",
+    "name": "Init",
+    "target": {
+     "id": "X1",
+     "name": "X1",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 552,
+     "y": 232,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    }
+   }
+  ],
+  "variables": [
+   {
+    "id": "VAR_a1:real(Parameter)",
+    "name": "a1",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.01",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_a2:real(Parameter)",
+    "name": "a2",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.01",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_a3:real(Parameter)",
+    "name": "a3",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.01",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_a4:real(CalculatedParameter)",
+    "name": "a4",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "",
+    "scope": "CalculatedParameter"
+   },
+   {
+    "id": "VAR_b:real(Parameter)",
+    "name": "b",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.01",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_Id:real(Input)",
+    "name": "Id",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_Id_des:real(Input)",
+    "name": "Id_des",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_Iq:real(Input)",
+    "name": "Iq",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_J:real(Parameter)",
+    "name": "J",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.01",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_k:real(Parameter)",
+    "name": "k",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.5",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_k11:real(Parameter)",
+    "name": "k11",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "-1000.0",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_k12:real(Parameter)",
+    "name": "k12",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_k21:real(Parameter)",
+    "name": "k21",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_k22:real(Parameter)",
+    "name": "k22",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "-100000.0",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_L:real(Parameter)",
+    "name": "L",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.05",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_Omega:real(Input)",
+    "name": "Omega",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_p:real(Parameter)",
+    "name": "p",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "3.0",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_R:real(Parameter)",
+    "name": "R",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "3.3",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_T1:real(Parameter)",
+    "name": "T1",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "4.0",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_T2:real(Parameter)",
+    "name": "T2",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "2.0",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_T3:real(Parameter)",
+    "name": "T3",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "1.0",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_T4:real(Parameter)",
+    "name": "T4",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.5",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_Theta:real(Input)",
+    "name": "Theta",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_Theta_des:real(Input)",
+    "name": "Theta_des",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_Ud_control:real(Output)",
+    "name": "Ud_control",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_Uq_control:real(Output)",
+    "name": "Uq_control",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_v1:real(Local)",
+    "name": "v1",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_v2:real(Local)",
+    "name": "v2",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_x1:real(Local)",
+    "name": "x1",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_x2:real(Local)",
+    "name": "x2",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_x3:real(Local)",
+    "name": "x3",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_x4:real(Local)",
+    "name": "x4",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_y1:real(Local)",
+    "name": "y1",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_y1_des:real(Local)",
+    "name": "y1_des",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_y2:real(Local)",
+    "name": "y2",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_y2_des:real(Local)",
+    "name": "y2_des",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_z:real(Parameter)",
+    "name": "z",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "10.0",
+    "scope": "Parameter"
+   },
+   {
+    "id": "VAR_error_theta:real(Output)",
+    "name": "error_theta",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_error_xd:real(Output)",
+    "name": "error_xd",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_J1:real(Output)",
+    "name": "J1",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_J2:real(Output)",
+    "name": "J2",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_J3:real(Output)",
+    "name": "J3",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_J4:eral(Output)",
+    "name": "J4",
+    "type": "eral",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Output"
+   }
+  ],
+  "constants": [],
+  "datatypes": [],
+  "pmr": {},
+  "isPIM": false
+ }
+}

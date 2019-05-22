@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<fmiModelDescription 	fmiVersion="2.0"
+						modelName="BrushlessMotorControl"
+						guid="{abb4bff1-d423-4e02-90d9-011f519869ff}"
+						description=""
+						author="..author name.."
+						version="Version 1"
+						copyright=""
+						license="PVS License"
+						generationTool="PVSio-web"
+						variableNamingConvention="flat"
+						numberOfEventIndicators="0">
+	<CoSimulation 	modelIdentifier="BrushlessMotorControl"
+					needsExecutionTool="false"
+					canHandleVariableCommunicationStepSize="true"
+					canInterpolateInputs="false"
+					maxOutputDerivativeOrder="0"
+					canRunAsynchronuously="false"
+					canBeInstantiatedOnlyOncePerProcess="false"
+					canNotUseMemoryManagementFunctions="true"
+					canGetAndSetFMUstate="false"
+					canSerializeFMUstate="false"
+					providesDirectionalDerivative="false">
+		</CoSimulation>
+	<LogCategories>
+		<Category name="logAll" />
+		<Category name="logError" />
+		<Category name="logFmiCall" />
+		<Category name="Protocol" />
+		<Category name="Error" />
+	</LogCategories>
+
+	<ModelVariables>
+		<ScalarVariable name="a1" valueReference="1" causality="parameter" variability="fixed"   ><Real start="0.01" /></ScalarVariable>
+    
+		<ScalarVariable name="a2" valueReference="2" causality="parameter" variability="fixed"   ><Real start="0.01" /></ScalarVariable>
+    
+		<ScalarVariable name="a3" valueReference="3" causality="parameter" variability="fixed"   ><Real start="0.01" /></ScalarVariable>
+    
+		<ScalarVariable name="a4" valueReference="4" causality="parameter" variability="fixed" ><Real start="0.01"  /></ScalarVariable>
+    
+		<ScalarVariable name="b" valueReference="5" causality="parameter" variability="fixed"   ><Real start="0.01" /></ScalarVariable>
+    
+		<ScalarVariable name="error_theta" valueReference="6" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+    
+		<ScalarVariable name="error_xd" valueReference="7" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+    
+		<ScalarVariable name="Id" valueReference="8" causality="input" variability="continuous" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="Id_des" valueReference="9" causality="input" variability="continuous" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="Iq" valueReference="10" causality="input" variability="continuous" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="J" valueReference="11" causality="parameter" variability="fixed"   ><Real start="0.01" /></ScalarVariable>
+    
+		<ScalarVariable name="J1" valueReference="12" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+    
+		<ScalarVariable name="J2" valueReference="13" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+    
+		<ScalarVariable name="J3" valueReference="14" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+    
+		<ScalarVariable name="k" valueReference="15" causality="parameter" variability="fixed"    ><Real start="0.5" /></ScalarVariable>
+    
+		<ScalarVariable name="k11" valueReference="16" causality="parameter" variability="fixed"    ><Real start="-1000.0" /></ScalarVariable>
+    
+		<ScalarVariable name="k12" valueReference="17" causality="parameter" variability="fixed"    ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="k21" valueReference="18" causality="parameter" variability="fixed"    ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="k22" valueReference="19" causality="parameter" variability="fixed"    ><Real start="-100000.0" /></ScalarVariable>
+    
+		<ScalarVariable name="L" valueReference="20" causality="parameter" variability="fixed"    ><Real start="0.05" /></ScalarVariable>
+    
+		<ScalarVariable name="Omega" valueReference="21" causality="input" variability="continuous" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="p" valueReference="22" causality="parameter" variability="fixed"    ><Real start="3.0" /></ScalarVariable>
+    
+		<ScalarVariable name="R" valueReference="23" causality="parameter" variability="fixed"    ><Real start="3.3" /></ScalarVariable>
+    
+		<ScalarVariable name="T1" valueReference="24" causality="parameter" variability="fixed"    ><Real start="4.0" /></ScalarVariable>
+    
+		<ScalarVariable name="T2" valueReference="25" causality="parameter" variability="fixed"    ><Real start="2.0" /></ScalarVariable>
+    
+		<ScalarVariable name="T3" valueReference="26" causality="parameter" variability="fixed"    ><Real start="1.0" /></ScalarVariable>
+    
+		<ScalarVariable name="T4" valueReference="27" causality="parameter" variability="fixed"    ><Real start="0.5" /></ScalarVariable>
+    
+		<ScalarVariable name="Theta" valueReference="28" causality="input" variability="continuous" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="Theta_des" valueReference="29" causality="input" variability="continuous" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="Ud_control" valueReference="30" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+    
+		<ScalarVariable name="Uq_control" valueReference="31" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+    
+		<ScalarVariable name="v1" valueReference="32" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="v2" valueReference="33" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="x1" valueReference="34" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="x2" valueReference="35" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="x3" valueReference="36" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="x4" valueReference="37" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="y1" valueReference="38" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="y1_des" valueReference="39" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="y2" valueReference="40" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="y2_des" valueReference="41" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.0" /></ScalarVariable>
+    
+		<ScalarVariable name="z" valueReference="42" causality="parameter" variability="fixed"    ><Real start="10.0" /></ScalarVariable>
+    </ModelVariables>
+
+	<ModelStructure>
+	<Outputs>
+			<Unknown index="6"  dependencies=""/>
+            
+			<Unknown index="7"  dependencies=""/>
+            
+			<Unknown index="12"  dependencies=""/>
+            
+			<Unknown index="13"  dependencies=""/>
+            
+			<Unknown index="14"  dependencies=""/>
+            
+			<Unknown index="30"  dependencies=""/>
+            
+			<Unknown index="31"  dependencies=""/>
+            
+	</Outputs>
+
+	</ModelStructure>
+</fmiModelDescription>

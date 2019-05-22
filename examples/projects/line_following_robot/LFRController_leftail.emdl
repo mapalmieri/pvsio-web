@@ -3,18 +3,18 @@
   "file_type": "emdl",
   "version": "2.0",
   "description": "emucharts model",
-  "chart_name": "LFRController_leftFail"
+  "chart_name": "LFRController_leftail"
  },
  "chart": {
   "states": [
    {
     "id": "X1",
-    "name": "AUTO",
-    "color": "#1f77b4",
+    "name": "Automatic",
+    "color": "#2ca02c",
     "width": 36,
     "height": 36,
-    "x": 318.0138854980469,
-    "y": 262.7673645019531,
+    "x": 335.5138854980469,
+    "y": 263.5173645019531,
     "enter": "",
     "exit": "",
     "pmr": [],
@@ -24,11 +24,11 @@
    {
     "id": "X2",
     "name": "left_sensor_failed",
-    "color": "#1f77b4",
+    "color": "#FE2E2E",
     "width": 36,
     "height": 36,
-    "x": 48.01171875,
-    "y": 360.0859375,
+    "x": 49.0117134898901,
+    "y": 380.0859375,
     "enter": "",
     "exit": "",
     "pmr": [],
@@ -37,12 +37,12 @@
    },
    {
     "id": "X5",
-    "name": "on_Black",
+    "name": "on_Black_right",
     "color": "#1f77b4",
     "width": 36,
     "height": 36,
-    "x": -277.99998474121094,
-    "y": 580.3333435058594,
+    "x": -119.99998474121094,
+    "y": 603.3333435058594,
     "enter": "",
     "exit": "",
     "pmr": [],
@@ -51,12 +51,54 @@
    },
    {
     "id": "X6",
-    "name": "on_White",
+    "name": "on_White_right",
     "color": "#ff7f0e",
     "width": 36,
     "height": 36,
-    "x": 344.00000381469727,
-    "y": 608.3333435058594,
+    "x": 285.00000381469727,
+    "y": 602.3333435058594,
+    "enter": "",
+    "exit": "",
+    "pmr": [],
+    "widgets": [],
+    "components": []
+   },
+   {
+    "id": "X3",
+    "name": "right_sensor_failed",
+    "color": "#FE2E2E",
+    "width": 36,
+    "height": 36,
+    "x": 636,
+    "y": 381,
+    "enter": "",
+    "exit": "",
+    "pmr": [],
+    "widgets": [],
+    "components": []
+   },
+   {
+    "id": "X4",
+    "name": "on_Black_left",
+    "color": "#1f77b4",
+    "width": 36,
+    "height": 36,
+    "x": 419,
+    "y": 603,
+    "enter": "",
+    "exit": "",
+    "pmr": [],
+    "widgets": [],
+    "components": []
+   },
+   {
+    "id": "X7",
+    "name": "on_White_left",
+    "color": "#ff7f0e",
+    "width": 36,
+    "height": 36,
+    "x": 882,
+    "y": 608,
     "enter": "",
     "exit": "",
     "pmr": [],
@@ -70,12 +112,12 @@
     "name": "tick\n[ (sensor_left_fail == 0 AND sensor_right_fail == 0) AND lfRightVal <= LSR_THRESHOLD AND lfLeftVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardSpeed;\n  servoRightVal := -forwardSpeed; }",
     "source": {
      "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
+     "name": "Automatic",
+     "color": "#2ca02c",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 335.5138854980469,
+     "y": 263.5173645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -84,12 +126,12 @@
     },
     "target": {
      "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
+     "name": "Automatic",
+     "color": "#2ca02c",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 335.5138854980469,
+     "y": 263.5173645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -97,8 +139,8 @@
      "components": []
     },
     "controlPoint": {
-     "x": 432.0138854980469,
-     "y": 26.76735496520996
+     "x": 219.5,
+     "y": 139.74999237060547
     }
    },
    {
@@ -106,12 +148,12 @@
     "name": "tick\n[ (sensor_left_fail == 0 AND sensor_right_fail == 0) AND lfRightVal <= LSR_THRESHOLD AND lfLeftVal > LSR_THRESHOLD ]\n{ servoLeftVal := backwardRotate; \n  servoRightVal := -forwardRotate; }",
     "source": {
      "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
+     "name": "Automatic",
+     "color": "#2ca02c",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 335.5138854980469,
+     "y": 263.5173645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -120,12 +162,12 @@
     },
     "target": {
      "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
+     "name": "Automatic",
+     "color": "#2ca02c",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 335.5138854980469,
+     "y": 263.5173645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -133,8 +175,8 @@
      "components": []
     },
     "controlPoint": {
-     "x": 475.0138854980469,
-     "y": 58.76735305786133
+     "x": 447.5,
+     "y": 130.74999237060547
     }
    },
    {
@@ -142,12 +184,12 @@
     "name": "tick\n[(sensor_left_fail == 0 AND sensor_right_fail == 0) AND lfRightVal > LSR_THRESHOLD AND lfLeftVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardRotate;\n  servoRightVal := -backwardRotate; }",
     "source": {
      "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
+     "name": "Automatic",
+     "color": "#2ca02c",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 335.5138854980469,
+     "y": 263.5173645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -156,12 +198,12 @@
     },
     "target": {
      "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
+     "name": "Automatic",
+     "color": "#2ca02c",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 335.5138854980469,
+     "y": 263.5173645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -169,8 +211,8 @@
      "components": []
     },
     "controlPoint": {
-     "x": 451.0138854980469,
-     "y": 43.76735305786133
+     "x": 530,
+     "y": 154.75
     }
    },
    {
@@ -178,12 +220,12 @@
     "name": "tick\n[ (sensor_left_fail == 0 AND sensor_right_fail == 0) AND lfRightVal > LSR_THRESHOLD AND lfLeftVal > LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
     "source": {
      "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
+     "name": "Automatic",
+     "color": "#2ca02c",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 335.5138854980469,
+     "y": 263.5173645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -192,12 +234,12 @@
     },
     "target": {
      "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
+     "name": "Automatic",
+     "color": "#2ca02c",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 335.5138854980469,
+     "y": 263.5173645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -205,21 +247,21 @@
      "components": []
     },
     "controlPoint": {
-     "x": 427,
-     "y": -12
+     "x": 116.24999237060547,
+     "y": 173.5
     }
    },
    {
     "id": "T5",
-    "name": "tick\n[sensor_left_fail == 1]\n{servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal;}",
+    "name": "tick\n[sensor_left_fail != 0 AND sensor_right_fail == 0]\n{servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal;}",
     "source": {
      "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
+     "name": "Automatic",
+     "color": "#2ca02c",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 335.5138854980469,
+     "y": 263.5173645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -229,11 +271,11 @@
     "target": {
      "id": "X2",
      "name": "left_sensor_failed",
-     "color": "#1f77b4",
+     "color": "#FE2E2E",
      "width": 36,
      "height": 36,
-     "x": 48.01171875,
-     "y": 360.0859375,
+     "x": 49.0117134898901,
+     "y": 380.0859375,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -241,8 +283,8 @@
      "components": []
     },
     "controlPoint": {
-     "x": 223.3053312746819,
-     "y": 308.06694589174884
+     "x": 230.73208888419003,
+     "y": 312.4731701840194
     }
    },
    {
@@ -251,11 +293,11 @@
     "source": {
      "id": "X2",
      "name": "left_sensor_failed",
-     "color": "#1f77b4",
+     "color": "#FE2E2E",
      "width": 36,
      "height": 36,
-     "x": 48.01171875,
-     "y": 360.0859375,
+     "x": 49.0117134898901,
+     "y": 380.0859375,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -264,12 +306,12 @@
     },
     "target": {
      "id": "X5",
-     "name": "on_Black",
+     "name": "on_Black_right",
      "color": "#1f77b4",
      "width": 36,
      "height": 36,
-     "x": -277.99998474121094,
-     "y": 580.3333435058594,
+     "x": -119.99998474121094,
+     "y": 603.3333435058594,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -277,8 +319,8 @@
      "components": []
     },
     "controlPoint": {
-     "x": -110.1216576521993,
-     "y": 458.68103273464914
+     "x": -91,
+     "y": 543.7999877929688
     }
    },
    {
@@ -287,11 +329,11 @@
     "source": {
      "id": "X2",
      "name": "left_sensor_failed",
-     "color": "#1f77b4",
+     "color": "#FE2E2E",
      "width": 36,
      "height": 36,
-     "x": 48.01171875,
-     "y": 360.0859375,
+     "x": 49.0117134898901,
+     "y": 380.0859375,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -300,12 +342,12 @@
     },
     "target": {
      "id": "X6",
-     "name": "on_White",
+     "name": "on_White_right",
      "color": "#ff7f0e",
      "width": 36,
      "height": 36,
-     "x": 344.00000381469727,
-     "y": 608.3333435058594,
+     "x": 285.00000381469727,
+     "y": 602.3333435058594,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -313,8 +355,8 @@
      "components": []
     },
     "controlPoint": {
-     "x": 175.99998474121094,
-     "y": 463
+     "x": 152.87131461946143,
+     "y": 467.72826460411227
     }
    },
    {
@@ -322,12 +364,12 @@
     "name": "tick\n[lfRightVal <= LSR_THRESHOLD]\n{servoLeftVal := servoLeftVal;\nservoRightVal := servoRightVal;}",
     "source": {
      "id": "X6",
-     "name": "on_White",
+     "name": "on_White_right",
      "color": "#ff7f0e",
      "width": 36,
      "height": 36,
-     "x": 344.00000381469727,
-     "y": 608.3333435058594,
+     "x": 285.00000381469727,
+     "y": 602.3333435058594,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -336,12 +378,12 @@
     },
     "target": {
      "id": "X5",
-     "name": "on_Black",
+     "name": "on_Black_right",
      "color": "#1f77b4",
      "width": 36,
      "height": 36,
-     "x": -277.99998474121094,
-     "y": 580.3333435058594,
+     "x": -119.99998474121094,
+     "y": 603.3333435058594,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -349,8 +391,8 @@
      "components": []
     },
     "controlPoint": {
-     "x": 35.702588192507875,
-     "y": 561.7141376071814
+     "x": 76.95403362751952,
+     "y": 568.6334271047765
     }
    },
    {
@@ -358,12 +400,12 @@
     "name": "tick\n[lfRightVal > LSR_THRESHOLD]\n{servoLeftVal := servoRightVal+servoLeftVal;\nservoRightVal := servoLeftVal-servoRightVal;\n servoLeftVal := servoLeftVal-servoRightVal;\n servoLeftVal := -servoLeftVal;\nservoRightVal := -servoRightVal;}",
     "source": {
      "id": "X5",
-     "name": "on_Black",
+     "name": "on_Black_right",
      "color": "#1f77b4",
      "width": 36,
      "height": 36,
-     "x": -277.99998474121094,
-     "y": 580.3333435058594,
+     "x": -119.99998474121094,
+     "y": 603.3333435058594,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -372,12 +414,12 @@
     },
     "target": {
      "id": "X6",
-     "name": "on_White",
+     "name": "on_White_right",
      "color": "#ff7f0e",
      "width": 36,
      "height": 36,
-     "x": 344.00000381469727,
-     "y": 608.3333435058594,
+     "x": 285.00000381469727,
+     "y": 602.3333435058594,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -385,8 +427,8 @@
      "components": []
     },
     "controlPoint": {
-     "x": 11.99998664855957,
-     "y": 603
+     "x": 45.999996185302734,
+     "y": 624.7999877929688
     }
    },
    {
@@ -394,12 +436,12 @@
     "name": "tick\n[lfRightVal <= LSR_THRESHOLD]\n{servoLeftVal := servoLeftVal;\nservoRightVal := servoRightVal;}",
     "source": {
      "id": "X5",
-     "name": "on_Black",
+     "name": "on_Black_right",
      "color": "#1f77b4",
      "width": 36,
      "height": 36,
-     "x": -277.99998474121094,
-     "y": 580.3333435058594,
+     "x": -119.99998474121094,
+     "y": 603.3333435058594,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -408,12 +450,12 @@
     },
     "target": {
      "id": "X5",
-     "name": "on_Black",
+     "name": "on_Black_right",
      "color": "#1f77b4",
      "width": 36,
      "height": 36,
-     "x": -277.99998474121094,
-     "y": 580.3333435058594,
+     "x": -119.99998474121094,
+     "y": 603.3333435058594,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -421,8 +463,8 @@
      "components": []
     },
     "controlPoint": {
-     "x": -385.99998474121094,
-     "y": 527.3333435058594
+     "x": -77,
+     "y": 686.7999877929688
     }
    },
    {
@@ -430,12 +472,12 @@
     "name": "tick\n[lfRightVal > LSR_THRESHOLD]\n{servoLeftVal := servoLeftVal;\nservoRightVal := servoRightVal;}",
     "source": {
      "id": "X6",
-     "name": "on_White",
+     "name": "on_White_right",
      "color": "#ff7f0e",
      "width": 36,
      "height": 36,
-     "x": 344.00000381469727,
-     "y": 608.3333435058594,
+     "x": 285.00000381469727,
+     "y": 602.3333435058594,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -444,12 +486,12 @@
     },
     "target": {
      "id": "X6",
-     "name": "on_White",
+     "name": "on_White_right",
      "color": "#ff7f0e",
      "width": 36,
      "height": 36,
-     "x": 344.00000381469727,
-     "y": 608.3333435058594,
+     "x": 285.00000381469727,
+     "y": 602.3333435058594,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -457,23 +499,275 @@
      "components": []
     },
     "controlPoint": {
-     "x": 424.00000381469727,
-     "y": 658.7333435058594
+     "x": 310,
+     "y": 708.7999877929688
+    }
+   },
+   {
+    "id": "T6",
+    "name": "tick\n[sensor_right_fail != 0 ]\n{servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal;}",
+    "source": {
+     "id": "X1",
+     "name": "Automatic",
+     "color": "#2ca02c",
+     "width": 36,
+     "height": 36,
+     "x": 335.5138854980469,
+     "y": 263.5173645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X3",
+     "name": "right_sensor_failed",
+     "color": "#FE2E2E",
+     "width": 36,
+     "height": 36,
+     "x": 636,
+     "y": 381,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 456.72180847983674,
+     "y": 306.28775626271374
+    }
+   },
+   {
+    "id": "T7",
+    "name": "tick\n[lfLeftVal > LSR_THRESHOLD]\n{servoLeftVal := servoLeftVal;\nservoRightVal := servoRightVal;}",
+    "source": {
+     "id": "X7",
+     "name": "on_White_left",
+     "color": "#ff7f0e",
+     "width": 36,
+     "height": 36,
+     "x": 882,
+     "y": 608,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X7",
+     "name": "on_White_left",
+     "color": "#ff7f0e",
+     "width": 36,
+     "height": 36,
+     "x": 882,
+     "y": 608,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 932,
+     "y": 704.7999877929688
+    }
+   },
+   {
+    "id": "T8",
+    "name": "tick\n[lfLeftVal <= LSR_THRESHOLD]\n{servoLeftVal := servoLeftVal;\nservoRightVal := servoRightVal;}",
+    "source": {
+     "id": "X4",
+     "name": "on_Black_left",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 419,
+     "y": 603,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X4",
+     "name": "on_Black_left",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 419,
+     "y": 603,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 449,
+     "y": 691.2000122070312
+    }
+   },
+   {
+    "id": "T9",
+    "name": "tick\n[lfLeftVal <= LSR_THRESHOLD]\n{servoLeftVal := servoLeftVal;\nservoRightVal := servoRightVal;}",
+    "source": {
+     "id": "X3",
+     "name": "right_sensor_failed",
+     "color": "#FE2E2E",
+     "width": 36,
+     "height": 36,
+     "x": 636,
+     "y": 381,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X4",
+     "name": "on_Black_left",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 419,
+     "y": 603,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 535.5273947365284,
+     "y": 482.09930053276855
+    }
+   },
+   {
+    "id": "T10",
+    "name": "tick\n[lfLeftVal > LSR_THRESHOLD]\n{servoLeftVal := servoRightVal+servoLeftVal;\nservoRightVal := servoLeftVal-servoRightVal;\n servoLeftVal := servoLeftVal-servoRightVal;\n servoLeftVal := -servoLeftVal;\nservoRightVal := -servoRightVal;}",
+    "source": {
+     "id": "X3",
+     "name": "right_sensor_failed",
+     "color": "#FE2E2E",
+     "width": 36,
+     "height": 36,
+     "x": 636,
+     "y": 381,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X7",
+     "name": "on_White_left",
+     "color": "#ff7f0e",
+     "width": 36,
+     "height": 36,
+     "x": 882,
+     "y": 608,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 757.3753790066728,
+     "y": 485.4101183076621
+    }
+   },
+   {
+    "id": "T11",
+    "name": "tick\n[lfLeftVal <= LSR_THRESHOLD]\n{servoLeftVal := servoRightVal+servoLeftVal;\nservoRightVal := servoLeftVal-servoRightVal;\n servoLeftVal := servoLeftVal-servoRightVal;\n servoLeftVal := -servoLeftVal;\nservoRightVal := -servoRightVal;}",
+    "source": {
+     "id": "X7",
+     "name": "on_White_left",
+     "color": "#ff7f0e",
+     "width": 36,
+     "height": 36,
+     "x": 882,
+     "y": 608,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X4",
+     "name": "on_Black_left",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 419,
+     "y": 603,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 691,
+     "y": 627.7999877929688
+    }
+   },
+   {
+    "id": "T12",
+    "name": "tick\n[lfLeftVal > LSR_THRESHOLD]\n{servoLeftVal := servoLeftVal;\nservoRightVal := servoRightVal;}",
+    "source": {
+     "id": "X4",
+     "name": "on_Black_left",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 419,
+     "y": 603,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X7",
+     "name": "on_White_left",
+     "color": "#ff7f0e",
+     "width": 36,
+     "height": 36,
+     "x": 882,
+     "y": 608,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 665.0845117976793,
+     "y": 576.9943552040135
     }
    }
   ],
   "initial_transitions": [
    {
     "id": "IT1",
-    "name": "Init",
+    "name": "IT1",
     "target": {
      "id": "X1",
-     "name": "AUTO",
-     "color": "#1f77b4",
+     "name": "Automatic",
+     "color": "#2ca02c",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 335.5138854980469,
+     "y": 263.5173645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
