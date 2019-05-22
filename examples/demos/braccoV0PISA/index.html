@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <link href="../../client/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="../../client/app/plugins/graphbuilder/graph.css" rel="stylesheet" type="text/css"/>
+        <link href="../../client/css/style.css" rel="stylesheet" type="text/css"/>
+        <link href="js/bracco.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body class="noselect">
+        <!-- IMPORTANT: div content must be the first one from the top, otherwise the coordinates of the buttons are not computed correctly -->
+        <div id="content" class="content" style="display:block;">
+            <map id="prototypeMap" name="prototypeMap">
+				<div id="bracco" style="display:block; z-index:1;">
+					<img src="bracco.png" usemap="#prototypeMap" id="bracco" style="margin-top:0px;">          
+					<img src="avvenuto-Raccordo_Paziente.png" usemap="#prototypeMap" id="avvenutoRP" style="position:absolute; top:467px; left: 265px; z-index:2; visibility:hidden;">
+					<div id="dialogs" style="position:absolute; top:315px; left:150px;">
+						<div id="confirm_substitution_patient_link" style="visibility:hidden;">
+							<div style="border-radius:15px ;position:absolute; margin-top:15px; margin-left:15px;  width:315px; height:140px; text-align:center; background-color:lightcyan; ">
+								
+								<p style="line-height:7px; font-size: 15px"><b><br><br>Confermare l'avvenuta<br><br>
+								 sostituzione del<br><br>
+								 Raccordo-Paziente?</b></p>
+								 <p class="normal" style="line-height:7px;font-size: 12px">Utilizzare un nuovo Raccordo-Paziente per <br><br>
+								 ogni nuovo paziente</p>
+								 <div style="float: left;">
+									<button id="x1" type="button" style="border-radius:15px ; background-color: transparent;; height:55px; width:55px; color:red; font-size:30px ">X</button>
+								 </div>
+								 <div style="float: right;">
+									<button id="v1" type="button" style="border-radius:15px ; background-color: transparent; height:55px; width:55px;  color:green; font-size:30px ">V</button>
+								 </div>
+							</div>
+						</div>
+						<div id="refill_RP" style="visibility:hidden;">
+							<div style="border-radius:15px ;position:absolute; margin-top: 30px;margin-left: 80px;width: 256px;height: 260px;background-color:lightcyan;">
+								<p class="normal" style="line-height:7px"><br><br>
+									Riempimento<br><br>
+									Kit-Paziente</p>
+								<div align="center"> 	
+									<button id="last operation" type="button" style="border-radius:7px ;width: 250px; height: 50px; text-align:right">Riempi con <br> salina</button>
+								</div>
+								<div align="center"> 	
+									<button id="refill_contrast" type="button" style="border-radius:7px ;width: 250px;background-color: darkblue;color: white;height: 50px; text-align:justify; padding-left:50px">Riempi con <br> mezzo di contrasto</button>
+								</div>
+								<div align="center" > 	
+									<button id="btn_refill_saline" type="button" style="border-radius:7px ;width: 250px;background-color: lightcyan;color: lightblack;height: 50px;text-align:justify; padding-left:50px">Riempi con <br> salina</button>
+								</div>
+								<div style="float: left;">
+									<button id="x2" type="button" style="border-radius:15px ; margin-top: 10px; background-color: transparent; height:55px; width:55px; color:red; font-size:30px ">X</button>
+								 </div>
+								<div style="float: right;">
+									<button id="v2" type="button" style="border-radius:15px ;  margin-top: 10px; background-color: transparent; height:55px; width:55px;  color:green; font-size:30px ">V</button>
+								</div>
+							</div>
+						</div>
+						<div id="refill_saline" style="visibility:hidden;">
+							<div style="border-radius:15px ;position:absolute; margin-top:15px; margin-left:15px;  width:315px; height:170px; text-align:center; background-color:lightcyan; ">
+								<div style="float: left;">
+									<button id="x3" type="button" style="border-radius:15px ;background-color:transparent; height:55px; width:55px; color:red; font-size:30px">X</button>
+								 </div>
+								 <div style="float: right;">
+									<button id="v3" type="button" style="border-radius:15px ;background: url(freccia.png); height:55px; width:55px;"></button>
+								 </div>
+								 <div style="float: center; margin-top:5px; font-size:15px"><b>
+									Riempimento <br> automatico</b>
+								</div>
+								<div style="margin-top:30px; font-size:15px">
+									Assicurarsi che non sia stato collegato alcun paziente al raccordo Kit-Paziente
+								</div>
+								<div style="margin-top:10px; font-size:12px">
+									Tale azione avviera' il riempimento automatico. Raccogliere la salina fuoriuscita in un piccolo recipiente
+								</div>
+								 
+								 
+							</div>
+						</div>
+						<div id="automatic_refil" style="visibility:hidden">
+							<div style="margin-top:-70px;margin-left:40px; width:280px;text-align: center; height:100px; background-color:white;border-radius:5px;">
+								<p class="normal" style="line-height:7px"><br><br>Riempimento automatico in corso
+								<br><br><br><br>Attendere!</p> <br>
+								<div class="progress">
+								  <div id="progress1" class="progress-bar" role="progressbar" style="width:11%; background-color: black; border:solid 1px black;">
+									
+								  </div>
+								  <div id="progress2" class="progress-bar " role="progressbar" style="width:11%; background-color: white; border:solid 1px black;">
+									
+								  </div>
+								  <div id="progress3" class="progress-bar " role="progressbar" style="width:11%; background-color: white; border:solid 1px black;">
+									
+								  </div>
+								  <div id="progress4" class="progress-bar " role="progressbar" style="width:11%; background-color: white;border:solid 1px black;">
+									
+								  </div>
+								  <div id="progress5" class="progress-bar " role="progressbar" style="width:11%; background-color: white;border:solid 1px black;">
+									
+								  </div>
+								  <div id="progress6" class="progress-bar " role="progressbar" style="width:11%; background-color: white;border:solid 1px black;">
+									
+								  </div>
+								  <div id="progress7" class="progress-bar " role="progressbar" style="width:11%; background-color: white;border:solid 1px black;">
+									
+								  </div>
+								  <div id="progress8" class="progress-bar " role="progressbar" style="width:11%; background-color: white;border:solid 1px black;">
+									
+								  </div>
+								  <div id="progress9" class="progress-bar " role="progressbar" style="width:11%; background-color: white;border:solid 1px black;">
+									
+								  </div>
+								</div>
+							</div>
+								</div>
+						<div id="confirm_no_air" style="visibility:hidden;">
+							<div style="border-radius:15px ;position:absolute; margin-top:15px; margin-left:15px;  width:315px; height:140px; text-align:center; background-color:lightcyan; ">
+								
+								<p class="normal" style="line-height:7px;font-size:14px;"><br><br>Verificare l'assenza di aria<br><br>
+									nel raccordo Kit-Paziente<br><br>
+								</p>
+								<p class="normal" style="line-height:7px;font-size:12px;">Espellere l'aria restante utilizzando<br><br>
+									l'apposito tasto di riempimento manuale</p>
+								<p class="normal" style="line-height:7px; font-size:15px; margin-top:15px"><b>Confermare quando<br><br>
+									eseguito </b></p>
+								<div style="float: right;">
+									<button id="v4" type="button" style="border-radius:15px ; background-color: transparent; height:45px; width:55px;  color:green; font-size:30px; margin-top:-30px ">V</button>
+								 </div>
+							</div>
+						</div>
+						<div id="change_needle_size" style="visibility:hidden;">
+							<div style="border-radius:15px ;position:absolute; margin-top:110px; margin-left:50px;  width:290px; height:55px; text-align:center; background-color:lightcyan; ">
+								
+								<p class="normal" style="line-height:7px"><br><br>Selezionare il calibro<br><br>
+								  dell'ago<br><br>
+								 </p>
+								 
+							</div>
+						</div>
+						<div id="select_needle_size" style="visibility:hidden;">
+							
+							
+							<div style="border-radius:15px ;position:absolute; margin-top: -100px;margin-left: 30px;width: 235px;height: 265px;background-color:lightcyan;">
+								<p class="normal" style="line-height:7px"><br><br>
+									&nbsp;Calibro ago</p>
+								<div align="center"> 	
+									<button id="last_size" type="button" style="border-radius:15px ;width: 220px;text-align:right; height:45px">18G</button>
+								</div>
+								<div align="left"> 	
+									<button id="g16" type="button" style="border-radius:15px ;width: 110px;background-color: grey;height:45px;">16G</button>
+									<button id="g22" type="button" style="border-radius:15px ;width: 110px;background-color: cyan; height:45px;">22G</button>
+								
+								</div>
+								<div align="left" > 	
+									<button id="g18" type="button" style="border-radius:15px ;width: 110px;background-color: green; height:45px;">18G</button>
+									<button id="g24" type="button" style="border-radius:15px ;width: 110px;background-color: yellow; height:45px;">24G</button>
+									<button id="g20" type="button" style="border-radius:15px ;width: 110px;background-color: pink; height:45px;">20G</button>
+								</div>
+								 <div style="float: left;">
+									<button id="x1" type="button" style="border-radius:15px ; background-color: transparent; height:55px; width:55px; color:red; font-size:30px">X</button>
+								 </div>
+								 <div style="float: right;">
+									<button id="v1" type="button" style="border-radius:15px ; background-color: transparent; height:55px; width:55px;  color:green; font-size:30px ">V</button>
+								 </div>
+							</div>
+						</div>		
+						<div id="choose_protocol" style="visibility:hidden;">
+							<div style="border-radius:15px ;position:absolute; margin-top:110px; margin-left:50px;  width:290px; height:55px; text-align:center; background-color:lightcyan; ">
+								
+								<p class="normal" style="line-height:7px"><br><br>Definire o selezionare<br><br>
+								  un nuovo profilo di<br><br>
+								  iniezione<br><br>
+								 </p>
+								 
+							</div>
+						</div>
+					</div>
+					<div id="injection" style="position:absolute; z-index:1; height:526px; width:417px; top:135px; left:80px;background:white;visibility:hidden">
+						<button id="top1" type="button" style="position:absolute;background: url(protocol_8.png); left:5px; border-radius:15px ; height:45px; width:55px;"></button>
+						<button id="top2" type="button" style="position:absolute; left:63px; border-radius:15px ; height:45px; width:220px;background:lightcyan;">total body</button>
+						<button id="top3" type="button" style="background: url(backbutton.png); position:absolute; left:300px; border-radius:15px ; height:45px; width:55px;"></button>
+						<button id="top4" type="button" style="background: url(toprightbutton.png);position:absolute; left:360px; border-radius:15px ; height:45px; width:55px;"></button>
+						<div id="graphics" style="position:absolute; left:10px; top:50px; width:400px; height:140px; background:white">
+							<img src="graficoBracco.png" usemap="#prototypeMap" id="graficobracco" style="margin-top:0px; width:100%; height:100%">
+						</div>
+						<button id="middle_row1_col1" type="button" style="position:absolute; left:5px; top:240px; border-radius:15px ; height:45px; width:55px;background:lightcyan; font-size: 16px">1:</button>
+						<button id="middle_row1_col2" type="button" style="position:absolute; left:70px; top:240px; border-radius:15px ; height:45px; width:105px;background:lightcyan;font-size: 16px">Salina</button>
+						<button id="middle_row1_col3" type="button" style="position:absolute; left:180px; top:240px; border-radius:15px ; height:45px; width:65px;background:lightcyan;font-size: 16px"></button>
+						<button id="middle_row1_col4" type="button" style="position:absolute; left:250px; top:240px; border-radius:15px ; height:45px; width:65px;background:lightcyan;font-size: 16px"></button>
+						<button id="middle_row1_col5" type="button" style="position:absolute; left:320px; top:240px; border-radius:15px ; height:45px; width:80px;background:lightcyan;font-size: 16px"></button>
+						
+						<button id="middle_row2_col1" type="button" style="position:absolute; left:5px; top:290px; border-radius:15px ; height:45px; width:55px;background:darkblue; color:white;font-size: 16px">2:</button>
+						<button id="middle_row2_col2" type="button" style="position:absolute; left:70px; top:290px; border-radius:15px ; height:45px; width:105px;background:darkblue; color:white;font-size: 16px">Iomeron 400</button>
+						<button id="middle_row2_col3" type="button" style="position:absolute; left:180px; top:290px; border-radius:15px ; height:45px; width:65px;background:darkblue; color:white;font-size: 16px"></button>
+						<button id="middle_row2_col4" type="button" style="position:absolute; left:250px; top:290px; border-radius:15px ; height:45px; width:65px;background:darkblue; color:white;font-size: 16px"></button>
+						<button id="middle_row2_col5" type="button" style="position:absolute; left:320px; top:290px; border-radius:15px ; height:45px; width:80px;background:darkblue; color:white;font-size: 16px"></button>
+						
+						<button id="middle_row3_col1" type="button" style="position:absolute; left:5px; top:340px; border-radius:15px ; height:45px; width:55px;background:lightcyan;font-size: 16px">3:</button>
+						<button id="middle_row3_col2" type="button" style="position:absolute; left:70px; top:340px; border-radius:15px ; height:45px; width:105px;background:lightcyan;font-size: 16px">Salina</button>
+						<button id="middle_row3_col3" type="button" style="position:absolute; left:180px; top:340px; border-radius:15px ; height:45px; width:65px;background:lightcyan;font-size: 16px"></button>
+						<button id="middle_row3_col4" type="button" style="position:absolute; left:250px; top:340px; border-radius:15px ; height:45px; width:65px;background:lightcyan;font-size: 16px"></button>
+						<button id="middle_row3_col5" type="button" style="position:absolute; left:320px; top:340px; border-radius:15px ; height:45px; width:80px;background:lightcyan;font-size: 16px"></button>
+						
+						<button id="down_arrow" type ="button"style=" background:url(down_arrow.png);position:absolute; left:5px; top:390px; border-radius:15px ; height:45px; width:40px;"></button>
+						
+						<button id="bottom1" type="button" style="background: url(bottom1.png);position:absolute; left:0px; top:440px;  border-radius:10px ; height:85px; width:75px;"></button>
+						<button id="bottom2" type="button" style="background: url(bottom2.png);position:absolute; top:480px; left:75px; border-radius:15px ; height:45px; width:75px;"></button>
+						<button id="bottom3" type="button" style="background: url(bottom3.png);position:absolute; top:480px; left:151px; border-radius:15px ; height:45px; width:75px;"></button>
+						<button id="bottom4" type="button" style="position:absolute; top:480px; left:380px; border-radius:15px ; height:45px; width:35px;background:lightcyan;font-size: 16px;">?</button>
+						
+						<div id= "dialogs_injection">
+							<div id="total_body" style="visibility:hidden">
+								<div style="position:absolute; top:50px; left:70px; height:240px; width:340px; background:lightcyan; z-index:3">
+
+									<p class="normal" style="line-height:7px; margin-left:3px;">
+										<br><br>Varie</p>
+									<div align="center"> 	
+										<button id="last protocol" type="button" style="text-align:left;border-radius:15px ;height:50px;width: 330px; background-color: grey; color:white">total body  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 110ml</button>
+									</div>
+									<div align="center"> 	
+										<button id="aaa" type="button" style="text-align:left;border-radius:15px ;width: 330px;height:50px;background-color: darkblue;color: white;">angio aaa &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 60ml</button>
+									</div>
+									<div align="center" > 	
+										<button id="select_total_body" type="button" style="text-align:left;border-radius:15px ;height:50px;width: 330px;background-color: darkblue;color: white;">total body &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 110ml</button>
+									</div>
+									
+										<button id="x5" type="button" style="position:absolute;border-radius:15px ;margin-left: 10px; margin-top: 4px; background-color: transparent; height:55px; width:55px;  color:red; font-size:30px; ">X</button>
+									
+									
+										<button id="m6" type="button" style="background: url(custom_protocol.png); position:absolute; border-radius:15px; margin-left: 140px; margin-top: 4px; height:55px; width:55px;"></button>
+									
+									
+										<button id="v5" type="button" style="position:absolute; border-radius:15px;margin-left: 280px; margin-top: 4px; background-color: transparent; height:55px; width:55px;  color:green; font-size:30px; ">V</button>
+									
+								</div>
+							</div>
+								<div id="injection-finished" style="visibility:hidden;">
+									<div style="border-radius:5px ;position:absolute; top:130px; left:60px;  width:270px; height:110px; text-align:center; background-color:lightcyan; ">
+									
+									<p style="line-height:7px; font-size: 18px"><br><br><b>Iniezione completata</b></p>
+									<p style="line-height:7px; font-size: 15px; text-align:left">- Inserisci un nuovo profilo di <br><br>iniezione o <br><br>
+									 - Chiudere questa sessione paziente<br><br> rimuovendo <br><br>
+									  il Raccordo-Paziente e cliccare <br><br> il tasto ->>-</p>
+									 
+									 
+									</div>
+								</div>
+								
+							
+						</div>								
+					</div>								
+					<!-- buttons da usare per i protocolli in alto a dx
+					<div id="protocol_buttons" style="position:absolute; top:134px; left:415px; height:298px; width:78px; background-color:lightcyan;">
+						<button id="protocol_btn1" type="button" style="border-radius:5px ; height:34px; width:77px; background-image: url(protocol_1.png);"></button>
+						<button id="protocol_btn2" type="button" style="border-radius:5px ; height:34px; width:77px; margin-top:1px; background-image: url(protocol_2.png);"></button>
+						<button id="protocol_btn3" type="button" style="border-radius:5px ; height:34px; width:77px; margin-top:1px; background-image: url(protocol_1.png);"></button>
+						<button id="protocol_btn4" type="button" style="border-radius:5px ; height:34px; width:77px; margin-top:1px; background-image: url(protocol_1.png);"></button>
+						<button id="protocol_btn5" type="button" style="border-radius:5px ; height:34px; width:77px; margin-top:1px; background-image: url(protocol_1.png);"></button>
+						<button id="protocol_btn6" type="button" style="border-radius:5px ; height:34px; width:77px; margin-top:1px; background-image: url(protocol_1.png);"></button>
+						<button id="protocol_btn7" type="button" style="border-radius:5px ; height:34px; width:77px; margin-top:1px; background-image: url(protocol_1.png);"></button>
+						<button id="protocol_btn8" type="button" style="border-radius:5px ; height:34px; width:77px; margin-top:1px; background-image: url(protocol_1.png);"></button>
+						
+					</div>-->
+				</div>
+			</div>
+		</div>
+		<script type="application/javascript" src="../../client/lib/promise-0.1.1.js"></script>
+		<script type="text/javascript" src="../../client/lib/jquery.js"></script>
+		<script type="text/javascript" src="../../client/lib/underscore/underscore.js"></script>
+		<script type="text/javascript" src="../../client/lib/backbone.js"></script>
+		<script type="text/javascript" src="../../client/lib/handlebars-v1.1.0.js"></script>
+		<script type="text/javascript" src="../../client/lib/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../../client/lib/keys.js"></script>
+        <script src="../../client/require.js" data-main="js/index.js"></script>
+
+        <script type="text/javascript" src="js/lib/segment-display.js"></script>
+    
+
+</body></html>

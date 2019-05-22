@@ -1,0 +1,140 @@
+bracco: THEORY
+BEGIN
+
+contrast: TYPE = {Iomeron_400 }
+NEEDLE: TYPE = {16, 18, 20, 22, 24, 0}
+Mode: TYPE = {INITIAL, CONFIRM, CONFIRMED, REFILL_SALINE, START_REFILL, STOP_REFILL, CHECKED_AIR, INSERT_NEEDLE_SIZE, CHOOSE_PROTOCOL, PROTOCOL_8, TOTAL_BODY, START_INJECTION, FINISHED }
+
+
+state: TYPE = [#
+	mode: Mode,
+    contrast1: contrast,
+    contrast2: contrast,
+    contrast_volume1: integer,
+    contrast_volume2: integer,
+    injection_contrast_volume1: integer,
+    injection_contrast_volume2: integer,
+    needle_connected: bool,
+    saline_volume: integer,
+    injection_saline_volume: integer,
+    needle_size: NEEDLE,
+    elapsed_time: integer,
+    first_row_volume: real,
+    first_row_rate: real,
+    first_row_time: real,
+    second_row_volume: posreal,
+    second_row_rate: real,
+    second_row_time: real,
+    third_row_volume: real,
+    third_row_rate: real,
+    third_row_time: real,
+    last_size: NEEDLE
+    #]
+    
+init(x:real): state = (#
+	mode := INITIAL,
+    contrast1 := Iomeron_400,
+    contrast2 := Iomeron_400,
+    contrast_volume1 := 181,
+    contrast_volume2 := 0,
+    injection_contrast_volume1 := 181,
+    injection_contrast_volume2 := 0,
+    needle_connected := FALSE,
+    saline_volume := 360,
+    injection_saline_volume := 360,
+    needle_size := 18,
+    elapsed_time := 650,
+    first_row_volume := 12,
+    first_row_rate := 3,
+    first_row_time := 4,
+    second_row_volume := 110,
+    second_row_rate := 3,
+    second_row_time := 37,
+    third_row_volume := 30,
+    third_row_rate := 3,
+    third_row_time := 10,
+    last_size:= 18
+#)
+
+tick(st:state) : state = 
+COND
+	mode(st) = START_INJECTION ->
+									COND 
+											first_row_volume(st) > 0 -> st WITH
+																			[
+																				elapsed_time := elapsed_time(st)+1,
+																				first_row_time := first_row_time(st)-1,
+																				first_row_volume:= first_row_volume(st)-first_row_rate(st),
+																				saline_volume := saline_volume(st)-first_row_rate(st),
+																				injection_saline_volume := saline_volume(st)-first_row_rate(st)
+																			],
+											second_row_volume(st) > 0 ->
+																			COND 
+																					second_row_volume(st)>second_row_rate(st) -> st WITH 
+																								
+																																	[
+																																		elapsed_time := elapsed_time(st)+1,
+																																		second_row_time := second_row_time(st)-1,
+																																		second_row_volume := second_row_volume(st)-second_row_rate(st),
+																																		contrast_volume1 := contrast_volume1(st) - second_row_rate(st),
+																																		injection_contrast_volume1 := contrast_volume1(st) - second_row_rate(st)
+ 																																	],
+																			ELSE -> st WITH 
+																								
+																																	[
+																																		elapsed_time := elapsed_time(st)+1,
+																																		second_row_time := second_row_time(st)-1,
+																																		second_row_volume:= 0,
+																																		contrast_volume1 := contrast_volume1(st) -second_row_volume(st),
+																																		injection_contrast_volume1 := contrast_volume1(st) -second_row_volume(st)
+																																	]
+																			ENDCOND,
+											third_row_volume(st) > 0 -> st WITH 
+																			[
+																				elapsed_time := elapsed_time(st)+1,
+																				third_row_time := third_row_time(st)-1,
+																				third_row_volume:= third_row_volume(st)-third_row_rate(st),
+																				saline_volume := saline_volume(st)-third_row_rate(st),
+																				injection_saline_volume := saline_volume(st)-third_row_rate(st)
+																			],
+											ELSE -> st with [mode:= FINISHED] 
+										ENDCOND,								
+	
+	ELSE -> st WITH [ elapsed_time := elapsed_time(st)+1] 
+ENDCOND
+click_btn_check_RP (st:state): state = st WITH [mode:= CONFIRM]
+
+click_confirm_change_RP (st:state): state = st WITH [mode:= CONFIRMED]
+
+click_btn_refill_saline (st:state): state = st WITH [ mode:= REFILL_SALINE]
+
+click_btn_start_refill (st:state): state = st WITH [ mode:= START_REFILL]  
+
+click_btn_protocol_8 (st:state): state = st WITH [ mode:= PROTOCOL_8]  
+
+click_btn_needle_size (st:state): state = st WITH [mode:= INSERT_NEEDLE_SIZE ]
+
+reset_needle_size (st:state): state = st WITH [needle_size := 0 ]
+
+STOP_REFILL (st:state): state = st WITH [ mode:= STOP_REFILL]
+
+start_new_procedure (st:state): state = st WITH [ elapsed_time := elapsed_time(st)+1,
+									 mode := INITIAL,
+									 first_row_volume := 12,
+									 first_row_time := 4,
+									 second_row_volume :=110,
+									 second_row_time:= 37,
+									 third_row_volume := 30,
+									 third_row_time := 10]
+
+automatic_saline_refill (st:state): state = st WITH [ saline_volume := saline_volume(st)-14,injection_saline_volume := saline_volume(st)-14]
+
+click_btn_checked_air (st:state): state = st WITH [ mode:= CHECKED_AIR]
+
+click_btn_total_body (st:state): state = st WITH [ mode:= TOTAL_BODY]
+
+click_btn_start (st:state): state = st WITH [ mode:= START_INJECTION, elapsed_time:= 0]
+
+set_needle_size(n:NEEDLE)(st:state): state = st WITH [needle_size := n,last_size:=n,mode := CHOOSE_PROTOCOL ]
+
+END bracco
