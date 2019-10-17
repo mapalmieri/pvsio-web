@@ -7,7 +7,13 @@ all:
 	gcc -fPIC -Wall -c fmu.c
 	gcc -fPIC -Wall -c skeleton.c
 	gcc -fPIC -Wall -c misraC/{{name}}.c
-	gcc -shared -o {{name}}.so skeleton.o fmu.o {{name}}.o 
+	cp resources/libwebsockets.* .
+	cp resources/libcrypto.so.* .
+	cp resources/libssl.so.* .
+	gcc -fPIC -shared -o {{name}}.so skeleton.o fmu.o {{name}}.o -Wl,-rpath,. -L. -lwebsockets
+	rm libwebsockets.*
+	rm libcrypto.so.*
+	rm libssl.so.*
 	rm -rf sources
 	rm -rf binaries
 	mkdir sources
@@ -21,14 +27,29 @@ all:
 	cp -r misraC sources
 	cp -r fmi sources
 	mv {{name}}.so binaries/linux64/
+	cp resources/libwebsockets.* binaries/linux64/
+	cp resources/libcrypto.so.* binaries/linux64/
+	cp resources/libssl.so.* binaries/linux64/
 	zip -r {{name}}.fmu modelDescription.xml binaries/ resources/ sources/
 	rm -rf sources
 	rm -rf binaries
 
 run:
+	cp resources/libwebsockets.* .
+	cp resources/libcrypto.so.* .
+	cp resources/libssl.so.* .
 	./fmuCheck.linux64 -h 1E-01 {{name}}.fmu
+	rm libwebsockets.*
+	rm libcrypto.so.*
+	rm libssl.so.*
 run1:
+	cp resources/libwebsockets.* .
+	cp resources/libcrypto.so.* .
+	cp resources/libssl.so.* .
 	./fmuCheck.linux64 -h 1E-02 {{name}}.fmu
+	rm libwebsockets.*
+	rm libcrypto.so.*
+	rm libssl.so.*
 
 clean:
 	rm -rf  {{name}}.o fmu.o skeleton.o

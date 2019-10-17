@@ -13,8 +13,36 @@
     "color": "#1f77b4",
     "width": 36,
     "height": 36,
-    "x": 318.0138854980469,
-    "y": 262.7673645019531,
+    "x": 479.0138854980469,
+    "y": 345.7673645019531,
+    "enter": "",
+    "exit": "",
+    "pmr": [],
+    "widgets": [],
+    "components": []
+   },
+   {
+    "id": "X4",
+    "name": "DRIVE",
+    "color": "#85c458",
+    "width": 36,
+    "height": 36,
+    "x": 361,
+    "y": 643,
+    "enter": "",
+    "exit": "",
+    "pmr": [],
+    "widgets": [],
+    "components": []
+   },
+   {
+    "id": "X5",
+    "name": "REVERSE",
+    "color": "#fa6304",
+    "width": 36,
+    "height": 36,
+    "x": 26,
+    "y": 361,
     "enter": "",
     "exit": "",
     "pmr": [],
@@ -25,15 +53,15 @@
   "transitions": [
    {
     "id": "T1",
-    "name": "tick\n[ lfRightVal <= LSR_THRESHOLD AND lfLeftVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardSpeed;\n  servoRightVal := -forwardSpeed; }",
+    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardSpeed;\n  servoRightVal := -forwardSpeed; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
      "color": "#1f77b4",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -46,8 +74,8 @@
      "color": "#1f77b4",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -55,21 +83,21 @@
      "components": []
     },
     "controlPoint": {
-     "x": 432.0138854980469,
-     "y": 26.76735496520996
+     "x": 688,
+     "y": 87
     }
    },
    {
     "id": "T2",
-    "name": "tick\n[ lfRightVal <= LSR_THRESHOLD AND lfLeftVal > LSR_THRESHOLD ]\n{ servoLeftVal := backwardRotate; \n  servoRightVal := -forwardRotate; }",
+    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := backwardRotate; \n  servoRightVal := -forwardRotate; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
      "color": "#1f77b4",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -82,8 +110,8 @@
      "color": "#1f77b4",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -91,21 +119,21 @@
      "components": []
     },
     "controlPoint": {
-     "x": 475.0138854980469,
-     "y": 58.76735305786133
+     "x": 710,
+     "y": 121
     }
    },
    {
     "id": "T3",
-    "name": "tick\n[ lfRightVal > LSR_THRESHOLD AND lfLeftVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardRotate;\n  servoRightVal := -backwardRotate; }",
+    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := forwardRotate;\n  servoRightVal := -backwardRotate; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
      "color": "#1f77b4",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -118,8 +146,8 @@
      "color": "#1f77b4",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -127,21 +155,21 @@
      "components": []
     },
     "controlPoint": {
-     "x": 451.0138854980469,
-     "y": 43.76735305786133
+     "x": 698,
+     "y": 106
     }
    },
    {
     "id": "T4",
-    "name": "tick\n[ lfRightVal > LSR_THRESHOLD AND lfLeftVal > LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
      "color": "#1f77b4",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -154,8 +182,8 @@
      "color": "#1f77b4",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -163,8 +191,1160 @@
      "components": []
     },
     "controlPoint": {
-     "x": 427,
-     "y": -12
+     "x": 675,
+     "y": 68
+    }
+   },
+   {
+    "id": "T19",
+    "name": "drive\n{ servoLeftVal := 0;\n  servoRightVal := 0; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 385,
+     "y": 505
+    }
+   },
+   {
+    "id": "T22",
+    "name": "autopilot",
+    "source": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 466,
+     "y": 609
+    }
+   },
+   {
+    "id": "T23",
+    "name": "accelerate\n[ servoLeftVal <= ACCELERATION_MAX_THRESHOLD  AND servoRightVal >= NEG_ACCELERATION_MAX_THRESHOLD ]\n{ servoLeftVal := servoLeftVal + ACCELERATION_FACTOR;\n  servoRightVal := servoRightVal - ACCELERATION_FACTOR; }",
+    "source": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 408,
+     "y": 848
+    }
+   },
+   {
+    "id": "T24",
+    "name": "brake\n[ servoLeftVal >= ACCELERATION_MIN_THRESHOLD  AND servoRightVal <= NEG_ACCELERATION_MIN_THRESHOLD ]\n{ servoLeftVal := servoLeftVal - ACCELERATION_FACTOR;\n  servoRightVal := servoRightVal + ACCELERATION_FACTOR; }",
+    "source": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 438,
+     "y": 785
+    }
+   },
+   {
+    "id": "T25",
+    "name": "right\n{ servoLeftVal := forwardRotate;\n  servoRightVal := -backwardRotate; }",
+    "source": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 488,
+     "y": 706
+    }
+   },
+   {
+    "id": "T26",
+    "name": "left\n{ servoLeftVal := backwardRotate; \n  servoRightVal := -forwardRotate; }",
+    "source": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 500,
+     "y": 690
+    }
+   },
+   {
+    "id": "T27",
+    "name": "right",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 569,
+     "y": 459
+    }
+   },
+   {
+    "id": "T28",
+    "name": "left",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 561,
+     "y": 479
+    }
+   },
+   {
+    "id": "T33",
+    "name": "drive",
+    "source": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 265,
+     "y": 708
+    }
+   },
+   {
+    "id": "T34",
+    "name": "autopilot",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 545,
+     "y": 500
+    }
+   },
+   {
+    "id": "T29",
+    "name": "tick",
+    "source": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 286,
+     "y": 723
+    }
+   },
+   {
+    "id": "T31",
+    "name": "accelerate\n[ servoLeftVal > ACCELERATION_MAX_THRESHOLD  OR servoRightVal < NEG_ACCELERATION_MAX_THRESHOLD OR\n  backwardRotate > ACCELERATION_MAX_THRESHOLD OR forwardRotate > ACCELERATION_MAX_THRESHOLD OR \n  forwardSpeed > ACCELERATION_MAX_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal;\n  backwardRotate := backwardRotate; \n  forwardRotate := forwardRotate;\n  forwardSpeed := forwardSpeed; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 735,
+     "y": 306
+    }
+   },
+   {
+    "id": "T41",
+    "name": "accelerate\n[ servoLeftVal > ACCELERATION_MAX_THRESHOLD  OR servoRightVal < NEG_ACCELERATION_MAX_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "source": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 408,
+     "y": 870
+    }
+   },
+   {
+    "id": "T42",
+    "name": "brake\n[ servoLeftVal < ACCELERATION_MIN_THRESHOLD  OR servoRightVal > NEG_ACCELERATION_MIN_THRESHOLD OR\n  backwardRotate < ACCELERATION_MIN_THRESHOLD OR forwardRotate < ACCELERATION_MIN_THRESHOLD OR \n  forwardSpeed < ACCELERATION_MIN_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal;\n  backwardRotate := backwardRotate; \n  forwardRotate := forwardRotate;\n  forwardSpeed := forwardSpeed; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 666,
+     "y": 408
+    }
+   },
+   {
+    "id": "T45",
+    "name": "brake\n[ servoLeftVal < ACCELERATION_MIN_THRESHOLD  OR servoRightVal > NEG_ACCELERATION_MIN_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "source": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 438,
+     "y": 805
+    }
+   },
+   {
+    "id": "T46",
+    "name": "reverse\n{ servoLeftVal := -servoLeftVal;\n  servoRightVal := -servoRightVal; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 244,
+     "y": 325
+    }
+   },
+   {
+    "id": "T49",
+    "name": "reverse\n{ servoLeftVal := -servoLeftVal;\n  servoRightVal := -servoRightVal; }",
+    "source": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 223,
+     "y": 480
+    }
+   },
+   {
+    "id": "T50",
+    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := -forwardRotate; \n  servoRightVal := backwardRotate; }",
+    "source": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 107,
+     "y": 190
+    }
+   },
+   {
+    "id": "T51",
+    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := -backwardRotate;\n  servoRightVal := forwardRotate; }",
+    "source": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 105,
+     "y": 173
+    }
+   },
+   {
+    "id": "T52",
+    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := -forwardSpeed;\n  servoRightVal := forwardSpeed; }",
+    "source": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 106,
+     "y": 152
+    }
+   },
+   {
+    "id": "T53",
+    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "source": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 83,
+     "y": 127
+    }
+   },
+   {
+    "id": "T54",
+    "name": "accelerate\n[ servoLeftVal <= ACCELERATION_MAX_THRESHOLD  AND servoRightVal >= NEG_ACCELERATION_MAX_THRESHOLD AND\n  backwardRotate <= ACCELERATION_MAX_THRESHOLD AND forwardRotate <= ACCELERATION_MAX_THRESHOLD AND \n  forwardSpeed <= ACCELERATION_MAX_THRESHOLD ]\n{ servoLeftVal := servoLeftVal + ACCELERATION_FACTOR;\n  servoRightVal := servoRightVal - ACCELERATION_FACTOR;\n  backwardRotate := backwardRotate + ACCELERATION_FACTOR; \n  forwardRotate := forwardRotate + ACCELERATION_FACTOR;\n  forwardSpeed := forwardSpeed + ACCELERATION_FACTOR; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 696,
+     "y": 289
+    }
+   },
+   {
+    "id": "T5",
+    "name": "brake\n[ servoLeftVal >= ACCELERATION_MIN_THRESHOLD  AND servoRightVal <= NEG_ACCELERATION_MIN_THRESHOLD AND\n  backwardRotate >= ACCELERATION_MIN_THRESHOLD AND forwardRotate >= ACCELERATION_MIN_THRESHOLD AND \n  forwardSpeed >= ACCELERATION_MIN_THRESHOLD ]\n{ servoLeftVal := servoLeftVal - ACCELERATION_FACTOR;\n  servoRightVal := servoRightVal + ACCELERATION_FACTOR;\n  backwardRotate := backwardRotate - ACCELERATION_FACTOR; \n  forwardRotate := forwardRotate - ACCELERATION_FACTOR;\n  forwardSpeed := forwardSpeed - ACCELERATION_FACTOR; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 692,
+     "y": 394
+    }
+   },
+   {
+    "id": "T6",
+    "name": "drive\n{ servoLeftVal := 0;\n  servoRightVal := 0; }",
+    "source": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X4",
+     "name": "DRIVE",
+     "color": "#85c458",
+     "width": 36,
+     "height": 36,
+     "x": 361,
+     "y": 643,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 149,
+     "y": 538
+    }
+   },
+   {
+    "id": "T7",
+    "name": "autopilot\n{ servoLeftVal := -servoLeftVal;\n  servoRightVal := -servoRightVal;\n  backwardRotate := -backwardRotate; \n  forwardRotate := -forwardRotate;\n  forwardSpeed := -forwardSpeed;}",
+    "source": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 248,
+     "y": 373
+    }
+   },
+   {
+    "id": "T8",
+    "name": "left",
+    "source": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": -100,
+     "y": 474
+    }
+   },
+   {
+    "id": "T9",
+    "name": "right",
+    "source": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": -113,
+     "y": 483
+    }
+   },
+   {
+    "id": "T10",
+    "name": "brake\n[ servoLeftVal > NEG_ACCELERATION_MIN_THRESHOLD  OR servoRightVal < ACCELERATION_MIN_THRESHOLD OR\n  backwardRotate < ACCELERATION_MIN_THRESHOLD OR forwardRotate < ACCELERATION_MIN_THRESHOLD OR \n  forwardSpeed < ACCELERATION_MIN_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal;\n  backwardRotate := backwardRotate; \n  forwardRotate := forwardRotate;\n  forwardSpeed := forwardSpeed; }",
+    "source": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": -252,
+     "y": 399
+    }
+   },
+   {
+    "id": "T11",
+    "name": "brake\n[ servoLeftVal <= NEG_ACCELERATION_MIN_THRESHOLD  AND servoRightVal >= ACCELERATION_MIN_THRESHOLD AND\n  backwardRotate >= ACCELERATION_MIN_THRESHOLD AND forwardRotate >= ACCELERATION_MIN_THRESHOLD AND \n  forwardSpeed >= ACCELERATION_MIN_THRESHOLD ]\n{ servoLeftVal := servoLeftVal + ACCELERATION_FACTOR;\n  servoRightVal := servoRightVal - ACCELERATION_FACTOR;\n  backwardRotate := backwardRotate - ACCELERATION_FACTOR; \n  forwardRotate := forwardRotate - ACCELERATION_FACTOR;\n  forwardSpeed := forwardSpeed - ACCELERATION_FACTOR; }",
+    "source": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": -240,
+     "y": 382
+    }
+   },
+   {
+    "id": "T12",
+    "name": "accelerate\n[ servoLeftVal < NEG_ACCELERATION_MAX_THRESHOLD  OR servoRightVal > ACCELERATION_MAX_THRESHOLD OR\n  backwardRotate > ACCELERATION_MAX_THRESHOLD OR forwardRotate > ACCELERATION_MAX_THRESHOLD OR \n  forwardSpeed > ACCELERATION_MAX_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal;\n  backwardRotate := backwardRotate; \n  forwardRotate := forwardRotate;\n  forwardSpeed := forwardSpeed; }",
+    "source": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": -224,
+     "y": 232
+    }
+   },
+   {
+    "id": "T13",
+    "name": "accelerate\n[ servoLeftVal >= NEG_ACCELERATION_MAX_THRESHOLD  AND servoRightVal <= ACCELERATION_MAX_THRESHOLD AND\n  backwardRotate <= ACCELERATION_MAX_THRESHOLD AND forwardRotate <= ACCELERATION_MAX_THRESHOLD AND \n  forwardSpeed <= ACCELERATION_MAX_THRESHOLD ]\n{ servoLeftVal := servoLeftVal - ACCELERATION_FACTOR;\n  servoRightVal := servoRightVal + ACCELERATION_FACTOR;\n  backwardRotate := backwardRotate + ACCELERATION_FACTOR; \n  forwardRotate := forwardRotate + ACCELERATION_FACTOR;\n  forwardSpeed := forwardSpeed + ACCELERATION_FACTOR; }",
+    "source": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": -221,
+     "y": 209
+    }
+   },
+   {
+    "id": "T14",
+    "name": "reverse",
+    "source": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X5",
+     "name": "REVERSE",
+     "color": "#fa6304",
+     "width": 36,
+     "height": 36,
+     "x": 26,
+     "y": 361,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": -92,
+     "y": 465
     }
    }
   ],
@@ -178,8 +1358,8 @@
      "color": "#1f77b4",
      "width": 36,
      "height": 36,
-     "x": 318.0138854980469,
-     "y": 262.7673645019531,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
      "enter": "",
      "exit": "",
      "pmr": [],
@@ -222,19 +1402,11 @@
     "scope": "Output"
    },
    {
-    "id": "VAR_LSR_THRESHOLD:real(Local)",
-    "name": "LSR_THRESHOLD",
-    "type": "real",
-    "repr": "float64_t",
-    "value": "400",
-    "scope": "Local"
-   },
-   {
     "id": "VAR_backwardRotate:real(Local)",
     "name": "backwardRotate",
     "type": "real",
     "repr": "float64_t",
-    "value": "1",
+    "value": "0.1",
     "scope": "Local"
    },
    {
@@ -242,7 +1414,7 @@
     "name": "forwardRotate",
     "type": "real",
     "repr": "float64_t",
-    "value": "5",
+    "value": "0.5",
     "scope": "Local"
    },
    {
@@ -250,11 +1422,80 @@
     "name": "forwardSpeed",
     "type": "real",
     "repr": "float64_t",
-    "value": "4",
+    "value": "0.4",
     "scope": "Local"
+   },
+   {
+    "id": "VAR_posx:real(Input)",
+    "name": "posx",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.138",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_posy:real(Input)",
+    "name": "posy",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "-0.08",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_port:int(Local)",
+    "name": "port",
+    "type": "int",
+    "repr": "int64_t",
+    "value": "8084",
+    "scope": "Local"
+   },
+   {
+    "type": "real",
+    "repr": "float64_t",
+    "name": "time",
+    "value": "0",
+    "scope": "Local",
+    "id": "VAR_time:real(Local)"
    }
   ],
-  "constants": [],
+  "constants": [
+   {
+    "id": "CONST_ACCELERATION_FACTOR:real",
+    "name": "ACCELERATION_FACTOR",
+    "type": "real",
+    "value": "0.2"
+   },
+   {
+    "id": "CONST_LSR_THRESHOLD:real",
+    "name": "LSR_THRESHOLD",
+    "type": "real",
+    "value": "150"
+   },
+   {
+    "id": "CONST_ACCELERATION_MIN_THRESHOLD:real",
+    "name": "ACCELERATION_MIN_THRESHOLD",
+    "type": "real",
+    "value": "0.2"
+   },
+   {
+    "id": "CONST_ACCELERATION_MAX_THRESHOLD:real",
+    "name": "ACCELERATION_MAX_THRESHOLD",
+    "type": "real",
+    "value": "0.8"
+   },
+   {
+    "id": "CONST_NEG_ACCELERATION_MAX_THRESHOLD:real",
+    "name": "NEG_ACCELERATION_MAX_THRESHOLD",
+    "type": "real",
+    "value": "-0.8"
+   },
+   {
+    "id": "CONST_NEG_ACCELERATION_MIN_THRESHOLD:real",
+    "name": "NEG_ACCELERATION_MIN_THRESHOLD",
+    "type": "real",
+    "value": "-0.2"
+   }
+  ],
   "datatypes": [],
   "pmr": {},
   "isPIM": false

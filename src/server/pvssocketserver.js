@@ -421,7 +421,20 @@ function run() {
             });
         });
     }
-
+	
+	/**
+     * @function copyFile
+     * @descrtiption Extracts from the message the source and the destination and then copies the file(s) by using the cp shell command.
+     * @param m {String} The received message.
+     */	
+	function copyFile(m) {
+		//Extract the paths from the message and edit them in order to be relatative to the server 
+        let source = "../client/app/" + m.split(":")[0];
+        let destination = "../../examples/projects/" + m.split(":")[1];
+        
+		let exec = require('child_process').exec, child;
+		child = exec("cp " + source + " " + destination);
+     }
 
     /**
         get function maps for client sockets
@@ -1051,21 +1064,31 @@ function run() {
         var functionMaps = createClientFunctionMaps();
         logger.info("opening websocket client " + socketid);
         socket.on("message", function (m) {
-            try {
-                var token = JSON.parse(m);
-                token.time = token.time || {};
-                token.time.server = { received: new Date().getTime() };
-                var f = functionMaps[token.type];
-                if (f && typeof f === 'function') {
-                    //call the function with token and socket as parameter
-                    f(token, socket, socketid);
-                } else {
-                    logger.warn("f is something unexpected -- I expected a function but got type " + typeof f);
-                }
-            } catch (error) {
-                logger.error(error.message);
-                logger.warn("Error while parsing token " + JSON.stringify(m).replace(/\\/g,""));
-            }
+			//The copy operation is handled with a specific function
+			if (m && m.indexOf("TYPE=copy") != -1) {
+				copyFile(m);
+			}
+			else {
+				try {
+					var token = JSON.parse(m);
+					
+					if (token.time) {
+						token.time = token.time || {};
+						token.time.server = { received: new Date().getTime() };
+					}
+					var f = functionMaps[token.type];
+					if (f && typeof f === 'function') {
+						//call the function with token and socket as parameter
+						f(token, socket, socketid);
+						
+					} else {
+						logger.warn("f is something unexpected -- I expected a function but got type " + typeof f);
+					}
+				} catch (error) {
+					logger.error(error.message);
+					logger.warn("Error while parsing token " + JSON.stringify(m).replace(/\\/g,""));
+				}
+			}
         });
 
         socket.on("close", function () {
@@ -1078,6 +1101,7 @@ function run() {
         });
     });
 
+	
     wsServer.on("error", function (err) {
         if (err.code === "EADDRINUSE") {
             console.log("\nError: Another instance of the PVSio-web server is already running.\nPlease shut down the other PVSio-web server instance before starting a new instance.");

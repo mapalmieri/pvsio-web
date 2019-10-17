@@ -166,6 +166,16 @@ define(function (require, exports, module) {
             wscBase.send(token, cb);
             return o;
         };
+         /**
+          * @function copyFile
+          * @descrtiption Copies the file(s) in the project directory.
+          * @param source {String} The orignal path of the file(s) to be added.
+          * @param destination {String} The path of the project folder in which the file(s) will be copied.
+          */
+        o.copyFile = function (source, destination) {
+            wscBase.sendForCopy(source, destination);
+            return o;
+        };
 
         /**
          * @function deleteFile

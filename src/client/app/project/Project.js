@@ -409,6 +409,20 @@ define(function (require, exports, module) {
             });
         });
     };
+    
+     /**
+     * @function copyFile
+     * @description Copies the file of the specified source path in the specified destination folder (the project folder).
+     * @param source {String} The orignal path of the file(s) to be added.
+     * @param destination {String} The path of the project folder in which the file(s) will be copied.
+     * @memberof module:Project
+     * @instance
+     */
+	Project.prototype.copyFile = function (source, destination) {
+        return new Promise(function (resolve, reject) {
+            WSManager.getWebSocket().copyFile(source, destination);
+         });
+    };
 
     Project.prototype.addFileDialog = function (name, content, opt) {
         var _this = this;

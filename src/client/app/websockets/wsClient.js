@@ -84,6 +84,22 @@ define(function (require, exports, module) {
             }
             return o;
         };
+        
+       /**
+        * @function sendForCopy
+        * @descrtiption Sends a message in order to copy the specified file(s) in the project directory. 
+        * 			    This send function is used only for the copy operation.
+        * @param source {String} The orignal path of the file(s) to be added.
+        * @param destination {String} The path of the project folder in which the file(s) will be copied.
+        */
+        o.sendForCopy = function (source, destination) {
+            if (ws) {
+				//The message is sent as a string whit all the needed infos				
+				ws.send(source + ":" + destination + ":TYPE=copy");
+            }
+            return o;
+        };
+        
         /**
             closes the websocket connection
         */

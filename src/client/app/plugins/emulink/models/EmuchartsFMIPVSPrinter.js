@@ -93,7 +93,7 @@ define(function (require, exports, module) {
 							v.fmi.variability = "fixed"; 
 							v.fmi.causality = "parameter";
 							v.fmi.initial = "exact";
-							}
+						}
                         v.fmi.valueReference = valueReference;
                         valueReference++;
                         count++;
@@ -105,6 +105,8 @@ define(function (require, exports, module) {
                         v.int = (v.type === "int");
                         v.bool = (v.type === "bool");
                         v.string = (v.type === "string");
+                        v.port = (v.name === "port");
+                        v.time = (v.name === "time");
                     }
                 });
                /* model.constants.forEach(function (c) {
@@ -126,17 +128,18 @@ define(function (require, exports, module) {
                 try {
                     skeleton_c = Handlebars.compile(skeleton_c_template, { noEscape: true })({
                         variables: model.state_variables.variables,
+                        triggers: model.triggers.functions,
                         modelName: emuchart.name
                     });
 
                     fmu_h = Handlebars.compile(fmu_h_template, { noEscape: true })({
                         variables: model.state_variables.variables,
+                        modelName: emuchart.name,
                         count: count
                     });
 
                     fmu_c = Handlebars.compile(fmu_c_template, { noEscape: true })({
                         variables: model.state_variables.variables
-
                     });
 
                     modelDescription_xml = Handlebars.compile(modelDescription_xml_template, { noEscape: true })({
@@ -161,9 +164,10 @@ define(function (require, exports, module) {
                     console.error(fmi_gen_err);
                 }
             }
-
+            
             //-- write data to disk
             var overWrite = {overWrite: true};
+            projectManager.project().addFolder("/" + fmu_folder + "resources", true);
             projectManager.project().addFile(fmu_folder + "skeleton.c", skeleton_c, overWrite);
             projectManager.project().addFile(fmu_folder + "FmuGUID.h", fmuGUID_h, overWrite);
             projectManager.project().addFile(fmu_folder + "fmu.h", fmu_h, overWrite);
@@ -173,7 +177,13 @@ define(function (require, exports, module) {
             projectManager.project().addFile(fmu_folder + "fmi/fmi2Functions.h", fmi2Functions_h, overWrite);
             projectManager.project().addFile(fmu_folder + "fmi/fmi2FunctionTypes.h", fmi2FunctionTypes_h, overWrite);
             projectManager.project().addFile(fmu_folder + "fmi/fmi2TypesPlatform.h", fmi2TypesPlatform_h, overWrite);
-            projectManager.project().addFile(fmu_folder + "binaries/linux64/something", null, overWrite);
+            
+            //Copy of needed libraries and useful files in the project directory
+            projectManager.project().copyFile("plugins/emulink/models/fmi-pvs/lib/fmuCheck.linux64", projectManager.project().toString() + "/" + fmu_folder);
+            projectManager.project().copyFile("plugins/emulink/models/fmi-pvs/lib/libcrypto.so.*", projectManager.project().toString() + "/" + fmu_folder + "resources/");
+            projectManager.project().copyFile("plugins/emulink/models/fmi-pvs/lib/libssl.so.*", projectManager.project().toString() + "/" + fmu_folder + "resources/");
+            projectManager.project().copyFile("plugins/emulink/models/fmi-pvs/lib/libwebsockets.*", projectManager.project().toString() + "/" + fmu_folder + "resources/");
+            
             resolve(true);
         }
         return new Promise (function (resolve, reject) {

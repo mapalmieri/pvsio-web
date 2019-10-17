@@ -1,0 +1,162 @@
+{
+ "descriptor": {
+  "file_type": "emdl",
+  "version": "2.0",
+  "description": "emucharts model",
+  "chart_name": "Environment"
+ },
+ "chart": {
+  "states": [
+   {
+    "id": "X1",
+    "name": "DISPLAY",
+    "color": "#1f77b4",
+    "width": 36,
+    "height": 36,
+    "x": 583,
+    "y": 311,
+    "enter": "",
+    "exit": "",
+    "pmr": [],
+    "widgets": [],
+    "components": []
+   }
+  ],
+  "transitions": [
+   {
+    "id": "T1",
+    "name": "tick",
+    "source": {
+     "id": "X1",
+     "name": "DISPLAY",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 583,
+     "y": 311,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "DISPLAY",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 583,
+     "y": 311,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 653,
+     "y": 361.4
+    }
+   }
+  ],
+  "initial_transitions": [
+   {
+    "id": "IT1",
+    "name": "",
+    "target": {
+     "id": "X1",
+     "name": "DISPLAY",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 583,
+     "y": 311,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    }
+   }
+  ],
+  "variables": [
+   {
+    "id": "VAR_posx1:real(Input)",
+    "name": "posx1",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_posy1:real(Input)",
+    "name": "posy1",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_posx2:real(Input)",
+    "name": "posx2",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_posy2:real(Input)",
+    "name": "posy2",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_posx3:real(Input)",
+    "name": "posx3",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_posy3:real(Input)",
+    "name": "posy3",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_output:real(Output)",
+    "name": "output",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "1",
+    "scope": "Output"
+   },
+   {
+    "type": "real",
+    "repr": "float64_t",
+    "name": "time",
+    "value": "0",
+    "scope": "Local",
+    "id": "VAR_time:real(Local)"
+   },
+   {
+    "type": "int",
+    "repr": "int64_t",
+    "name": "port",
+    "value": "8084",
+    "scope": "Local",
+    "id": "VAR_port:int(Local)"
+   }
+  ],
+  "constants": [],
+  "datatypes": [],
+  "pmr": {},
+  "isPIM": false
+ }
+}

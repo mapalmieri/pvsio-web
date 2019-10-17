@@ -14,10 +14,7 @@
  * */
 #include "fmu.h"
 
-struct FmiBuffer fmiBuffer;
-
-extern /*"C"*/fmi2Component fmi2Instantiate(
-				fmi2String instanceName,
+extern /*"C"*/fmi2Component fmi2Instantiate(fmi2String instanceName,
 				fmi2Type fmuType,
 				fmi2String fmuGUID,
 				fmi2String fmuResourceLocation,
@@ -25,8 +22,11 @@ extern /*"C"*/fmi2Component fmi2Instantiate(
 				fmi2Boolean visible,
 				fmi2Boolean loggingOn
 			) {
-	initialize(fmuResourceLocation);
-	return (void*) 1;
+	ModelInstance *comp = (ModelInstance *)malloc(sizeof(ModelInstance));	
+	
+	initialize(comp, fmuResourceLocation);
+	
+	return comp;
 }
 
 extern /*"C"*/fmi2Status fmi2SetupExperiment(
@@ -44,6 +44,15 @@ extern /*"C"*/fmi2Status fmi2EnterInitializationMode(fmi2Component c) {
 }
 
 extern /*"C"*/fmi2Status fmi2ExitInitializationMode(fmi2Component c) {
+	ModelInstance* comp = (ModelInstance*) c;
+	comp->port = 0;
+	comp->websocket_open = 0;
+
+	{{#each variables}}{{#if fmi}}{{#if int}}{{#if port}}// Create the websocket with the initial port number parameter	
+	create_websocket(comp, (int)comp->fmiBuffer.intBuffer[{{fmi.valueReference}}]);
+	{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if real}}{{#if port}}// Create the websocket with the initial port number parameter	
+	create_websocket(comp, (int)comp->fmiBuffer.realBuffer[{{fmi.valueReference}}]);
+	{{/if}}{{/if}}{{/if}}{{/each}}	
 	return fmi2OK;
 }
 
@@ -56,7 +65,10 @@ extern /*"C"*/fmi2Status fmi2Reset(fmi2Component c) {
 }
 
 extern /*"C"*/void fmi2FreeInstance(fmi2Component c) {
-	terminate();
+	ModelInstance* comp = (ModelInstance*)c;
+	
+	terminate(comp);	
+	free(comp);
 }
 
 /**---------------------------------------------------------------------
@@ -82,26 +94,35 @@ extern /*"C"*/fmi2Status fmi2SetDebugLogging(fmi2Component c, fmi2Boolean loggin
 }
 
 extern /*"C"*/fmi2Status fmi2GetReal(fmi2Component c, const fmi2ValueReference vr[], size_t nvr, fmi2Real value[]) {
-for (size_t i = 0; i < nvr; i++) {
+	ModelInstance* comp = (ModelInstance*) c;
+	
+	for (size_t i = 0; i < nvr; i++) {
 		fmi2ValueReference vRef = vr[i];
-		value[i] = fmiBuffer.realBuffer[vRef];
+		value[i] = comp->fmiBuffer.realBuffer[vRef];
 	}
+	
 	return fmi2OK;
 }
 
 extern /*"C"*/fmi2Status fmi2GetInteger(fmi2Component c, const fmi2ValueReference vr[], size_t nvr, fmi2Integer value[]) {
-for (size_t i = 0; i < nvr; i++) {
+	ModelInstance* comp = (ModelInstance*) c;
+	
+	for (size_t i = 0; i < nvr; i++) {
 		fmi2ValueReference vRef = vr[i];
-		value[i] = fmiBuffer.intBuffer[vRef];
+		value[i] = comp->fmiBuffer.intBuffer[vRef];
 	}
+	
 	return fmi2OK;
 }
 
 extern /*"C"*/fmi2Status fmi2GetBoolean(fmi2Component c, const fmi2ValueReference vr[], size_t nvr, fmi2Boolean value[]) {
+	ModelInstance* comp = (ModelInstance*) c;
+	
 	for (size_t i = 0; i < nvr; i++) {
 		fmi2ValueReference vRef = vr[i];
-		value[i] = fmiBuffer.booleanBuffer[vRef];
+		value[i] = comp->fmiBuffer.booleanBuffer[vRef];
 	}
+	
 	return fmi2OK;
 }
 
@@ -110,36 +131,42 @@ extern /*"C"*/fmi2Status fmi2GetString(fmi2Component c, const fmi2ValueReference
 }
 
 extern /*"C"*/fmi2Status fmi2SetReal(fmi2Component c, const fmi2ValueReference vr[], size_t nvr, const fmi2Real value[]) {
+	ModelInstance* comp = (ModelInstance*) c;
+	
 	for (size_t i = 0; i < nvr; i++) {
 		fmi2ValueReference vRef = vr[i];
-		fmiBuffer.realBuffer[vRef] = value[i];
-	//	printf("FMI real id=%d set to: %f\n", vRef, fmiBuffer.realBuffer[vRef]);
+		comp->fmiBuffer.realBuffer[vRef] = value[i];
+		//printf("FMI real id=%d set to: %f\n", vRef, comp->fmiBuffer.realBuffer[vRef]);
 	}
+	
 	return fmi2OK;
 }
 
-extern /*"C"*/fmi2Status fmi2SetInteger(fmi2Component c, const fmi2ValueReference vr[], size_t nvr,
-		const fmi2Integer value[]) {
+extern /*"C"*/fmi2Status fmi2SetInteger(fmi2Component c, const fmi2ValueReference vr[], size_t nvr, const fmi2Integer value[]) {
+	ModelInstance* comp = (ModelInstance*) c;
+	
 	for (size_t i = 0; i < nvr; i++) {
 		fmi2ValueReference vRef = vr[i];
-		fmiBuffer.intBuffer[vRef] = value[i];
-    //	printf("FMI real id=%d set to: %f\n", vRef, fmiBuffer.intBuffer[vRef]);
+		comp->fmiBuffer.intBuffer[vRef] = value[i];
+        //printf("FMI real id=%d set to: %f\n", vRef, comp->fmiBuffer.intBuffer[vRef]);
 	}
+	
 	return fmi2OK;
 }
 
-extern /*"C"*/fmi2Status fmi2SetBoolean(fmi2Component c, const fmi2ValueReference vr[], size_t nvr,
-		const fmi2Boolean value[]) {
+extern /*"C"*/fmi2Status fmi2SetBoolean(fmi2Component c, const fmi2ValueReference vr[], size_t nvr, const fmi2Boolean value[]) {
+   ModelInstance* comp = (ModelInstance*) c;
+    
     for (size_t i = 0; i < nvr; i++) {
-    		fmi2ValueReference vRef = vr[i];
-    		fmiBuffer.booleanBuffer[vRef] = value[i];
-    //		printf("FMI real id=%d set to: %f\n", vRef, fmiBuffer.booleanBuffer[vRef]);
+    	fmi2ValueReference vRef = vr[i];
+    	comp->fmiBuffer.booleanBuffer[vRef] = value[i];
+		//printf("FMI real id=%d set to: %f\n", vRef, comp->fmiBuffer.booleanBuffer[vRef]);
 	}
+	
 	return fmi2OK;
 }
 
-extern /*"C"*/fmi2Status fmi2SetString(fmi2Component c, const fmi2ValueReference vr[], size_t nvr,
-		const fmi2String value[]) {
+extern /*"C"*/fmi2Status fmi2SetString(fmi2Component c, const fmi2ValueReference vr[], size_t nvr, const fmi2String value[]) {
 	return fmi2OK;
 }
 
@@ -155,12 +182,10 @@ extern /*"C"*/fmi2Status fmi2FreeFMUstate(fmi2Component c, fmi2FMUstate* FMUstat
 extern /*"C"*/fmi2Status fmi2SerializedFMUstateSize(fmi2Component c, fmi2FMUstate FMUstate, size_t *size) {
 	return fmi2OK;
 }
-extern /*"C"*/fmi2Status fmi2SerializeFMUstate(fmi2Component c, fmi2FMUstate FMUstate, fmi2Byte serializedState[],
-		size_t size) {
+extern /*"C"*/fmi2Status fmi2SerializeFMUstate(fmi2Component c, fmi2FMUstate FMUstate, fmi2Byte serializedState[], size_t size) {
 	return fmi2OK;
 }
-extern /*"C"*/fmi2Status fmi2DeSerializeFMUstate(fmi2Component c, const fmi2Byte serializedState[], size_t size,
-		fmi2FMUstate* FMUstate) {
+extern /*"C"*/fmi2Status fmi2DeSerializeFMUstate(fmi2Component c, const fmi2Byte serializedState[], size_t size, fmi2FMUstate* FMUstate) {
 	return fmi2OK;
 }
 
@@ -191,7 +216,15 @@ extern /*"C"*/fmi2Status fmi2CancelStep(fmi2Component c) {
 
 extern /*"C"*/fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicationPoint, fmi2Real communicationStepSize,
 		fmi2Boolean noSetFMUStatePriorToCurrentPoint) {
-	doStep("tick");
+	ModelInstance *comp = (ModelInstance*)c;
+	double currentCP = (double)currentCommunicationPoint;
+	double commStepSize = (double)communicationStepSize;
+	
+	printf("fmi2DoStep\n");
+	{{#each variables}}{{#if fmi}}{{#if real}}{{#if time}}
+	while (comp->fmiBuffer.realBuffer[{{fmi.valueReference}}] <= currentCP+commStepSize)
+		{{/if}}{{/if}}{{/if}}{{/each}}doStep(comp, "tick");
+	
 	return fmi2OK;
 }
 
