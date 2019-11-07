@@ -58,7 +58,9 @@
     
 		<ScalarVariable name="servoRightVal" valueReference="10" causality="output" variability="continuous" ><Real  /></ScalarVariable>
     
-		<ScalarVariable name="time" valueReference="11" causality="parameter" variability="fixed"  initial="exact" ><Real start="0" /></ScalarVariable>
+		<ScalarVariable name="tickSize" valueReference="11" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.01" /></ScalarVariable>
+    
+		<ScalarVariable name="time" valueReference="12" causality="parameter" variability="fixed"  initial="exact" ><Real start="0" /></ScalarVariable>
     </ModelVariables>
 
 	<ModelStructure>

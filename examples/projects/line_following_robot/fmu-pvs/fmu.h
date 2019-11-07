@@ -18,10 +18,10 @@
 #include "misraC/line_following_robot.h"
 #include <libwebsockets.h>
 
-#define BOOL_COUNT 12
-#define INT_COUNT 12
-#define REAL_COUNT 12
-#define STRING_COUNT 12
+#define BOOL_COUNT 13
+#define INT_COUNT 13
+#define REAL_COUNT 13
+#define STRING_COUNT 13
 #define FMI_COSIMULATION
 
 typedef struct {

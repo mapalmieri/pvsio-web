@@ -20,11 +20,12 @@ typedef struct {
     float64_t forwardSpeed; //-- real
     float64_t lfLeftVal; //-- real
     float64_t lfRightVal; //-- real
-    int64_t port; //-- int
+    int32_t port; //-- int
     float64_t posx; //-- real
     float64_t posy; //-- real
     float64_t servoLeftVal; //-- real
     float64_t servoRightVal; //-- real
+    float64_t tickSize; //-- real
     float64_t time; //-- real
 } State;
 

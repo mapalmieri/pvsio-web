@@ -81,6 +81,8 @@ define(function (require, exports, module) {
             var modelDescription_xml = "";
             var Makefile = "";
             var model = _this.genericPrinter.print(emuchart);
+            var time = false;
+            var tickSize = false;
             if (model && model.state_variables && model.state_variables.variables
                     && model.state_variables.variables.length > 0) {
                 // process the array of variables to add information necessary for the fmi
@@ -106,7 +108,14 @@ define(function (require, exports, module) {
                         v.bool = (v.type === "bool");
                         v.string = (v.type === "string");
                         v.port = (v.name === "port");
-                        v.time = (v.name === "time");
+                        v.isTime = (v.name === "time");
+                        v.isTickSize = (v.name === "tickSize");
+                        if (v.isTime === true) {
+							time = true;
+						}
+                        if (v.isTickSize === true) {
+							tickSize = true;
+						}
                     }
                 });
                /* model.constants.forEach(function (c) {
@@ -139,7 +148,9 @@ define(function (require, exports, module) {
                     });
 
                     fmu_c = Handlebars.compile(fmu_c_template, { noEscape: true })({
-                        variables: model.state_variables.variables
+                        variables: model.state_variables.variables,
+                        time: time,
+                        tickSize: tickSize
                     });
 
                     modelDescription_xml = Handlebars.compile(modelDescription_xml_template, { noEscape: true })({
@@ -179,10 +190,11 @@ define(function (require, exports, module) {
             projectManager.project().addFile(fmu_folder + "fmi/fmi2TypesPlatform.h", fmi2TypesPlatform_h, overWrite);
             
             //Copy of needed libraries and useful files in the project directory
-            projectManager.project().copyFile("plugins/emulink/models/fmi-pvs/lib/fmuCheck.linux64", projectManager.project().toString() + "/" + fmu_folder);
+            projectManager.project().copyFile("plugins/emulink/models/fmi-pvs/lib/lib.zip", projectManager.project().toString() + "/" + fmu_folder + "resources/");
+            /*projectManager.project().copyFile("plugins/emulink/models/fmi-pvs/lib/fmuCheck.linux64", projectManager.project().toString() + "/" + fmu_folder);
             projectManager.project().copyFile("plugins/emulink/models/fmi-pvs/lib/libcrypto.so.*", projectManager.project().toString() + "/" + fmu_folder + "resources/");
             projectManager.project().copyFile("plugins/emulink/models/fmi-pvs/lib/libssl.so.*", projectManager.project().toString() + "/" + fmu_folder + "resources/");
-            projectManager.project().copyFile("plugins/emulink/models/fmi-pvs/lib/libwebsockets.*", projectManager.project().toString() + "/" + fmu_folder + "resources/");
+            projectManager.project().copyFile("plugins/emulink/models/fmi-pvs/lib/libwebsockets.*", projectManager.project().toString() + "/" + fmu_folder + "resources/");*/
             
             resolve(true);
         }

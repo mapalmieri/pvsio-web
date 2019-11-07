@@ -13,6 +13,7 @@
  * of Overture Extension for FMI
  * */
 #include "fmu.h"
+#include "math.h"
 
 extern /*"C"*/fmi2Component fmi2Instantiate(fmi2String instanceName,
 				fmi2Type fmuType,
@@ -218,12 +219,24 @@ extern /*"C"*/fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicati
 	double currentCP = (double)currentCommunicationPoint;
 	double commStepSize = (double)communicationStepSize;
 	
-	printf("fmi2DoStep\n");
 	
-	while (comp->fmiBuffer.realBuffer[11] <= currentCP+commStepSize)
-		doStep(comp, "tick");
-	
-	return fmi2OK;
+	if (fmod(commStepSize,(double)comp->fmiBuffer.realBuffer[11]) < 0.0000001) {
+		printf("fmi2DoStep\n");
+		
+		while (comp->fmiBuffer.realBuffer[12] <= currentCP+commStepSize) {
+			doStep(comp, "tick");
+		}
+		
+		return fmi2OK;
+	}
+	else {
+		
+		while (comp->fmiBuffer.realBuffer[12] <= currentCP+commStepSize) {
+			doStep(comp, "tick");
+		}
+		
+		return fmi2Discard;
+	}	
 }
 
 extern /*"C"*/fmi2Status fmi2GetStatus(fmi2Component c, const fmi2StatusKind s, fmi2Status *value) {
@@ -247,9 +260,9 @@ extern /*"C"*/fmi2Status fmi2GetStringStatus(fmi2Component c, const fmi2StatusKi
 }
 
 /* INTO cps specific*/
-extern /*"C"*/fmi2Status fmi2GetMaxStepsize(fmi2Component c, fmi2Real* size) {
-	return fmi2OK;
-}
+//extern /*"C"*/fmi2Status fmi2GetMaxStepsize(fmi2Component c, fmi2Real* size) {
+//	return fmi2OK;
+//}
 
 // ---------------------------------------------------------------------------
 // Functions for FMI2 for Model Exchange

@@ -53,7 +53,7 @@
   "transitions": [
    {
     "id": "T1",
-    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardSpeed;\n  servoRightVal := -forwardSpeed; }",
+    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardSpeed;\n  servoRightVal := -forwardSpeed;\n  time := time + tickSize; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -89,7 +89,7 @@
    },
    {
     "id": "T2",
-    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := backwardRotate; \n  servoRightVal := -forwardRotate; }",
+    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := backwardRotate; \n  servoRightVal := -forwardRotate;\n  time := time + tickSize; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -125,7 +125,7 @@
    },
    {
     "id": "T3",
-    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := forwardRotate;\n  servoRightVal := -backwardRotate; }",
+    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := forwardRotate;\n  servoRightVal := -backwardRotate;\n  time := time + tickSize; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -161,7 +161,7 @@
    },
    {
     "id": "T4",
-    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal;\n  time := time + tickSize; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -557,7 +557,7 @@
    },
    {
     "id": "T29",
-    "name": "tick",
+    "name": "tick\n{ time := time + tickSize; }",
     "source": {
      "id": "X4",
      "name": "DRIVE",
@@ -809,7 +809,7 @@
    },
    {
     "id": "T50",
-    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := -forwardRotate; \n  servoRightVal := backwardRotate; }",
+    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := -forwardRotate; \n  servoRightVal := backwardRotate;\n  time := time + tickSize; }",
     "source": {
      "id": "X5",
      "name": "REVERSE",
@@ -845,7 +845,7 @@
    },
    {
     "id": "T51",
-    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := -backwardRotate;\n  servoRightVal := forwardRotate; }",
+    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := -backwardRotate;\n  servoRightVal := forwardRotate;\n  time := time + tickSize; }",
     "source": {
      "id": "X5",
      "name": "REVERSE",
@@ -881,7 +881,7 @@
    },
    {
     "id": "T52",
-    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := -forwardSpeed;\n  servoRightVal := forwardSpeed; }",
+    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := -forwardSpeed;\n  servoRightVal := forwardSpeed;\n  time := time + tickSize; }",
     "source": {
      "id": "X5",
      "name": "REVERSE",
@@ -917,7 +917,7 @@
    },
    {
     "id": "T53",
-    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal;\n  time := time + tickSize; }",
     "source": {
      "id": "X5",
      "name": "REVERSE",
@@ -1442,20 +1442,28 @@
     "scope": "Input"
    },
    {
-    "id": "VAR_port:int(Local)",
-    "name": "port",
-    "type": "int",
-    "repr": "int64_t",
-    "value": "8084",
+    "id": "VAR_time:real(Local)",
+    "name": "time",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
     "scope": "Local"
    },
    {
+    "id": "VAR_tickSize:real(Local)",
+    "name": "tickSize",
     "type": "real",
     "repr": "float64_t",
-    "name": "time",
-    "value": "0",
+    "value": "0.01",
+    "scope": "Local"
+   },
+   {
+    "type": "int",
+    "repr": "int32_t",
+    "name": "port",
+    "value": "8084",
     "scope": "Local",
-    "id": "VAR_time:real(Local)"
+    "id": "VAR_port:int(Local)"
    }
   ],
   "constants": [

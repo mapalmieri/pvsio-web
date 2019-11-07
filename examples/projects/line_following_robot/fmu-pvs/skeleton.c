@@ -33,6 +33,13 @@ void initialize(ModelInstance* comp, const char* location) {
     
     comp->fmiBuffer.realBuffer[9] = comp->st.servoLeftVal;
     comp->fmiBuffer.realBuffer[10] = comp->st.servoRightVal;
+    
+    comp->fmiBuffer.realBuffer[1] = comp->st.backwardRotate;
+    comp->fmiBuffer.realBuffer[2] = comp->st.forwardRotate;
+    comp->fmiBuffer.realBuffer[3] = comp->st.forwardSpeed;
+    comp->fmiBuffer.realBuffer[11] = comp->st.tickSize;
+    comp->fmiBuffer.realBuffer[12] = comp->st.time;
+    comp->fmiBuffer.intBuffer[6] = comp->st.port;
 
     comp->first = 0;   
 }
@@ -99,7 +106,8 @@ void doStep(ModelInstance* comp, const char* action) {
 		comp->st.backwardRotate = comp->fmiBuffer.realBuffer[1];
 		comp->st.forwardRotate = comp->fmiBuffer.realBuffer[2];
 		comp->st.forwardSpeed = comp->fmiBuffer.realBuffer[3];
-		comp->st.time = comp->fmiBuffer.realBuffer[11];
+		comp->st.tickSize = comp->fmiBuffer.realBuffer[11];
+		comp->st.time = comp->fmiBuffer.realBuffer[12];
 		
 		comp->first = 1;
 	}
@@ -114,20 +122,21 @@ void doStep(ModelInstance* comp, const char* action) {
     
     comp->fmiBuffer.realBuffer[9] = comp->st.servoLeftVal;
     comp->fmiBuffer.realBuffer[10] = comp->st.servoRightVal;
-    /*
-    comp->fmiBuffer.realBuffer[1] = comp->st.backwardRotate;
-    comp->fmiBuffer.realBuffer[2] = comp->st.forwardRotate;
-    comp->fmiBuffer.realBuffer[3] = comp->st.forwardSpeed;
-    comp->fmiBuffer.realBuffer[11] = comp->st.time;
-    comp->fmiBuffer.intBuffer[6] = comp->st.port;*/
+    
+    //comp->fmiBuffer.realBuffer[1] = comp->st.backwardRotate;
+    //comp->fmiBuffer.realBuffer[2] = comp->st.forwardRotate;
+    //comp->fmiBuffer.realBuffer[3] = comp->st.forwardSpeed;
+    //comp->fmiBuffer.realBuffer[11] = comp->st.tickSize;
+    comp->fmiBuffer.realBuffer[12] = comp->st.time;
+    //comp->fmiBuffer.intBuffer[6] = comp->st.port;
     
     if (comp->websocket_open == 1) {
 		lws_service(comp->context, 0);
 	}
 	
-	printf("Time: %f\n", comp->fmiBuffer.realBuffer[11]);
-	comp->fmiBuffer.realBuffer[11] += 0.01;
-	comp->st.time = comp->fmiBuffer.realBuffer[11];
+	/*printf("Time: %f\n", comp->fmiBuffer.realBuffer[12]);
+	comp->fmiBuffer.realBuffer[12] += 0.01;
+	comp->st.time = comp->fmiBuffer.realBuffer[12];*/
 	
 }
 
@@ -213,7 +222,7 @@ void stateToString(State st, char* str) {
 	strcat(str, temp);
 	sprintf(temp, " lfRightVal := %f,", st.lfRightVal);
 	strcat(str, temp);
-	sprintf(temp, " port := %ld,", st.port);
+	sprintf(temp, " port := %d,", st.port);
 	strcat(str, temp);
 	sprintf(temp, " posx := %f,", st.posx);
 	strcat(str, temp);
@@ -223,10 +232,12 @@ void stateToString(State st, char* str) {
 	strcat(str, temp);
 	sprintf(temp, " servoRightVal := %f,", st.servoRightVal);
 	strcat(str, temp);
+	sprintf(temp, " tickSize := %f,", st.tickSize);
+	strcat(str, temp);
 	sprintf(temp, " time := %f,", st.time);
 	strcat(str, temp);	
 	//Remove the last char ','
-	temp[strlen(str)-1] = '\0';	
+	str[strlen(str)-1] = '\0';	
 	strcat(str, " #);");
 
 	free(temp);
