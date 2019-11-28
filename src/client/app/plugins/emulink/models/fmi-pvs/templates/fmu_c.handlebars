@@ -221,10 +221,10 @@ extern /*"C"*/fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicati
 	double currentCP = (double)currentCommunicationPoint;
 	double commStepSize = (double)communicationStepSize;
 	
-	{{#if time}}{{#if tickSize}}{{#each variables}}{{#if fmi}}{{#if real}}{{#if isTickSize}}
+	{{#if parametricTime}}{{#each variables}}{{#if fmi}}{{#if real}}{{#if tickSize}}
 	if (fmod(commStepSize,(double)comp->fmiBuffer.realBuffer[{{fmi.valueReference}}]) < 0.0000001) {
 		{{/if}}{{/if}}{{/if}}{{/each}}printf("fmi2DoStep\n");
-		{{#each variables}}{{#if fmi}}{{#if real}}{{#if isTime}}
+		{{#each variables}}{{#if fmi}}{{#if real}}{{#if time}}
 		while (comp->fmiBuffer.realBuffer[{{fmi.valueReference}}] <= currentCP+commStepSize) {
 			doStep(comp, "tick");
 		}
@@ -232,7 +232,7 @@ extern /*"C"*/fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicati
 		return fmi2OK;
 	}
 	else {
-		{{#each variables}}{{#if fmi}}{{#if real}}{{#if isTime}}
+		{{#each variables}}{{#if fmi}}{{#if real}}{{#if time}}
 		while (comp->fmiBuffer.realBuffer[{{fmi.valueReference}}] <= currentCP+commStepSize) {
 			doStep(comp, "tick");
 		}
@@ -241,7 +241,7 @@ extern /*"C"*/fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicati
 	}{{else}}
 	doStep(comp, "tick");
 	
-	return fmi2OK;{{/if}}{{/if}}	
+	return fmi2OK;{{/if}}	
 }
 
 extern /*"C"*/fmi2Status fmi2GetStatus(fmi2Component c, const fmi2StatusKind s, fmi2Status *value) {

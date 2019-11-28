@@ -13,6 +13,7 @@ void init(State* st) {
     st->posy1 = 0.0f;
     st->posy2 = 0.0f;
     st->posy3 = 0.0f;
+    st->tickSize = 0.01f;
     st->time = 0.0f;
 }
 
@@ -39,6 +40,7 @@ State* tick(State* st) {
         _dbg_print_condition("st->mode == DISPLAY");
         #endif
         leave(DISPLAY, st);
+        st->time = st->time + st->tickSize;
         enter(DISPLAY, st);
     }
     #ifdef DBG

@@ -25,7 +25,7 @@
   "transitions": [
    {
     "id": "T1",
-    "name": "tick",
+    "name": "tick\n{ time := time + tickSize; }",
     "source": {
      "id": "X1",
      "name": "DISPLAY",
@@ -138,16 +138,24 @@
     "scope": "Output"
    },
    {
+    "id": "VAR_time:real(Local)",
+    "name": "time",
     "type": "real",
     "repr": "float64_t",
-    "name": "time",
     "value": "0",
-    "scope": "Local",
-    "id": "VAR_time:real(Local)"
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_tickSize:real(Local)",
+    "name": "tickSize",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.01",
+    "scope": "Local"
    },
    {
     "type": "int",
-    "repr": "int64_t",
+    "repr": "int32_t",
     "name": "port",
     "value": "8084",
     "scope": "Local",

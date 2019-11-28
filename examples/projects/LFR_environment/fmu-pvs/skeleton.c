@@ -32,6 +32,10 @@ void initialize(ModelInstance* comp, const char* location) {
     init(&comp->st);
     
     comp->fmiBuffer.realBuffer[1] = comp->st.output;
+    
+    comp->fmiBuffer.realBuffer[9] = comp->st.tickSize;
+    comp->fmiBuffer.realBuffer[10] = comp->st.time;
+    comp->fmiBuffer.intBuffer[2] = comp->st.port;
 
     comp->first = 0;   
 }
@@ -95,7 +99,8 @@ int open_websocket(ModelInstance* comp) {
 void doStep(ModelInstance* comp, const char* action) {
 	if(comp->first == 0) {
 	
-		comp->st.time = comp->fmiBuffer.realBuffer[9];
+		comp->st.tickSize = comp->fmiBuffer.realBuffer[9];
+		comp->st.time = comp->fmiBuffer.realBuffer[10];
 		
 		comp->first = 1;
 	}
@@ -111,13 +116,19 @@ void doStep(ModelInstance* comp, const char* action) {
        
     
     comp->fmiBuffer.realBuffer[1] = comp->st.output;
-    /*
-    comp->fmiBuffer.realBuffer[9] = comp->st.time;
-    comp->fmiBuffer.intBuffer[2] = comp->st.port;*/
     
-     if (comp->websocket_open == 1) {
+    //comp->fmiBuffer.realBuffer[9] = comp->st.tickSize;
+    comp->fmiBuffer.realBuffer[10] = comp->st.time;
+    //comp->fmiBuffer.intBuffer[2] = comp->st.port;
+    
+    if (comp->websocket_open == 1) {
 		lws_service(comp->context, 0);
 	}
+	
+	/*printf("Time: %f\n", comp->fmiBuffer.realBuffer[10]);
+	comp->fmiBuffer.realBuffer[10] += 0.01;
+	comp->st.time = comp->fmiBuffer.realBuffer[10];*/
+	
 }
 
 void terminate(ModelInstance* comp) {
@@ -194,7 +205,7 @@ void stateToString(State st, char* str) {
 	
 	sprintf(temp, " output := %f,", st.output);
 	strcat(str, temp);
-	sprintf(temp, " port := %ld,", st.port);
+	sprintf(temp, " port := %d,", st.port);
 	strcat(str, temp);
 	sprintf(temp, " posx1 := %f,", st.posx1);
 	strcat(str, temp);
@@ -208,10 +219,12 @@ void stateToString(State st, char* str) {
 	strcat(str, temp);
 	sprintf(temp, " posy3 := %f,", st.posy3);
 	strcat(str, temp);
+	sprintf(temp, " tickSize := %f,", st.tickSize);
+	strcat(str, temp);
 	sprintf(temp, " time := %f,", st.time);
 	strcat(str, temp);	
 	//Remove the last char ','
-	temp[strlen(str)-1] = '\0';	
+	str[strlen(str)-1] = '\0';	
 	strcat(str, " #);");
 
 	free(temp);

@@ -123,25 +123,23 @@ void doStep(ModelInstance* comp, const char* action) {
     comp->fmiBuffer.intBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if bool}}
     comp->fmiBuffer.booleanBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
     comp->fmiBuffer.stringBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}
-    {{#each variables}}{{#if fmi}}{{#if local}}{{#if real}}{{#if isTime}}
+    {{#each variables}}{{#if fmi}}{{#if local}}{{#if real}}{{#if time}}
     comp->fmiBuffer.realBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{else}}
     //comp->fmiBuffer.realBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if local}}{{#if int}}
     //comp->fmiBuffer.intBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if local}}{{#if bool}}
     //comp->fmiBuffer.booleanBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if local}}{{#if string}}
     //comp->fmiBuffer.stringBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}
     
+    {{#each variables}}{{#if fmi}}{{#if port}}
     if (comp->websocket_open == 1) {
 		lws_service(comp->context, 0);
-	}
-	{{#each variables}}{{#if fmi}}{{#if real}}{{#if isTime}}
-	/*printf("Time: %f\n", comp->fmiBuffer.realBuffer[{{fmi.valueReference}}]);
-	comp->fmiBuffer.realBuffer[{{fmi.valueReference}}] += 0.01;
-	comp->st.{{name}} = comp->fmiBuffer.realBuffer[{{fmi.valueReference}}];*/
-	{{/if}}{{/if}}{{/if}}{{/each}}
+	}{{/if}}{{/if}}{{/each}}
 }
 
 void terminate(ModelInstance* comp) {
+	{{#each variables}}{{#if fmi}}{{#if port}}
 	close_websocket(comp);
+	{{/if}}{{/if}}{{/each}}
 }
 
 /**

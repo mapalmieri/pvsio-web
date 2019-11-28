@@ -16,13 +16,14 @@ typedef struct {
     Mode mode;
     Mode previous_mode;
     float64_t output; //-- real
-    int64_t port; //-- int
+    int32_t port; //-- int
     float64_t posx1; //-- real
     float64_t posx2; //-- real
     float64_t posx3; //-- real
     float64_t posy1; //-- real
     float64_t posy2; //-- real
     float64_t posy3; //-- real
+    float64_t tickSize; //-- real
     float64_t time; //-- real
 } State;
 

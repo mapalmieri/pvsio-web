@@ -81,8 +81,9 @@ define(function (require, exports, module) {
             var modelDescription_xml = "";
             var Makefile = "";
             var model = _this.genericPrinter.print(emuchart);
-            var time = false;
-            var tickSize = false;
+            var timeCheck = false;
+            var tickSizeCheck = false;
+            var parametricTime = false;
             if (model && model.state_variables && model.state_variables.variables
                     && model.state_variables.variables.length > 0) {
                 // process the array of variables to add information necessary for the fmi
@@ -108,16 +109,19 @@ define(function (require, exports, module) {
                         v.bool = (v.type === "bool");
                         v.string = (v.type === "string");
                         v.port = (v.name === "port");
-                        v.isTime = (v.name === "time");
-                        v.isTickSize = (v.name === "tickSize");
-                        if (v.isTime === true) {
-							time = true;
+                        v.time = (v.name === "time");
+                        v.tickSize = (v.name === "tickSize");
+                        if (v.time) {
+							timeCheck = true;
 						}
-                        if (v.isTickSize === true) {
-							tickSize = true;
+						if (v.tickSize) {
+							tickSizeCheck = true;
 						}
                     }
                 });
+                if (timeCheck && tickSizeCheck) {
+					parametricTime = true;
+				}
                /* model.constants.forEach(function (c) {
                     c.fmi = get_buffer(c.type, count);
                     if (c.fmi) {
@@ -149,8 +153,7 @@ define(function (require, exports, module) {
 
                     fmu_c = Handlebars.compile(fmu_c_template, { noEscape: true })({
                         variables: model.state_variables.variables,
-                        time: time,
-                        tickSize: tickSize
+                        parametricTime: parametricTime
                     });
 
                     modelDescription_xml = Handlebars.compile(modelDescription_xml_template, { noEscape: true })({

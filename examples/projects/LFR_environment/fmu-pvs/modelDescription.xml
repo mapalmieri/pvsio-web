@@ -54,7 +54,9 @@
     
 		<ScalarVariable name="posy3" valueReference="8" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="time" valueReference="9" causality="parameter" variability="fixed"  initial="exact" ><Real start="0" /></ScalarVariable>
+		<ScalarVariable name="tickSize" valueReference="9" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.01" /></ScalarVariable>
+    
+		<ScalarVariable name="time" valueReference="10" causality="parameter" variability="fixed"  initial="exact" ><Real start="0" /></ScalarVariable>
     </ModelVariables>
 
 	<ModelStructure>
