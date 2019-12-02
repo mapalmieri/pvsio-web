@@ -13,7 +13,9 @@
  * of Overture Extension for FMI
  * */
 #include "fmu.h"
+{{#if timeCheck}}
 #include "math.h"
+{{/if}}
 
 extern /*"C"*/fmi2Component fmi2Instantiate(fmi2String instanceName,
 				fmi2Type fmuType,
@@ -45,6 +47,7 @@ extern /*"C"*/fmi2Status fmi2EnterInitializationMode(fmi2Component c) {
 }
 
 extern /*"C"*/fmi2Status fmi2ExitInitializationMode(fmi2Component c) {
+	{{#if portCheck}}
 	ModelInstance* comp = (ModelInstance*) c;
 	comp->port = 0;
 	comp->websocket_open = 0;
@@ -53,7 +56,7 @@ extern /*"C"*/fmi2Status fmi2ExitInitializationMode(fmi2Component c) {
 	create_websocket(comp, (int)comp->fmiBuffer.intBuffer[{{fmi.valueReference}}]);
 	{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if real}}{{#if port}}// Create the websocket with the initial port number parameter	
 	create_websocket(comp, (int)comp->fmiBuffer.realBuffer[{{fmi.valueReference}}]);
-	{{/if}}{{/if}}{{/if}}{{/each}}	
+	{{/if}}{{/if}}{{/if}}{{/each}}{{/if}}	
 	return fmi2OK;
 }
 
@@ -218,10 +221,10 @@ extern /*"C"*/fmi2Status fmi2CancelStep(fmi2Component c) {
 extern /*"C"*/fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicationPoint, fmi2Real communicationStepSize,
 		fmi2Boolean noSetFMUStatePriorToCurrentPoint) {
 	ModelInstance *comp = (ModelInstance*)c;
+	{{#if timeCheck}}
 	double currentCP = (double)currentCommunicationPoint;
-	double commStepSize = (double)communicationStepSize;
-	
-	{{#if parametricTime}}{{#each variables}}{{#if fmi}}{{#if real}}{{#if tickSize}}
+	double commStepSize = (double)communicationStepSize;	
+	{{#each variables}}{{#if fmi}}{{#if real}}{{#if tickSize}}
 	if (fmod(commStepSize,(double)comp->fmiBuffer.realBuffer[{{fmi.valueReference}}]) < 0.0000001) {
 		{{/if}}{{/if}}{{/if}}{{/each}}printf("fmi2DoStep\n");
 		{{#each variables}}{{#if fmi}}{{#if real}}{{#if time}}

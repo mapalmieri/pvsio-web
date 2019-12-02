@@ -8,19 +8,6 @@
 
 static int WebSocketCallback(struct lws*, enum lws_callback_reasons, void*, void*, size_t);
 
-/** 
- * List of supported protocols and callbacks 
- */
-static struct lws_protocols protocols[] = {
-	{
-        "FMI",              // Name
-        WebSocketCallback,  // Callback
-        0,                  // Per_session_data_size
-        0,                  // Rx_buffer_size
-    },
-    { NULL, NULL, 0, 0 }	// End of list
-};
-
  /**
  * Function for the initialization of the model.
  * It calls the init function of the model and sets the output.
@@ -43,6 +30,108 @@ void initialize(ModelInstance* comp, const char* location) {
 
     comp->first = 0;   
 }
+
+/**
+ * Function that performs a step of the simulation model.
+ * At first the inputs of the are updated with the values fom the master algorithm.
+ * Then the tick function is called inside the mutex, in order to guarantee mutual exlusion.
+ * Finally the outputs of the model are forwarded to the master algorithm 
+ * @param action is the action to perform. Might be used in future version.
+ */
+void doStep(ModelInstance* comp, const char* action) {
+	if(comp->first == 0) {
+	
+		comp->st.backwardRotate = comp->fmiBuffer.realBuffer[1];
+		comp->st.forwardRotate = comp->fmiBuffer.realBuffer[2];
+		comp->st.forwardSpeed = comp->fmiBuffer.realBuffer[3];
+		comp->st.tickSize = comp->fmiBuffer.realBuffer[11];
+		comp->st.time = comp->fmiBuffer.realBuffer[12];
+		
+		comp->first = 1;
+	}
+	
+    comp->st.lfLeftVal = comp->fmiBuffer.realBuffer[4];
+    comp->st.lfRightVal = comp->fmiBuffer.realBuffer[5];
+    comp->st.posx = comp->fmiBuffer.realBuffer[7];
+    comp->st.posy = comp->fmiBuffer.realBuffer[8];
+	
+    tick(&comp->st);
+       
+    
+    comp->fmiBuffer.realBuffer[9] = comp->st.servoLeftVal;
+    comp->fmiBuffer.realBuffer[10] = comp->st.servoRightVal;
+    
+    //comp->fmiBuffer.realBuffer[1] = comp->st.backwardRotate;
+    //comp->fmiBuffer.realBuffer[2] = comp->st.forwardRotate;
+    //comp->fmiBuffer.realBuffer[3] = comp->st.forwardSpeed;
+    //comp->fmiBuffer.realBuffer[11] = comp->st.tickSize;
+    comp->fmiBuffer.realBuffer[12] = comp->st.time;
+    //comp->fmiBuffer.intBuffer[6] = comp->st.port;
+    
+    
+    if (comp->websocket_open == 1) {
+		lws_service(comp->context, 0);
+	}
+}
+
+/**
+* Function used to convert the state into a string
+*/
+void stateToString(State st, char* str) {
+	char* temp = (char*)malloc(1024);
+	
+	strcpy(str, "(#");
+	
+	sprintf(temp, " backwardRotate := %f,", st.backwardRotate);
+	strcat(str, temp);
+	sprintf(temp, " forwardRotate := %f,", st.forwardRotate);
+	strcat(str, temp);
+	sprintf(temp, " forwardSpeed := %f,", st.forwardSpeed);
+	strcat(str, temp);
+	sprintf(temp, " lfLeftVal := %f,", st.lfLeftVal);
+	strcat(str, temp);
+	sprintf(temp, " lfRightVal := %f,", st.lfRightVal);
+	strcat(str, temp);
+	sprintf(temp, " port := %d,", st.port);
+	strcat(str, temp);
+	sprintf(temp, " posx := %f,", st.posx);
+	strcat(str, temp);
+	sprintf(temp, " posy := %f,", st.posy);
+	strcat(str, temp);
+	sprintf(temp, " servoLeftVal := %f,", st.servoLeftVal);
+	strcat(str, temp);
+	sprintf(temp, " servoRightVal := %f,", st.servoRightVal);
+	strcat(str, temp);
+	sprintf(temp, " tickSize := %f,", st.tickSize);
+	strcat(str, temp);
+	sprintf(temp, " time := %f,", st.time);
+	strcat(str, temp);	
+	//Remove the last char ','
+	str[strlen(str)-1] = '\0';	
+	strcat(str, " #);");
+
+	free(temp);
+}
+
+void terminate(ModelInstance* comp) {
+	
+	close_websocket(comp);
+	
+}
+
+
+/** 
+ * List of supported protocols and callbacks 
+ */
+static struct lws_protocols protocols[] = {
+	{
+        "FMI",              // Name
+        WebSocketCallback,  // Callback
+        0,                  // Per_session_data_size
+        0,                  // Rx_buffer_size
+    },
+    { NULL, NULL, 0, 0 }	// End of list
+};
 
 /**
  * Function used to initialize the websocket
@@ -91,55 +180,6 @@ int open_websocket(ModelInstance* comp) {
 
     printf("Open websocket on port %i\n", comp->port);
     return 1;
-}
-
-/**
- * Function that performs a step of the simulation model.
- * At first the inputs of the are updated with the values fom the master algorithm.
- * Then the tick function is called inside the mutex, in order to guarantee mutual exlusion.
- * Finally the outputs of the model are forwarded to the master algorithm 
- * @param action is the action to perform. Might be used in future version.
- */
-void doStep(ModelInstance* comp, const char* action) {
-	if(comp->first == 0) {
-	
-		comp->st.backwardRotate = comp->fmiBuffer.realBuffer[1];
-		comp->st.forwardRotate = comp->fmiBuffer.realBuffer[2];
-		comp->st.forwardSpeed = comp->fmiBuffer.realBuffer[3];
-		comp->st.tickSize = comp->fmiBuffer.realBuffer[11];
-		comp->st.time = comp->fmiBuffer.realBuffer[12];
-		
-		comp->first = 1;
-	}
-	
-    comp->st.lfLeftVal = comp->fmiBuffer.realBuffer[4];
-    comp->st.lfRightVal = comp->fmiBuffer.realBuffer[5];
-    comp->st.posx = comp->fmiBuffer.realBuffer[7];
-    comp->st.posy = comp->fmiBuffer.realBuffer[8];
-	
-    tick(&comp->st);
-       
-    
-    comp->fmiBuffer.realBuffer[9] = comp->st.servoLeftVal;
-    comp->fmiBuffer.realBuffer[10] = comp->st.servoRightVal;
-    
-    //comp->fmiBuffer.realBuffer[1] = comp->st.backwardRotate;
-    //comp->fmiBuffer.realBuffer[2] = comp->st.forwardRotate;
-    //comp->fmiBuffer.realBuffer[3] = comp->st.forwardSpeed;
-    //comp->fmiBuffer.realBuffer[11] = comp->st.tickSize;
-    comp->fmiBuffer.realBuffer[12] = comp->st.time;
-    //comp->fmiBuffer.intBuffer[6] = comp->st.port;
-    
-    
-    if (comp->websocket_open == 1) {
-		lws_service(comp->context, 0);
-	}
-}
-
-void terminate(ModelInstance* comp) {
-	
-	close_websocket(comp);
-	
 }
 
 /**
@@ -202,44 +242,6 @@ static int WebSocketCallback(struct lws* wsi, enum lws_callback_reasons reason, 
     return 0;
 }
 
-/**
-* Function used to convert the state into a string
-*/
-void stateToString(State st, char* str) {
-	char* temp = (char*)malloc(1024);
-	
-	strcpy(str, "(#");
-	
-	sprintf(temp, " backwardRotate := %f,", st.backwardRotate);
-	strcat(str, temp);
-	sprintf(temp, " forwardRotate := %f,", st.forwardRotate);
-	strcat(str, temp);
-	sprintf(temp, " forwardSpeed := %f,", st.forwardSpeed);
-	strcat(str, temp);
-	sprintf(temp, " lfLeftVal := %f,", st.lfLeftVal);
-	strcat(str, temp);
-	sprintf(temp, " lfRightVal := %f,", st.lfRightVal);
-	strcat(str, temp);
-	sprintf(temp, " port := %d,", st.port);
-	strcat(str, temp);
-	sprintf(temp, " posx := %f,", st.posx);
-	strcat(str, temp);
-	sprintf(temp, " posy := %f,", st.posy);
-	strcat(str, temp);
-	sprintf(temp, " servoLeftVal := %f,", st.servoLeftVal);
-	strcat(str, temp);
-	sprintf(temp, " servoRightVal := %f,", st.servoRightVal);
-	strcat(str, temp);
-	sprintf(temp, " tickSize := %f,", st.tickSize);
-	strcat(str, temp);
-	sprintf(temp, " time := %f,", st.time);
-	strcat(str, temp);	
-	//Remove the last char ','
-	str[strlen(str)-1] = '\0';	
-	strcat(str, " #);");
-
-	free(temp);
-}
 
 /**
  * Function used to handle the received command
@@ -290,3 +292,4 @@ void close_websocket(ModelInstance* comp) {
     comp->websocket_open = 0;
     printf("Close websocket\n");
 }
+

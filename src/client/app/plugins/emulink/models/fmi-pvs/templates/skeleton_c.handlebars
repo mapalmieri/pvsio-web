@@ -5,21 +5,8 @@
  */
 #include "fmu.h"
 #include <string.h>
-
-static int WebSocketCallback(struct lws*, enum lws_callback_reasons, void*, void*, size_t);
-
-/** 
- * List of supported protocols and callbacks 
- */
-static struct lws_protocols protocols[] = {
-	{
-        "FMI",              // Name
-        WebSocketCallback,  // Callback
-        0,                  // Per_session_data_size
-        0,                  // Rx_buffer_size
-    },
-    { NULL, NULL, 0, 0 }	// End of list
-};
+{{#if portCheck}}
+static int WebSocketCallback(struct lws*, enum lws_callback_reasons, void*, void*, size_t);{{/if}}
 
  /**
  * Function for the initialization of the model.
@@ -43,6 +30,92 @@ void initialize(ModelInstance* comp, const char* location) {
 
     comp->first = 0;   
 }
+
+/**
+ * Function that performs a step of the simulation model.
+ * At first the inputs of the are updated with the values fom the master algorithm.
+ * Then the tick function is called inside the mutex, in order to guarantee mutual exlusion.
+ * Finally the outputs of the model are forwarded to the master algorithm 
+ * @param action is the action to perform. Might be used in future version.
+ */
+void doStep(ModelInstance* comp, const char* action) {
+	if(comp->first == 0) {
+	{{#each variables}}{{#if fmi}}{{#if parameter}}{{#if real}}
+		comp->st.{{name}} = comp->fmiBuffer.realBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if int}}
+		comp->st.{{name}} = comp->fmiBuffer.intBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if bool}}
+		comp->st.{{name}} = comp->fmiBuffer.booleanBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
+		comp->st.{{name}} = comp->fmiBuffer.stringBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}
+		
+		comp->first = 1;
+	}
+	{{#each variables}}{{#if fmi}}{{#if input}}{{#if real}}
+    comp->st.{{name}} = comp->fmiBuffer.realBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if input}}{{#if int}}
+	comp->st.{{name}} = comp->fmiBuffer.intBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if input}}{{#if bool}}
+	comp->st.{{name}} = comp->fmiBuffer.booleanBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if input}}{{#if string}}
+	comp->st.{{name}} = comp->fmiBuffer.stringBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}
+	
+    tick(&comp->st);
+       
+    {{#each variables}}{{#if fmi}}{{#if output}}{{#if real}}
+    comp->fmiBuffer.realBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if int}}
+    comp->fmiBuffer.intBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if bool}}
+    comp->fmiBuffer.booleanBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
+    comp->fmiBuffer.stringBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}
+    {{#each variables}}{{#if fmi}}{{#if local}}{{#if real}}{{#if time}}
+    comp->fmiBuffer.realBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{else}}
+    //comp->fmiBuffer.realBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if local}}{{#if int}}
+    //comp->fmiBuffer.intBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if local}}{{#if bool}}
+    //comp->fmiBuffer.booleanBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if local}}{{#if string}}
+    //comp->fmiBuffer.stringBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}
+    
+    {{#if portCheck}}
+    if (comp->websocket_open == 1) {
+		lws_service(comp->context, 0);
+	}{{/if}}
+}
+
+/**
+* Function used to convert the state into a string
+*/
+void stateToString(State st, char* str) {
+	char* temp = (char*)malloc(1024);
+	
+	strcpy(str, "(#");
+	{{#each variables}}{{#if fmi}}{{#if real}}
+	sprintf(temp, " {{name}} := %f,", st.{{name}});
+	strcat(str, temp);{{/if}}{{#if int}}
+	sprintf(temp, " {{name}} := %d,", st.{{name}});
+	strcat(str, temp);{{/if}}{{#if bool}}
+	sprintf(temp, " {{name}} := %d,", st.{{name}});
+	strcat(str, temp);{{/if}}{{#if string}}
+	sprintf(temp, " {{name}} := %s,", st.{{name}});
+	strcat(str, temp);{{/if}}{{/if}}{{/each}}	
+	//Remove the last char ','
+	str[strlen(str)-1] = '\0';	
+	strcat(str, " #);");
+
+	free(temp);
+}
+
+void terminate(ModelInstance* comp) {
+	{{#if portCheck}}
+	close_websocket(comp);
+	{{/if}}
+}
+
+{{#if portCheck}}
+/** 
+ * List of supported protocols and callbacks 
+ */
+static struct lws_protocols protocols[] = {
+	{
+        "FMI",              // Name
+        WebSocketCallback,  // Callback
+        0,                  // Per_session_data_size
+        0,                  // Rx_buffer_size
+    },
+    { NULL, NULL, 0, 0 }	// End of list
+};
 
 /**
  * Function used to initialize the websocket
@@ -91,55 +164,6 @@ int open_websocket(ModelInstance* comp) {
 
     printf("Open websocket on port %i\n", comp->port);
     return 1;
-}
-
-/**
- * Function that performs a step of the simulation model.
- * At first the inputs of the are updated with the values fom the master algorithm.
- * Then the tick function is called inside the mutex, in order to guarantee mutual exlusion.
- * Finally the outputs of the model are forwarded to the master algorithm 
- * @param action is the action to perform. Might be used in future version.
- */
-void doStep(ModelInstance* comp, const char* action) {
-	if(comp->first == 0) {
-	{{#each variables}}{{#if fmi}}{{#if parameter}}{{#if real}}
-		comp->st.{{name}} = comp->fmiBuffer.realBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if int}}
-		comp->st.{{name}} = comp->fmiBuffer.intBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if bool}}
-		comp->st.{{name}} = comp->fmiBuffer.booleanBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
-		comp->st.{{name}} = comp->fmiBuffer.stringBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}
-		
-		comp->first = 1;
-	}
-	{{#each variables}}{{#if fmi}}{{#if input}}{{#if real}}
-    comp->st.{{name}} = comp->fmiBuffer.realBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if input}}{{#if int}}
-	comp->st.{{name}} = comp->fmiBuffer.intBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if input}}{{#if bool}}
-	comp->st.{{name}} = comp->fmiBuffer.booleanBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if input}}{{#if string}}
-	comp->st.{{name}} = comp->fmiBuffer.stringBuffer[{{fmi.valueReference}}];{{/if}}{{/if}}{{/if}}{{/each}}
-	
-    tick(&comp->st);
-       
-    {{#each variables}}{{#if fmi}}{{#if output}}{{#if real}}
-    comp->fmiBuffer.realBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if int}}
-    comp->fmiBuffer.intBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if bool}}
-    comp->fmiBuffer.booleanBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if output}}{{#if string}}
-    comp->fmiBuffer.stringBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}
-    {{#each variables}}{{#if fmi}}{{#if local}}{{#if real}}{{#if time}}
-    comp->fmiBuffer.realBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{else}}
-    //comp->fmiBuffer.realBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if local}}{{#if int}}
-    //comp->fmiBuffer.intBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if local}}{{#if bool}}
-    //comp->fmiBuffer.booleanBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}{{#each variables}}{{#if fmi}}{{#if local}}{{#if string}}
-    //comp->fmiBuffer.stringBuffer[{{fmi.valueReference}}] = comp->st.{{name}};{{/if}}{{/if}}{{/if}}{{/each}}
-    
-    {{#each variables}}{{#if fmi}}{{#if port}}
-    if (comp->websocket_open == 1) {
-		lws_service(comp->context, 0);
-	}{{/if}}{{/if}}{{/each}}
-}
-
-void terminate(ModelInstance* comp) {
-	{{#each variables}}{{#if fmi}}{{#if port}}
-	close_websocket(comp);
-	{{/if}}{{/if}}{{/each}}
 }
 
 /**
@@ -202,28 +226,6 @@ static int WebSocketCallback(struct lws* wsi, enum lws_callback_reasons reason, 
     return 0;
 }
 
-/**
-* Function used to convert the state into a string
-*/
-void stateToString(State st, char* str) {
-	char* temp = (char*)malloc(1024);
-	
-	strcpy(str, "(#");
-	{{#each variables}}{{#if fmi}}{{#if real}}
-	sprintf(temp, " {{name}} := %f,", st.{{name}});
-	strcat(str, temp);{{/if}}{{#if int}}
-	sprintf(temp, " {{name}} := %d,", st.{{name}});
-	strcat(str, temp);{{/if}}{{#if bool}}
-	sprintf(temp, " {{name}} := %d,", st.{{name}});
-	strcat(str, temp);{{/if}}{{#if string}}
-	sprintf(temp, " {{name}} := %s,", st.{{name}});
-	strcat(str, temp);{{/if}}{{/if}}{{/each}}	
-	//Remove the last char ','
-	str[strlen(str)-1] = '\0';	
-	strcat(str, " #);");
-
-	free(temp);
-}
 
 /**
  * Function used to handle the received command
@@ -246,3 +248,4 @@ void close_websocket(ModelInstance* comp) {
     comp->websocket_open = 0;
     printf("Close websocket\n");
 }
+{{/if}}

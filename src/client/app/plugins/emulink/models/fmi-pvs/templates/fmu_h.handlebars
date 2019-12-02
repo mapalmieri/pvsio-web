@@ -16,7 +16,9 @@
 #include "./fmi/fmi2Functions.h"
 #include "FmuGUID.h"
 #include "misraC/{{modelName}}.h"
+{{#if portCheck}}
 #include <libwebsockets.h>
+{{/if}}
 
 #define BOOL_COUNT {{count}}
 #define INT_COUNT {{count}}
@@ -35,20 +37,23 @@ typedef struct {
 	FmiBuffer fmiBuffer;
 	State st; 		// Structure containing the state of the model
 	int first;	 	// Variable for execution of setup option during first step only
+	{{#if portCheck}}
 	int port;
 	int websocket_open;
 	struct lws_context* context;
 	char lwssendstate[LWS_SEND_BUFFER_PRE_PADDING + LWS_SEND_BUFFER_POST_PADDING+2800];
+	{{/if}}
 } ModelInstance;
 
 void initialize(ModelInstance*, fmi2String);
+void doStep(ModelInstance*, const char*);
+void stateToString(State, char*);
+void terminate(ModelInstance*);
+{{#if portCheck}}
 void create_websocket(ModelInstance*, int);
 int open_websocket(ModelInstance*);
-void doStep(ModelInstance*, const char*);
-void terminate(ModelInstance*);
-void stateToString(State, char*);
 void messageHandler(ModelInstance*, char*);
 void close_websocket(ModelInstance*);
-
+{{/if}}
 
 #endif // FMU_H

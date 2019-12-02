@@ -7,8 +7,10 @@ all:
 	gcc -fPIC -Wall -c fmu.c
 	gcc -fPIC -Wall -c skeleton.c
 	gcc -fPIC -Wall -c misraC/{{name}}.c
-	unzip resources/lib.zip
-	gcc -fPIC -shared -o {{name}}.so skeleton.o fmu.o {{name}}.o -Wl,-rpath,. -L. -lwebsockets -lm
+	{{#if portCheck}}unzip -o resources/libWS.zip
+	gcc -fPIC -shared -o {{name}}.so skeleton.o fmu.o {{name}}.o -Wl,-rpath,. -L. -lwebsockets {{#if timeCheck}}-lm{{/if}}
+	{{else}}unzip -o resources/lib.zip
+	gcc -shared -o {{name}}.so skeleton.o fmu.o {{name}}.o {{#if timeCheck}}-lm{{/if}}{{/if}}
 	rm -rf sources
 	rm -rf binaries
 	mkdir sources
@@ -22,31 +24,28 @@ all:
 	cp -r misraC sources
 	cp -r fmi sources
 	mv {{name}}.so binaries/linux64/
-	cp libwebsockets.* binaries/linux64/
+	{{#if portCheck}}cp libwebsockets.* binaries/linux64/
 	cp libcrypto.so.* binaries/linux64/
-	cp libssl.so.* binaries/linux64/
+	cp libssl.so.* binaries/linux64/{{/if}}
 	zip -r {{name}}.fmu modelDescription.xml binaries/ resources/ sources/
 	rm -rf sources
 	rm -rf binaries
-	rm libwebsockets.*
+	{{#if portCheck}}rm libwebsockets.*
 	rm libcrypto.so.*
-	rm libssl.so.*
-	rm fmuCheck.linux64
+	rm libssl.so.*{{/if}}
 
 run:
-	unzip resources/lib.zip
+	{{#if portCheck}}unzip -o resources/libWS.zip{{/if}}
 	./fmuCheck.linux64 -h 1E-01 {{name}}.fmu
-	rm libwebsockets.*
+	{{#if portCheck}}rm libwebsockets.*
 	rm libcrypto.so.*
-	rm libssl.so.*
-	rm fmuCheck.linux64
+	rm libssl.so.*{{/if}}
 run1:
-	unzip resources/lib.zip
+	{{#if portCheck}}unzip -o resources/libWS.zip{{/if}}
 	./fmuCheck.linux64 -h 1E-02 {{name}}.fmu
-	rm libwebsockets.*
+	{{#if portCheck}}rm libwebsockets.*
 	rm libcrypto.so.*
-	rm libssl.so.*
-	rm fmuCheck.linux64
+	rm libssl.so.*{{/if}}
 
 clean:
 	rm -rf  {{name}}.o fmu.o skeleton.o

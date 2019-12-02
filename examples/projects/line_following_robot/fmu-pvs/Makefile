@@ -7,8 +7,9 @@ all:
 	gcc -fPIC -Wall -c fmu.c
 	gcc -fPIC -Wall -c skeleton.c
 	gcc -fPIC -Wall -c misraC/line_following_robot.c
-	unzip resources/lib.zip
+	unzip -o resources/libWS.zip
 	gcc -fPIC -shared -o line_following_robot.so skeleton.o fmu.o line_following_robot.o -Wl,-rpath,. -L. -lwebsockets -lm
+	
 	rm -rf sources
 	rm -rf binaries
 	mkdir sources
@@ -31,22 +32,19 @@ all:
 	rm libwebsockets.*
 	rm libcrypto.so.*
 	rm libssl.so.*
-	rm fmuCheck.linux64
 
 run:
-	unzip resources/lib.zip
+	unzip -o resources/libWS.zip
 	./fmuCheck.linux64 -h 1E-01 line_following_robot.fmu
 	rm libwebsockets.*
 	rm libcrypto.so.*
 	rm libssl.so.*
-	rm fmuCheck.linux64
 run1:
-	unzip resources/lib.zip
+	unzip -o resources/libWS.zip
 	./fmuCheck.linux64 -h 1E-02 line_following_robot.fmu
 	rm libwebsockets.*
 	rm libcrypto.so.*
 	rm libssl.so.*
-	rm fmuCheck.linux64
 
 clean:
 	rm -rf  line_following_robot.o fmu.o skeleton.o
