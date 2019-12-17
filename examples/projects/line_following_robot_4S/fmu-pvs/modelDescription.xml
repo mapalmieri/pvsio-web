@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<fmiModelDescription 	fmiVersion="2.0"
+						modelName="line_following_robot_4S"
+						guid="{abb4bff1-d423-4e02-90d9-011f519869ff}"
+						description=""
+						author="..author name.."
+						version="Version 1"
+						copyright=""
+						license="PVS License"
+						generationTool="PVSio-web"
+						variableNamingConvention="flat"
+						numberOfEventIndicators="0">
+	<CoSimulation 	modelIdentifier="line_following_robot_4S"
+					needsExecutionTool="false"
+					canHandleVariableCommunicationStepSize="true"
+					canInterpolateInputs="false"
+					maxOutputDerivativeOrder="0"
+					canRunAsynchronuously="false"
+					canBeInstantiatedOnlyOncePerProcess="false"
+					canNotUseMemoryManagementFunctions="true"
+					canGetAndSetFMUstate="false"
+					canSerializeFMUstate="false"
+					providesDirectionalDerivative="false">
+					
+			<SourceFiles>
+				<File name="fmu.c" />
+				<File name="skeleton.c" />
+				<File name="misraC/line_following_robot_4S.c" />
+			</SourceFiles>
+			
+		</CoSimulation>
+	<LogCategories>
+		<Category name="logAll" />
+		<Category name="logError" />
+		<Category name="logFmiCall" />
+		<Category name="Protocol" />
+		<Category name="Error" />
+	</LogCategories>
+
+	<ModelVariables>
+		<ScalarVariable name="forwardSpeed" valueReference="1" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.6" /></ScalarVariable>
+    
+		<ScalarVariable name="highRotate" valueReference="2" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.45" /></ScalarVariable>
+    
+		<ScalarVariable name="lfFarLeftVal" valueReference="3" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
+    
+		<ScalarVariable name="lfFarRightVal" valueReference="4" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
+    
+		<ScalarVariable name="lfMidLeftVal" valueReference="5" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
+    
+		<ScalarVariable name="lfMidRightVal" valueReference="6" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
+    
+		<ScalarVariable name="lowRotate" valueReference="7" causality="parameter" variability="fixed"  initial="exact" ><Real start="0" /></ScalarVariable>
+    
+		<ScalarVariable name="mediumRotate" valueReference="8" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.3" /></ScalarVariable>
+    
+		<ScalarVariable name="port" valueReference="9" causality="parameter" variability="fixed"  initial="exact" ><Integer start="8084" /></ScalarVariable>
+    
+		<ScalarVariable name="posx" valueReference="10" causality="input" variability="continuous" ><Real start="0.138" /></ScalarVariable>
+    
+		<ScalarVariable name="posy" valueReference="11" causality="input" variability="continuous" ><Real start="-0.08" /></ScalarVariable>
+    
+		<ScalarVariable name="servoLeftVal" valueReference="12" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+    
+		<ScalarVariable name="servoRightVal" valueReference="13" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+    </ModelVariables>
+
+	<ModelStructure>
+	<Outputs>
+			<Unknown index="12"  dependencies=""/>
+            
+			<Unknown index="13"  dependencies=""/>
+            
+	</Outputs>
+
+	</ModelStructure>
+</fmiModelDescription>

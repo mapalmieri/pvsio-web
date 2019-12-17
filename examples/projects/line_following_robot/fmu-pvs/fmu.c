@@ -219,9 +219,9 @@ extern /*"C"*/fmi2Status fmi2CancelStep(fmi2Component c) {
 extern /*"C"*/fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicationPoint, fmi2Real communicationStepSize,
 		fmi2Boolean noSetFMUStatePriorToCurrentPoint) {
 	ModelInstance *comp = (ModelInstance*)c;
-	double currentCP = (double)currentCommunicationPoint;
-	double commStepSize = (double)communicationStepSize;
 	
+	double currentCP = (double)currentCommunicationPoint;
+	double commStepSize = (double)communicationStepSize;	
 	
 	if (fmod(commStepSize,(double)comp->fmiBuffer.realBuffer[11]) < 0.0000001) {
 		printf("fmi2DoStep\n");

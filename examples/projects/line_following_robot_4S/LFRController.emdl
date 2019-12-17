@@ -1,0 +1,483 @@
+{
+ "descriptor": {
+  "file_type": "emdl",
+  "version": "2.0",
+  "description": "emucharts model",
+  "chart_name": "LFRController"
+ },
+ "chart": {
+  "states": [
+   {
+    "id": "X1",
+    "name": "AUTO",
+    "color": "#1f77b4",
+    "width": 36,
+    "height": 36,
+    "x": 479.0138854980469,
+    "y": 345.7673645019531,
+    "enter": "",
+    "exit": "",
+    "pmr": [],
+    "widgets": [],
+    "components": []
+   }
+  ],
+  "transitions": [
+   {
+    "id": "T1",
+    "name": "tick\n[ lfFarLeftVal <= LSR_THRESHOLD AND lfMidLeftVal > LSR_THRESHOLD AND lfMidRightVal > LSR_THRESHOLD\n  AND lfFarRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := lowRotate; \n  servoRightVal := -forwardSpeed; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 688,
+     "y": 87
+    }
+   },
+   {
+    "id": "T2",
+    "name": "tick\n[ lfFarLeftVal > LSR_THRESHOLD AND lfMidLeftVal <= LSR_THRESHOLD AND lfMidRightVal > LSR_THRESHOLD\n  AND lfFarRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := highRotate; \n  servoRightVal := -forwardSpeed; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 710,
+     "y": 121
+    }
+   },
+   {
+    "id": "T3",
+    "name": "tick\n[ lfFarLeftVal <= LSR_THRESHOLD AND lfMidLeftVal <= LSR_THRESHOLD AND lfMidRightVal > LSR_THRESHOLD\n  AND lfFarRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := mediumRotate; \n  servoRightVal := -forwardSpeed; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 698,
+     "y": 106
+    }
+   },
+   {
+    "id": "T4",
+    "name": "tick\n[ lfFarLeftVal > LSR_THRESHOLD AND lfMidLeftVal > LSR_THRESHOLD AND lfMidRightVal > LSR_THRESHOLD\n  AND lfFarRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 675,
+     "y": 68
+    }
+   },
+   {
+    "id": "T5",
+    "name": "tick\n[ lfFarLeftVal > LSR_THRESHOLD AND lfMidLeftVal <= LSR_THRESHOLD AND lfMidRightVal <= LSR_THRESHOLD\n  AND lfFarRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := forwardSpeed; \n  servoRightVal := -forwardSpeed; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 730,
+     "y": 141
+    }
+   },
+   {
+    "id": "T6",
+    "name": "tick\n[ lfFarLeftVal > LSR_THRESHOLD AND lfMidLeftVal > LSR_THRESHOLD AND lfMidRightVal <= LSR_THRESHOLD\n  AND lfFarRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := forwardSpeed;\n  servoRightVal := -highRotate; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 753,
+     "y": 158
+    }
+   },
+   {
+    "id": "T7",
+    "name": "tick\n[ lfFarLeftVal > LSR_THRESHOLD AND lfMidLeftVal > LSR_THRESHOLD AND lfMidRightVal <= LSR_THRESHOLD\n  AND lfFarRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardSpeed;\n  servoRightVal := -mediumRotate; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 784,
+     "y": 175
+    }
+   },
+   {
+    "id": "T8",
+    "name": "tick\n[ lfFarLeftVal > LSR_THRESHOLD AND lfMidLeftVal > LSR_THRESHOLD AND lfMidRightVal > LSR_THRESHOLD\n  AND lfFarRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardSpeed;\n  servoRightVal := -lowRotate; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 810,
+     "y": 189
+    }
+   }
+  ],
+  "initial_transitions": [
+   {
+    "id": "IT1",
+    "name": "",
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    }
+   }
+  ],
+  "variables": [
+   {
+    "id": "VAR_servoLeftVal:real(Output)",
+    "name": "servoLeftVal",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_servoRightVal:real(Output)",
+    "name": "servoRightVal",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Output"
+   },
+   {
+    "id": "VAR_posx:real(Input)",
+    "name": "posx",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0.138",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_posy:real(Input)",
+    "name": "posy",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "-0.08",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_lfFarLeftVal:real(Input)",
+    "name": "lfFarLeftVal",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_lfFarRightVal:real(Input)",
+    "name": "lfFarRightVal",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_lfMidRightVal:real(Input)",
+    "name": "lfMidRightVal",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_lfMidLeftVal:real(Input)",
+    "name": "lfMidLeftVal",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_port:int(Local)",
+    "name": "port",
+    "type": "int",
+    "repr": "uint32_t",
+    "value": "8084",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_lowRotate:real(Local)",
+    "name": "lowRotate",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Local"
+   },
+   {
+    "type": "real",
+    "repr": "float64_t",
+    "name": "forwardSpeed",
+    "value": "0.4",
+    "scope": "Local",
+    "id": "VAR_forwardSpeed:real(Local)"
+   },
+   {
+    "type": "real",
+    "repr": "float64_t",
+    "name": "highRotate",
+    "value": "0.3",
+    "scope": "Local",
+    "id": "VAR_highRotate:real(Local)"
+   },
+   {
+    "type": "real",
+    "repr": "float64_t",
+    "name": "mediumRotate",
+    "value": "0.2",
+    "scope": "Local",
+    "id": "VAR_mediumRotate:real(Local)"
+   }
+  ],
+  "constants": [
+   {
+    "id": "CONST_ACCELERATION_FACTOR:real",
+    "name": "ACCELERATION_FACTOR",
+    "type": "real",
+    "value": "0.2"
+   },
+   {
+    "id": "CONST_LSR_THRESHOLD:real",
+    "name": "LSR_THRESHOLD",
+    "type": "real",
+    "value": "150"
+   },
+   {
+    "id": "CONST_ACCELERATION_MIN_THRESHOLD:real",
+    "name": "ACCELERATION_MIN_THRESHOLD",
+    "type": "real",
+    "value": "0.2"
+   },
+   {
+    "id": "CONST_ACCELERATION_MAX_THRESHOLD:real",
+    "name": "ACCELERATION_MAX_THRESHOLD",
+    "type": "real",
+    "value": "0.8"
+   },
+   {
+    "id": "CONST_NEG_ACCELERATION_MAX_THRESHOLD:real",
+    "name": "NEG_ACCELERATION_MAX_THRESHOLD",
+    "type": "real",
+    "value": "-0.8"
+   },
+   {
+    "id": "CONST_NEG_ACCELERATION_MIN_THRESHOLD:real",
+    "name": "NEG_ACCELERATION_MIN_THRESHOLD",
+    "type": "real",
+    "value": "-0.2"
+   }
+  ],
+  "datatypes": [],
+  "pmr": {},
+  "isPIM": false
+ }
+}

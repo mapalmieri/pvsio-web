@@ -121,18 +121,16 @@ void doStep(ModelInstance* comp, const char* action) {
     comp->fmiBuffer.realBuffer[10] = comp->st.time;
     //comp->fmiBuffer.intBuffer[2] = comp->st.port;
     
+    
     if (comp->websocket_open == 1) {
 		lws_service(comp->context, 0);
 	}
-	
-	/*printf("Time: %f\n", comp->fmiBuffer.realBuffer[10]);
-	comp->fmiBuffer.realBuffer[10] += 0.01;
-	comp->st.time = comp->fmiBuffer.realBuffer[10];*/
-	
 }
 
 void terminate(ModelInstance* comp) {
+	
 	close_websocket(comp);
+	
 }
 
 /**

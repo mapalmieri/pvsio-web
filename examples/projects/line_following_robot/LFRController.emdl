@@ -89,7 +89,7 @@
    },
    {
     "id": "T2",
-    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := backwardRotate; \n  servoRightVal := -forwardRotate;\n  time := time + tickSize; }",
+    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardRotate;\n  servoRightVal := -backwardRotate;\n  time := time + tickSize; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -125,7 +125,7 @@
    },
    {
     "id": "T3",
-    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := forwardRotate;\n  servoRightVal := -backwardRotate;\n  time := time + tickSize; }",
+    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := backwardRotate; \n  servoRightVal := -forwardRotate;\n  time := time + tickSize; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -1458,12 +1458,12 @@
     "scope": "Local"
    },
    {
+    "id": "VAR_port:int(Local)",
+    "name": "port",
     "type": "int",
     "repr": "int32_t",
-    "name": "port",
     "value": "8084",
-    "scope": "Local",
-    "id": "VAR_port:int(Local)"
+    "scope": "Local"
    }
   ],
   "constants": [
