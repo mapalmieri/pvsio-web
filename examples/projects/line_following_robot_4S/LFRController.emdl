@@ -310,6 +310,294 @@
      "x": 810,
      "y": 189
     }
+   },
+   {
+    "id": "T11",
+    "name": "tick\n[ lfFarLeftVal <= LSR_THRESHOLD AND lfMidLeftVal > LSR_THRESHOLD AND lfMidRightVal > LSR_THRESHOLD\n  AND lfFarRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 796,
+     "y": 455
+    }
+   },
+   {
+    "id": "T12",
+    "name": "tick\n[ lfFarLeftVal <= LSR_THRESHOLD AND lfMidLeftVal <= LSR_THRESHOLD AND lfMidRightVal > LSR_THRESHOLD\n  AND lfFarRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 856,
+     "y": 441
+    }
+   },
+   {
+    "id": "T13",
+    "name": "tick\n[ lfFarLeftVal <= LSR_THRESHOLD AND lfMidLeftVal > LSR_THRESHOLD AND lfMidRightVal <= LSR_THRESHOLD\n  AND lfFarRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 923,
+     "y": 368
+    }
+   },
+   {
+    "id": "T14",
+    "name": "tick\n[ lfFarLeftVal <= LSR_THRESHOLD AND lfMidLeftVal <= LSR_THRESHOLD AND lfMidRightVal <= LSR_THRESHOLD\n  AND lfFarRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 945,
+     "y": 346
+    }
+   },
+   {
+    "id": "T15",
+    "name": "tick\n[ lfFarLeftVal > LSR_THRESHOLD AND lfMidLeftVal <= LSR_THRESHOLD AND lfMidRightVal <= LSR_THRESHOLD\n  AND lfFarRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 915,
+     "y": 318
+    }
+   },
+   {
+    "id": "T16",
+    "name": "tick\n[ lfFarLeftVal <= LSR_THRESHOLD AND lfMidLeftVal <= LSR_THRESHOLD AND lfMidRightVal <= LSR_THRESHOLD\n  AND lfFarRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 877,
+     "y": 302
+    }
+   },
+   {
+    "id": "T9",
+    "name": "tick\n[ lfFarLeftVal <= LSR_THRESHOLD AND lfMidLeftVal > LSR_THRESHOLD AND lfMidRightVal <= LSR_THRESHOLD\n  AND lfFarRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 779,
+     "y": 490
+    }
+   },
+   {
+    "id": "T10",
+    "name": "tick\n[ lfFarLeftVal > LSR_THRESHOLD AND lfMidLeftVal <= LSR_THRESHOLD AND lfMidRightVal > LSR_THRESHOLD\n  AND lfFarRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := servoLeftVal;\n  servoRightVal := servoRightVal; }",
+    "source": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "target": {
+     "id": "X1",
+     "name": "AUTO",
+     "color": "#1f77b4",
+     "width": 36,
+     "height": 36,
+     "x": 479.0138854980469,
+     "y": 345.7673645019531,
+     "enter": "",
+     "exit": "",
+     "pmr": [],
+     "widgets": [],
+     "components": []
+    },
+    "controlPoint": {
+     "x": 729,
+     "y": 524
+    }
    }
   ],
   "initial_transitions": [
@@ -414,28 +702,28 @@
     "scope": "Local"
    },
    {
-    "type": "real",
-    "repr": "float64_t",
+    "id": "VAR_forwardSpeed:real(Local)",
     "name": "forwardSpeed",
+    "type": "real",
+    "repr": "float64_t",
     "value": "0.4",
-    "scope": "Local",
-    "id": "VAR_forwardSpeed:real(Local)"
+    "scope": "Local"
    },
    {
-    "type": "real",
-    "repr": "float64_t",
+    "id": "VAR_highRotate:real(Local)",
     "name": "highRotate",
-    "value": "0.3",
-    "scope": "Local",
-    "id": "VAR_highRotate:real(Local)"
-   },
-   {
     "type": "real",
     "repr": "float64_t",
+    "value": "0.3",
+    "scope": "Local"
+   },
+   {
+    "id": "VAR_mediumRotate:real(Local)",
     "name": "mediumRotate",
+    "type": "real",
+    "repr": "float64_t",
     "value": "0.2",
-    "scope": "Local",
-    "id": "VAR_mediumRotate:real(Local)"
+    "scope": "Local"
    }
   ],
   "constants": [

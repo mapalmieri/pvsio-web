@@ -18,11 +18,15 @@ void init(State* st) {
     st->backwardRotate = 0.1f;
     st->forwardRotate = 0.5f;
     st->forwardSpeed = 0.4f;
+    st->left_motorSpeed = 0.0f;
+    st->left_rotation = 0.0f;
     st->lfLeftVal = 0.0f;
     st->lfRightVal = 0.0f;
     st->port = 8084;
     st->posx = 0.138f;
     st->posy = -0.08f;
+    st->right_MotorSpeed = 0.0f;
+    st->right_rotation = 0.0f;
     st->servoLeftVal = 0.0f;
     st->servoRightVal = 0.0f;
     st->tickSize = 0.01f;
@@ -323,6 +327,9 @@ State* reverse(State* st) {
         leave(AUTO, st);
         st->servoLeftVal = - st->servoLeftVal;
         st->servoRightVal = - st->servoRightVal;
+        st->backwardRotate = - st->backwardRotate;
+        st->forwardRotate = - st->forwardRotate;
+        st->forwardSpeed = - st->forwardSpeed;
         enter(REVERSE, st);
     } else if (st->mode == DRIVE) {
         #ifdef DBG
@@ -374,28 +381,19 @@ State* right(State* st) {
 }
 
 bool per_tick(State* st) {
-    return (st->mode == REVERSE && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD ))
-            || (st->mode == AUTO && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD ))
-            || (st->mode == REVERSE && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal > LSR_THRESHOLD ))
+    return (st->mode == AUTO && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD ))
+            || (st->mode == REVERSE && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD ))
             || (st->mode == AUTO && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal > LSR_THRESHOLD ))
-            || (st->mode == REVERSE && ( st->lfLeftVal > LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD ))
+            || (st->mode == REVERSE && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal > LSR_THRESHOLD ))
             || (st->mode == AUTO && ( st->lfLeftVal > LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD ))
+            || (st->mode == REVERSE && ( st->lfLeftVal > LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD ))
             || (st->mode == AUTO && ( st->lfLeftVal > LSR_THRESHOLD && st->lfRightVal > LSR_THRESHOLD ))
             || (st->mode == REVERSE && ( st->lfLeftVal > LSR_THRESHOLD && st->lfRightVal > LSR_THRESHOLD ))
             || (st->mode == DRIVE);
 }
 State* tick(State* st) {
     // assert( per_tick(st) );
-    if (st->mode == REVERSE && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD )) {
-        #ifdef DBG
-        _dbg_print_condition("st->mode == REVERSE && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD )");
-        #endif
-        leave(REVERSE, st);
-        st->servoLeftVal = - st->forwardSpeed;
-        st->servoRightVal = st->forwardSpeed;
-        st->time = st->time + st->tickSize;
-        enter(REVERSE, st);
-    } else if (st->mode == AUTO && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD )) {
+    if (st->mode == AUTO && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD )) {
         #ifdef DBG
         _dbg_print_condition("st->mode == AUTO && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD )");
         #endif
@@ -404,13 +402,13 @@ State* tick(State* st) {
         st->servoRightVal = - st->forwardSpeed;
         st->time = st->time + st->tickSize;
         enter(AUTO, st);
-    } else if (st->mode == REVERSE && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal > LSR_THRESHOLD )) {
+    } else if (st->mode == REVERSE && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD )) {
         #ifdef DBG
-        _dbg_print_condition("st->mode == REVERSE && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal > LSR_THRESHOLD )");
+        _dbg_print_condition("st->mode == REVERSE && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD )");
         #endif
         leave(REVERSE, st);
-        st->servoLeftVal = - st->backwardRotate;
-        st->servoRightVal = st->forwardRotate;
+        st->servoLeftVal = st->forwardSpeed;
+        st->servoRightVal = - st->forwardSpeed;
         st->time = st->time + st->tickSize;
         enter(REVERSE, st);
     } else if (st->mode == AUTO && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal > LSR_THRESHOLD )) {
@@ -422,13 +420,13 @@ State* tick(State* st) {
         st->servoRightVal = - st->forwardRotate;
         st->time = st->time + st->tickSize;
         enter(AUTO, st);
-    } else if (st->mode == REVERSE && ( st->lfLeftVal > LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD )) {
+    } else if (st->mode == REVERSE && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal > LSR_THRESHOLD )) {
         #ifdef DBG
-        _dbg_print_condition("st->mode == REVERSE && ( st->lfLeftVal > LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD )");
+        _dbg_print_condition("st->mode == REVERSE && ( st->lfLeftVal <= LSR_THRESHOLD && st->lfRightVal > LSR_THRESHOLD )");
         #endif
         leave(REVERSE, st);
-        st->servoLeftVal = - st->forwardRotate;
-        st->servoRightVal = st->backwardRotate;
+        st->servoLeftVal = st->backwardRotate;
+        st->servoRightVal = - st->forwardRotate;
         st->time = st->time + st->tickSize;
         enter(REVERSE, st);
     } else if (st->mode == AUTO && ( st->lfLeftVal > LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD )) {
@@ -440,6 +438,15 @@ State* tick(State* st) {
         st->servoRightVal = - st->backwardRotate;
         st->time = st->time + st->tickSize;
         enter(AUTO, st);
+    } else if (st->mode == REVERSE && ( st->lfLeftVal > LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD )) {
+        #ifdef DBG
+        _dbg_print_condition("st->mode == REVERSE && ( st->lfLeftVal > LSR_THRESHOLD && st->lfRightVal <= LSR_THRESHOLD )");
+        #endif
+        leave(REVERSE, st);
+        st->servoLeftVal = st->forwardRotate;
+        st->servoRightVal = - st->backwardRotate;
+        st->time = st->time + st->tickSize;
+        enter(REVERSE, st);
     } else if (st->mode == AUTO && ( st->lfLeftVal > LSR_THRESHOLD && st->lfRightVal > LSR_THRESHOLD )) {
         #ifdef DBG
         _dbg_print_condition("st->mode == AUTO && ( st->lfLeftVal > LSR_THRESHOLD && st->lfRightVal > LSR_THRESHOLD )");

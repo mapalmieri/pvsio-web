@@ -18,15 +18,15 @@ static int WebSocketCallback(struct lws*, enum lws_callback_reasons, void*, void
 void initialize(ModelInstance* comp, const char* location) {
     init(&comp->st);
     
-    comp->fmiBuffer.realBuffer[9] = comp->st.servoLeftVal;
-    comp->fmiBuffer.realBuffer[10] = comp->st.servoRightVal;
+    comp->fmiBuffer.realBuffer[13] = comp->st.servoLeftVal;
+    comp->fmiBuffer.realBuffer[14] = comp->st.servoRightVal;
     
     comp->fmiBuffer.realBuffer[1] = comp->st.backwardRotate;
     comp->fmiBuffer.realBuffer[2] = comp->st.forwardRotate;
     comp->fmiBuffer.realBuffer[3] = comp->st.forwardSpeed;
-    comp->fmiBuffer.realBuffer[11] = comp->st.tickSize;
-    comp->fmiBuffer.realBuffer[12] = comp->st.time;
-    comp->fmiBuffer.intBuffer[6] = comp->st.port;
+    comp->fmiBuffer.realBuffer[15] = comp->st.tickSize;
+    comp->fmiBuffer.realBuffer[16] = comp->st.time;
+    comp->fmiBuffer.intBuffer[8] = comp->st.port;
 
     comp->first = 0;   
 }
@@ -44,29 +44,33 @@ void doStep(ModelInstance* comp, const char* action) {
 		comp->st.backwardRotate = comp->fmiBuffer.realBuffer[1];
 		comp->st.forwardRotate = comp->fmiBuffer.realBuffer[2];
 		comp->st.forwardSpeed = comp->fmiBuffer.realBuffer[3];
-		comp->st.tickSize = comp->fmiBuffer.realBuffer[11];
-		comp->st.time = comp->fmiBuffer.realBuffer[12];
+		comp->st.tickSize = comp->fmiBuffer.realBuffer[15];
+		comp->st.time = comp->fmiBuffer.realBuffer[16];
 		
 		comp->first = 1;
 	}
 	
-    comp->st.lfLeftVal = comp->fmiBuffer.realBuffer[4];
-    comp->st.lfRightVal = comp->fmiBuffer.realBuffer[5];
-    comp->st.posx = comp->fmiBuffer.realBuffer[7];
-    comp->st.posy = comp->fmiBuffer.realBuffer[8];
+    comp->st.left_motorSpeed = comp->fmiBuffer.realBuffer[4];
+    comp->st.left_rotation = comp->fmiBuffer.realBuffer[5];
+    comp->st.lfLeftVal = comp->fmiBuffer.realBuffer[6];
+    comp->st.lfRightVal = comp->fmiBuffer.realBuffer[7];
+    comp->st.posx = comp->fmiBuffer.realBuffer[9];
+    comp->st.posy = comp->fmiBuffer.realBuffer[10];
+    comp->st.right_MotorSpeed = comp->fmiBuffer.realBuffer[11];
+    comp->st.right_rotation = comp->fmiBuffer.realBuffer[12];
 	
     tick(&comp->st);
        
     
-    comp->fmiBuffer.realBuffer[9] = comp->st.servoLeftVal;
-    comp->fmiBuffer.realBuffer[10] = comp->st.servoRightVal;
+    comp->fmiBuffer.realBuffer[13] = comp->st.servoLeftVal;
+    comp->fmiBuffer.realBuffer[14] = comp->st.servoRightVal;
     
     //comp->fmiBuffer.realBuffer[1] = comp->st.backwardRotate;
     //comp->fmiBuffer.realBuffer[2] = comp->st.forwardRotate;
     //comp->fmiBuffer.realBuffer[3] = comp->st.forwardSpeed;
-    //comp->fmiBuffer.realBuffer[11] = comp->st.tickSize;
-    comp->fmiBuffer.realBuffer[12] = comp->st.time;
-    //comp->fmiBuffer.intBuffer[6] = comp->st.port;
+    //comp->fmiBuffer.realBuffer[15] = comp->st.tickSize;
+    comp->fmiBuffer.realBuffer[16] = comp->st.time;
+    //comp->fmiBuffer.intBuffer[8] = comp->st.port;
     
     
     if (comp->websocket_open == 1) {
@@ -88,6 +92,10 @@ void stateToString(State st, char* str) {
 	strcat(str, temp);
 	sprintf(temp, " forwardSpeed := %f,", st.forwardSpeed);
 	strcat(str, temp);
+	sprintf(temp, " left_motorSpeed := %f,", st.left_motorSpeed);
+	strcat(str, temp);
+	sprintf(temp, " left_rotation := %f,", st.left_rotation);
+	strcat(str, temp);
 	sprintf(temp, " lfLeftVal := %f,", st.lfLeftVal);
 	strcat(str, temp);
 	sprintf(temp, " lfRightVal := %f,", st.lfRightVal);
@@ -97,6 +105,10 @@ void stateToString(State st, char* str) {
 	sprintf(temp, " posx := %f,", st.posx);
 	strcat(str, temp);
 	sprintf(temp, " posy := %f,", st.posy);
+	strcat(str, temp);
+	sprintf(temp, " right_MotorSpeed := %f,", st.right_MotorSpeed);
+	strcat(str, temp);
+	sprintf(temp, " right_rotation := %f,", st.right_rotation);
 	strcat(str, temp);
 	sprintf(temp, " servoLeftVal := %f,", st.servoLeftVal);
 	strcat(str, temp);

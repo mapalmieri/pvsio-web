@@ -4,9 +4,11 @@
  * along with the data needed.
  */
 #include "fmu.h"
-#include <string.h>
 {{#if portCheck}}
-static int WebSocketCallback(struct lws*, enum lws_callback_reasons, void*, void*, size_t);{{/if}}
+#include <string.h>
+
+static int WebSocketCallback(struct lws*, enum lws_callback_reasons, void*, void*, size_t);
+{{/if}}
 
  /**
  * Function for the initialization of the model.
@@ -72,29 +74,6 @@ void doStep(ModelInstance* comp, const char* action) {
     if (comp->websocket_open == 1) {
 		lws_service(comp->context, 0);
 	}{{/if}}
-}
-
-/**
-* Function used to convert the state into a string
-*/
-void stateToString(State st, char* str) {
-	char* temp = (char*)malloc(1024);
-	
-	strcpy(str, "(#");
-	{{#each variables}}{{#if fmi}}{{#if real}}
-	sprintf(temp, " {{name}} := %f,", st.{{name}});
-	strcat(str, temp);{{/if}}{{#if int}}
-	sprintf(temp, " {{name}} := %d,", st.{{name}});
-	strcat(str, temp);{{/if}}{{#if bool}}
-	sprintf(temp, " {{name}} := %d,", st.{{name}});
-	strcat(str, temp);{{/if}}{{#if string}}
-	sprintf(temp, " {{name}} := %s,", st.{{name}});
-	strcat(str, temp);{{/if}}{{/if}}{{/each}}	
-	//Remove the last char ','
-	str[strlen(str)-1] = '\0';	
-	strcat(str, " #);");
-
-	free(temp);
 }
 
 void terminate(ModelInstance* comp) {
@@ -188,12 +167,17 @@ static int WebSocketCallback(struct lws* wsi, enum lws_callback_reasons reason, 
 			printf("LWS_CALLBACK_RECEIVE\n");
 			// 'len' is the length of the received message. It has some post padding.
 			char* received_msg = (char*)malloc(len);
+			// in is the pointer to the received
 			memcpy(received_msg, (char*)in, len);
+			// Call the messageHandler function to handle the received message
 			messageHandler(comp, received_msg);
 			free(received_msg);
 			char* response = (char*)malloc(1024);
+			// Convert the state variable into a string
 			stateToString(comp->st, response);
+			// Copy the converted state into lwssendstate
 			memcpy(comp->lwssendstate + LWS_SEND_BUFFER_PRE_PADDING, response, strlen(response));
+			// Send the response
 			lws_write(wsi, (unsigned char *)(comp->lwssendstate + LWS_SEND_BUFFER_PRE_PADDING), strlen(response), LWS_WRITE_TEXT);
 			free(response);
 			break;
@@ -226,7 +210,6 @@ static int WebSocketCallback(struct lws* wsi, enum lws_callback_reasons reason, 
     return 0;
 }
 
-
 /**
  * Function used to handle the received command
  */ 
@@ -239,6 +222,29 @@ void messageHandler(ModelInstance* comp, char* msg) {
 		{{/each}}
 	}	
 }	
+
+/**
+* Function used to convert the state variable into a string
+*/
+void stateToString(State st, char* str) {
+	char* temp = (char*)malloc(1024);
+	
+	strcpy(str, "(#");
+	{{#each variables}}{{#if fmi}}{{#if real}}
+	sprintf(temp, " {{name}} := %f,", st.{{name}});
+	strcat(str, temp);{{/if}}{{#if int}}
+	sprintf(temp, " {{name}} := %d,", st.{{name}});
+	strcat(str, temp);{{/if}}{{#if bool}}
+	sprintf(temp, " {{name}} := %d,", st.{{name}});
+	strcat(str, temp);{{/if}}{{#if string}}
+	sprintf(temp, " {{name}} := %s,", st.{{name}});
+	strcat(str, temp);{{/if}}{{/if}}{{/each}}	
+	//Remove the last char ','
+	str[strlen(str)-1] = '\0';	
+	strcat(str, " #);");
+
+	free(temp);
+}
 
 /**
  * Function used to close the websocket

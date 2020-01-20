@@ -44,30 +44,38 @@
     
 		<ScalarVariable name="forwardSpeed" valueReference="3" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.4" /></ScalarVariable>
     
-		<ScalarVariable name="lfLeftVal" valueReference="4" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
+		<ScalarVariable name="left_motorSpeed" valueReference="4" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="lfRightVal" valueReference="5" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
+		<ScalarVariable name="left_rotation" valueReference="5" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="port" valueReference="6" causality="parameter" variability="fixed"  initial="exact" ><Integer start="8084" /></ScalarVariable>
+		<ScalarVariable name="lfLeftVal" valueReference="6" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="posx" valueReference="7" causality="input" variability="continuous" ><Real start="0.138" /></ScalarVariable>
+		<ScalarVariable name="lfRightVal" valueReference="7" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="posy" valueReference="8" causality="input" variability="continuous" ><Real start="-0.08" /></ScalarVariable>
+		<ScalarVariable name="port" valueReference="8" causality="parameter" variability="fixed"  initial="exact" ><Integer start="8084" /></ScalarVariable>
     
-		<ScalarVariable name="servoLeftVal" valueReference="9" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+		<ScalarVariable name="posx" valueReference="9" causality="input" variability="continuous" ><Real start="0.138" /></ScalarVariable>
     
-		<ScalarVariable name="servoRightVal" valueReference="10" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+		<ScalarVariable name="posy" valueReference="10" causality="input" variability="continuous" ><Real start="-0.08" /></ScalarVariable>
     
-		<ScalarVariable name="tickSize" valueReference="11" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.01" /></ScalarVariable>
+		<ScalarVariable name="right_MotorSpeed" valueReference="11" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="time" valueReference="12" causality="parameter" variability="fixed"  initial="exact" ><Real start="0" /></ScalarVariable>
+		<ScalarVariable name="right_rotation" valueReference="12" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
+    
+		<ScalarVariable name="servoLeftVal" valueReference="13" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+    
+		<ScalarVariable name="servoRightVal" valueReference="14" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+    
+		<ScalarVariable name="tickSize" valueReference="15" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.01" /></ScalarVariable>
+    
+		<ScalarVariable name="time" valueReference="16" causality="parameter" variability="fixed"  initial="exact" ><Real start="0" /></ScalarVariable>
     </ModelVariables>
 
 	<ModelStructure>
 	<Outputs>
-			<Unknown index="9"  dependencies=""/>
+			<Unknown index="13"  dependencies=""/>
             
-			<Unknown index="10"  dependencies=""/>
+			<Unknown index="14"  dependencies=""/>
             
 	</Outputs>
 

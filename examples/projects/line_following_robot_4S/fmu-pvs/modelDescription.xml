@@ -38,9 +38,9 @@
 	</LogCategories>
 
 	<ModelVariables>
-		<ScalarVariable name="forwardSpeed" valueReference="1" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.6" /></ScalarVariable>
+		<ScalarVariable name="forwardSpeed" valueReference="1" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.4" /></ScalarVariable>
     
-		<ScalarVariable name="highRotate" valueReference="2" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.45" /></ScalarVariable>
+		<ScalarVariable name="highRotate" valueReference="2" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.3" /></ScalarVariable>
     
 		<ScalarVariable name="lfFarLeftVal" valueReference="3" causality="input" variability="continuous" ><Real start="0" /></ScalarVariable>
     
@@ -52,24 +52,22 @@
     
 		<ScalarVariable name="lowRotate" valueReference="7" causality="parameter" variability="fixed"  initial="exact" ><Real start="0" /></ScalarVariable>
     
-		<ScalarVariable name="mediumRotate" valueReference="8" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.3" /></ScalarVariable>
+		<ScalarVariable name="mediumRotate" valueReference="8" causality="parameter" variability="fixed"  initial="exact" ><Real start="0.2" /></ScalarVariable>
     
-		<ScalarVariable name="port" valueReference="9" causality="parameter" variability="fixed"  initial="exact" ><Integer start="8084" /></ScalarVariable>
+		<ScalarVariable name="posx" valueReference="9" causality="input" variability="continuous" ><Real start="0.138" /></ScalarVariable>
     
-		<ScalarVariable name="posx" valueReference="10" causality="input" variability="continuous" ><Real start="0.138" /></ScalarVariable>
+		<ScalarVariable name="posy" valueReference="10" causality="input" variability="continuous" ><Real start="-0.08" /></ScalarVariable>
     
-		<ScalarVariable name="posy" valueReference="11" causality="input" variability="continuous" ><Real start="-0.08" /></ScalarVariable>
+		<ScalarVariable name="servoLeftVal" valueReference="11" causality="output" variability="continuous" ><Real  /></ScalarVariable>
     
-		<ScalarVariable name="servoLeftVal" valueReference="12" causality="output" variability="continuous" ><Real  /></ScalarVariable>
-    
-		<ScalarVariable name="servoRightVal" valueReference="13" causality="output" variability="continuous" ><Real  /></ScalarVariable>
+		<ScalarVariable name="servoRightVal" valueReference="12" causality="output" variability="continuous" ><Real  /></ScalarVariable>
     </ModelVariables>
 
 	<ModelStructure>
 	<Outputs>
-			<Unknown index="12"  dependencies=""/>
+			<Unknown index="11"  dependencies=""/>
             
-			<Unknown index="13"  dependencies=""/>
+			<Unknown index="12"  dependencies=""/>
             
 	</Outputs>
 

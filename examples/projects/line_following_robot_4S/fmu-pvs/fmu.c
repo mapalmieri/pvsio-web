@@ -45,13 +45,6 @@ extern /*"C"*/fmi2Status fmi2EnterInitializationMode(fmi2Component c) {
 }
 
 extern /*"C"*/fmi2Status fmi2ExitInitializationMode(fmi2Component c) {
-	
-	ModelInstance* comp = (ModelInstance*) c;
-	comp->port = 0;
-	comp->websocket_open = 0;
-
-	// Create the websocket with the initial port number parameter	
-	create_websocket(comp, (int)comp->fmiBuffer.intBuffer[9]);
 		
 	return fmi2OK;
 }

@@ -53,7 +53,7 @@ extern /*"C"*/fmi2Status fmi2ExitInitializationMode(fmi2Component c) {
 	comp->websocket_open = 0;
 
 	// Create the websocket with the initial port number parameter	
-	create_websocket(comp, (int)comp->fmiBuffer.intBuffer[6]);
+	create_websocket(comp, (int)comp->fmiBuffer.intBuffer[8]);
 		
 	return fmi2OK;
 }
@@ -223,10 +223,10 @@ extern /*"C"*/fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicati
 	double currentCP = (double)currentCommunicationPoint;
 	double commStepSize = (double)communicationStepSize;	
 	
-	if (fmod(commStepSize,(double)comp->fmiBuffer.realBuffer[11]) < 0.0000001) {
+	if (fmod(commStepSize,(double)comp->fmiBuffer.realBuffer[15]) < 0.0000001) {
 		printf("fmi2DoStep\n");
 		
-		while (comp->fmiBuffer.realBuffer[12] <= currentCP+commStepSize) {
+		while (comp->fmiBuffer.realBuffer[16] <= currentCP+commStepSize) {
 			doStep(comp, "tick");
 		}
 		
@@ -234,7 +234,7 @@ extern /*"C"*/fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicati
 	}
 	else {
 		
-		while (comp->fmiBuffer.realBuffer[12] <= currentCP+commStepSize) {
+		while (comp->fmiBuffer.realBuffer[16] <= currentCP+commStepSize) {
 			doStep(comp, "tick");
 		}
 		

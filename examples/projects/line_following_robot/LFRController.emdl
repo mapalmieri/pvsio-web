@@ -737,7 +737,7 @@
    },
    {
     "id": "T46",
-    "name": "reverse\n{ servoLeftVal := -servoLeftVal;\n  servoRightVal := -servoRightVal; }",
+    "name": "reverse\n{ servoLeftVal := -servoLeftVal;\n  servoRightVal := -servoRightVal;\n  backwardRotate := -backwardRotate; \n  forwardRotate := -forwardRotate;\n  forwardSpeed := -forwardSpeed; }",
     "source": {
      "id": "X1",
      "name": "AUTO",
@@ -809,7 +809,7 @@
    },
    {
     "id": "T50",
-    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := -forwardRotate; \n  servoRightVal := backwardRotate;\n  time := time + tickSize; }",
+    "name": "tick\n[ lfLeftVal > LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardRotate;\n  servoRightVal := -backwardRotate;\n  time := time + tickSize; }",
     "source": {
      "id": "X5",
      "name": "REVERSE",
@@ -845,7 +845,7 @@
    },
    {
     "id": "T51",
-    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := -backwardRotate;\n  servoRightVal := forwardRotate;\n  time := time + tickSize; }",
+    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal > LSR_THRESHOLD ]\n{ servoLeftVal := backwardRotate; \n  servoRightVal := -forwardRotate;\n  time := time + tickSize; }",
     "source": {
      "id": "X5",
      "name": "REVERSE",
@@ -881,7 +881,7 @@
    },
    {
     "id": "T52",
-    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := -forwardSpeed;\n  servoRightVal := forwardSpeed;\n  time := time + tickSize; }",
+    "name": "tick\n[ lfLeftVal <= LSR_THRESHOLD AND lfRightVal <= LSR_THRESHOLD ]\n{ servoLeftVal := forwardSpeed;\n  servoRightVal := -forwardSpeed;\n  time := time + tickSize; }",
     "source": {
      "id": "X5",
      "name": "REVERSE",
@@ -1061,7 +1061,7 @@
    },
    {
     "id": "T7",
-    "name": "autopilot\n{ servoLeftVal := -servoLeftVal;\n  servoRightVal := -servoRightVal;\n  backwardRotate := -backwardRotate; \n  forwardRotate := -forwardRotate;\n  forwardSpeed := -forwardSpeed;}",
+    "name": "autopilot\n{ servoLeftVal := -servoLeftVal;\n  servoRightVal := -servoRightVal;\n  backwardRotate := -backwardRotate; \n  forwardRotate := -forwardRotate;\n  forwardSpeed := -forwardSpeed; }",
     "source": {
      "id": "X5",
      "name": "REVERSE",
@@ -1464,6 +1464,38 @@
     "repr": "int32_t",
     "value": "8084",
     "scope": "Local"
+   },
+   {
+    "id": "VAR_left_rotation:real(Input)",
+    "name": "left_rotation",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_right_rotation:real(Input)",
+    "name": "right_rotation",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_left_motorSpeed:real(Input)",
+    "name": "left_motorSpeed",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
+   },
+   {
+    "id": "VAR_right_MotorSpeed:real(Input)",
+    "name": "right_MotorSpeed",
+    "type": "real",
+    "repr": "float64_t",
+    "value": "0",
+    "scope": "Input"
    }
   ],
   "constants": [

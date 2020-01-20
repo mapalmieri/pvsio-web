@@ -23,7 +23,6 @@ typedef struct {
     float64_t lfMidRightVal; //-- real
     float64_t lowRotate; //-- real
     float64_t mediumRotate; //-- real
-    uint32_t port; //-- int
     float64_t posx; //-- real
     float64_t posy; //-- real
     float64_t servoLeftVal; //-- real

@@ -226,7 +226,7 @@ extern /*"C"*/fmi2Status fmi2DoStep(fmi2Component c, fmi2Real currentCommunicati
 	double commStepSize = (double)communicationStepSize;	
 	{{#each variables}}{{#if fmi}}{{#if real}}{{#if tickSize}}
 	if (fmod(commStepSize,(double)comp->fmiBuffer.realBuffer[{{fmi.valueReference}}]) < 0.0000001) {
-		{{/if}}{{/if}}{{/if}}{{/each}}printf("fmi2DoStep\n");
+		{{/if}}{{/if}}{{/if}}{{/each}}
 		{{#each variables}}{{#if fmi}}{{#if real}}{{#if time}}
 		while (comp->fmiBuffer.realBuffer[{{fmi.valueReference}}] <= currentCP+commStepSize) {
 			doStep(comp, "tick");

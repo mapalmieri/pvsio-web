@@ -15,15 +15,14 @@ const float64_t NEG_ACCELERATION_MIN_THRESHOLD = -0.2f;
 void init(State* st) { 
     st->previous_mode = AUTO;
     st->mode = AUTO;
-    st->forwardSpeed = 0.6f;
-    st->highRotate = 0.45f;
+    st->forwardSpeed = 0.4f;
+    st->highRotate = 0.3f;
     st->lfFarLeftVal = 0.0f;
     st->lfFarRightVal = 0.0f;
     st->lfMidLeftVal = 0.0f;
     st->lfMidRightVal = 0.0f;
     st->lowRotate = 0.0f;
-    st->mediumRotate = 0.3f;
-    st->port = 8084;
+    st->mediumRotate = 0.2f;
     st->posx = 0.138f;
     st->posy = -0.08f;
     st->servoLeftVal = 0.0f;
@@ -44,9 +43,17 @@ void leave(Mode m, State* st) {
  * triggers
  */
 bool per_tick(State* st) {
-    return (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD ))
+    return (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD ))
+            || (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD ))
+            || (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD ))
+            || (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD ))
+            || (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal > LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD ))
+            || (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal > LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD ))
+            || (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal > LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD ))
             || (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal > LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD ))
+            || (st->mode == AUTO && ( st->lfFarLeftVal > LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD ))
             || (st->mode == AUTO && ( st->lfFarLeftVal > LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD ))
+            || (st->mode == AUTO && ( st->lfFarLeftVal > LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD ))
             || (st->mode == AUTO && ( st->lfFarLeftVal > LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD ))
             || (st->mode == AUTO && ( st->lfFarLeftVal > LSR_THRESHOLD && st->lfMidLeftVal > LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD ))
             || (st->mode == AUTO && ( st->lfFarLeftVal > LSR_THRESHOLD && st->lfMidLeftVal > LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD ))
@@ -55,13 +62,61 @@ bool per_tick(State* st) {
 }
 State* tick(State* st) {
     // assert( per_tick(st) );
-    if (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD )) {
+    if (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD )) {
+        #ifdef DBG
+        _dbg_print_condition("st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD )");
+        #endif
+        leave(AUTO, st);
+        st->servoLeftVal = st->servoLeftVal;
+        st->servoRightVal = st->servoRightVal;
+        enter(AUTO, st);
+    } else if (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD )) {
+        #ifdef DBG
+        _dbg_print_condition("st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD )");
+        #endif
+        leave(AUTO, st);
+        st->servoLeftVal = st->servoLeftVal;
+        st->servoRightVal = st->servoRightVal;
+        enter(AUTO, st);
+    } else if (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD )) {
+        #ifdef DBG
+        _dbg_print_condition("st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD )");
+        #endif
+        leave(AUTO, st);
+        st->servoLeftVal = st->servoLeftVal;
+        st->servoRightVal = st->servoRightVal;
+        enter(AUTO, st);
+    } else if (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD )) {
         #ifdef DBG
         _dbg_print_condition("st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD )");
         #endif
         leave(AUTO, st);
         st->servoLeftVal = st->mediumRotate;
         st->servoRightVal = - st->forwardSpeed;
+        enter(AUTO, st);
+    } else if (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal > LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD )) {
+        #ifdef DBG
+        _dbg_print_condition("st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal > LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD )");
+        #endif
+        leave(AUTO, st);
+        st->servoLeftVal = st->servoLeftVal;
+        st->servoRightVal = st->servoRightVal;
+        enter(AUTO, st);
+    } else if (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal > LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD )) {
+        #ifdef DBG
+        _dbg_print_condition("st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal > LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD )");
+        #endif
+        leave(AUTO, st);
+        st->servoLeftVal = st->servoLeftVal;
+        st->servoRightVal = st->servoRightVal;
+        enter(AUTO, st);
+    } else if (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal > LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD )) {
+        #ifdef DBG
+        _dbg_print_condition("st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal > LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD )");
+        #endif
+        leave(AUTO, st);
+        st->servoLeftVal = st->servoLeftVal;
+        st->servoRightVal = st->servoRightVal;
         enter(AUTO, st);
     } else if (st->mode == AUTO && ( st->lfFarLeftVal <= LSR_THRESHOLD && st->lfMidLeftVal > LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD )) {
         #ifdef DBG
@@ -71,6 +126,14 @@ State* tick(State* st) {
         st->servoLeftVal = st->lowRotate;
         st->servoRightVal = - st->forwardSpeed;
         enter(AUTO, st);
+    } else if (st->mode == AUTO && ( st->lfFarLeftVal > LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD )) {
+        #ifdef DBG
+        _dbg_print_condition("st->mode == AUTO && ( st->lfFarLeftVal > LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD )");
+        #endif
+        leave(AUTO, st);
+        st->servoLeftVal = st->servoLeftVal;
+        st->servoRightVal = st->servoRightVal;
+        enter(AUTO, st);
     } else if (st->mode == AUTO && ( st->lfFarLeftVal > LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD )) {
         #ifdef DBG
         _dbg_print_condition("st->mode == AUTO && ( st->lfFarLeftVal > LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal <= LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD )");
@@ -78,6 +141,14 @@ State* tick(State* st) {
         leave(AUTO, st);
         st->servoLeftVal = st->forwardSpeed;
         st->servoRightVal = - st->forwardSpeed;
+        enter(AUTO, st);
+    } else if (st->mode == AUTO && ( st->lfFarLeftVal > LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD )) {
+        #ifdef DBG
+        _dbg_print_condition("st->mode == AUTO && ( st->lfFarLeftVal > LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal <= LSR_THRESHOLD )");
+        #endif
+        leave(AUTO, st);
+        st->servoLeftVal = st->servoLeftVal;
+        st->servoRightVal = st->servoRightVal;
         enter(AUTO, st);
     } else if (st->mode == AUTO && ( st->lfFarLeftVal > LSR_THRESHOLD && st->lfMidLeftVal <= LSR_THRESHOLD && st->lfMidRightVal > LSR_THRESHOLD && st->lfFarRightVal > LSR_THRESHOLD )) {
         #ifdef DBG
